@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Decision-Making &amp; Voting</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">30% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+    <div class="sections-remaining">6 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="decision.html">Decision-Making</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="vesting.html">← Back to Vesting Schedule</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Decision-Making &amp; Voting</h1>
+    <div class="page-desc">
+      <p>Without a plan for who decides what, even choosing office chairs can start a cold war. The day-to-day questions start piling up. Should we hire this engineer? Take that investor meeting? Pivot the product? Left undefined, these decisions can quietly blow up trust.</p>
+      <p>This section is where you make it concrete: who signs off on what, when a decision needs a vote, and how ties get broken. Defining it now means that when disagreements inevitably come, you have a clear, agreed-upon way to move forward without derailing.</p>
+    </div>
+
+    <!-- Card 1: Decisions requiring discussion -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. These are decisions that no single cofounder can make unilaterally.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What type of decisions require a discussion between all cofounders?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Accepting advisors" /><span class="checkbox-box"></span>Accepting advisors</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Accepting investors" /><span class="checkbox-box"></span>Accepting investors</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Equity allocations" /><span class="checkbox-box"></span>Equity allocations</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Hiring key personnel" /><span class="checkbox-box"></span>Hiring key personnel</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Major partnerships or contracts" /><span class="checkbox-box"></span>Major partnerships or contracts</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Product pivots" /><span class="checkbox-box"></span>Product pivots</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Selling the company or merging" /><span class="checkbox-box"></span>Selling the company or merging</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="None of the above" /><span class="checkbox-box"></span>None of the above</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Other" /><span class="checkbox-box"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: Voting power -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This determines whether a cofounder with more equity gets proportionally more say in decisions.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Should equity ownership reflect voting power?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="dec-voting-power" value="Yes" /><span class="radio-circle"></span>Yes</label>
+          <div class="radio-sublabel">Voting weight tied to equity %</div>
+          <label class="card-radio-option"><input type="radio" name="dec-voting-power" value="No" /><span class="radio-circle"></span>No</label>
+          <div class="radio-sublabel">All founders have equal vote</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 3: Deadlock resolution -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Deadlocks can paralyze a company. A predetermined resolution method prevents permanent stalemates.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">If cofounders are deadlocked, how should the tie be resolved?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="dec-deadlock" value="External advisor / board member" /><span class="radio-circle"></span>Consult agreed external advisor / board member</label>
+          <label class="card-radio-option"><input type="radio" name="dec-deadlock" value="Mediation" /><span class="radio-circle"></span>Mediation with a neutral third party</label>
+          <label class="card-radio-option"><input type="radio" name="dec-deadlock" value="Domain authority" /><span class="radio-circle"></span>Final decision authority by domain</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 4: Shotgun clause -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A shotgun clause lets one cofounder offer to buy the other out. The receiving party must either accept or buy the offering party out at the same price — creating a fair, self-enforcing mechanism.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Do you want to include a shotgun clause if cofounders cannot resolve deadlocks?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="dec-shotgun" value="Yes" /><span class="radio-circle"></span>Yes</label>
+          <label class="card-radio-option"><input type="radio" name="dec-shotgun" value="No" /><span class="radio-circle"></span>No</label>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: IP &amp; Ownership</span>
+      <a class="next-section-btn" href="ip.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_dec_';
+    const RADIO_NAMES = ['dec-voting-power', 'dec-deadlock', 'dec-shotgun'];
+    const CB_NAMES    = ['dec-discussion'];
+
+    function saveFormData() {
+      RADIO_NAMES.forEach(name => {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        localStorage.setItem(SK + name, r ? r.value : '');
+      });
+      CB_NAMES.forEach(name => {
+        const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+        localStorage.setItem(SK + name, JSON.stringify(vals));
+      });
+    }
+
+    function restoreFormData() {
+      RADIO_NAMES.forEach(name => {
+        const val = localStorage.getItem(SK + name) || '';
+        if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
+      });
+      CB_NAMES.forEach(name => {
+        try {
+          const vals = JSON.parse(localStorage.getItem(SK + name) || '[]');
+          vals.forEach(v => { const cb = document.querySelector(`input[name="${name}"][value="${v}"]`); if (cb) cb.checked = true; });
+        } catch(e) {}
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio   = card.querySelector('input[type="radio"]:checked');
+      const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+      let value = '';
+      if (radio) {
+        value = radio.value;
+      } else if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) card.classList.add('expanded');
+      });
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => updateAnswerPreview(card)));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

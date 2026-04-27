@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Cofounder Performance &amp; Departure</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">60% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:60%"></div></div>
+    <div class="sections-remaining">3 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="compensation.html">Compensation</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="compensation.html">← Back to Compensation</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Cofounder Performance &amp; Departure</h1>
+    <div class="page-desc">
+      <p>In every startup, execution is everything. You can have the best idea in the world, the perfect cofounder team, and a shiny product plan, but if the work doesn't get done, nothing happens. However, sometimes, for one reason or another, we can't perform at the level that's necessary.</p>
+      <p>In those cases, the best we can do is protect the company and the friendship. You do that by planning for the what-ifs ahead of time. Performance isn't just about grinding harder. It's about foresight, flexibility, and keeping the company moving even when things don't go perfectly.</p>
+    </div>
+
+    <!-- Card 1: Obligations breach -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. These are the escalating consequences if a cofounder doesn't meet their commitments.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What happens if a cofounder fails to meet their agreed-upon obligations?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Formal warning and performance plan" /><span class="checkbox-box"></span>Formal warning and performance plan</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Temporary suspension of voting rights" /><span class="checkbox-box"></span>Temporary suspension of voting rights</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Reduction or dilution of unvested equity" /><span class="checkbox-box"></span>Reduction or dilution of unvested equity</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Role reassignment or demotion" /><span class="checkbox-box"></span>Role reassignment or demotion</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Termination" /><span class="checkbox-box"></span>Termination</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: Cure period -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A cure period gives the underperforming cofounder a fair chance to correct the issue before further action is taken. 30 days is a common default.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How many days does a cofounder have to fix the issue after receiving written notice before termination can occur?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <input class="card-input" type="text" inputmode="numeric" placeholder="Enter number of days" data-key="perf-cure-period" />
+      </div></div>
+    </div>
+
+    <!-- Card 3: With cause -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. Termination "with cause" typically means forfeiture of unvested equity and other consequences.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Which of the following constitutes termination "with cause"?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Fraud, embezzlement, or theft" /><span class="checkbox-box"></span>Fraud, embezzlement, or theft</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Breach of fiduciary duty" /><span class="checkbox-box"></span>Breach of fiduciary duty</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Willful misconduct or gross negligence" /><span class="checkbox-box"></span>Willful misconduct or gross negligence</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Material breach of this agreement" /><span class="checkbox-box"></span>Material breach of this agreement</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Criminal conviction" /><span class="checkbox-box"></span>Criminal conviction</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Other" /><span class="checkbox-box"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 4: Voluntary departure notice -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A notice period gives the remaining cofounders time to redistribute responsibilities before the departure takes effect.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How many days notice must a cofounder give if they choose to voluntarily leave?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <input class="card-input" type="text" inputmode="numeric" placeholder="Enter number of days" data-key="perf-notice-period" />
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: Non-Competition</span>
+      <a class="next-section-btn" href="noncompete.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_perf_';
+    const RADIO_NAMES = [];
+    const CB_NAMES    = ['perf-obligations-breach', 'perf-with-cause'];
+
+    function saveFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        localStorage.setItem(SK + el.dataset.key, el.value);
+      });
+      CB_NAMES.forEach(name => {
+        const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+        localStorage.setItem(SK + name, JSON.stringify(vals));
+      });
+    }
+
+    function restoreFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        el.value = localStorage.getItem(SK + el.dataset.key) || '';
+      });
+      CB_NAMES.forEach(name => {
+        try {
+          const vals = JSON.parse(localStorage.getItem(SK + name) || '[]');
+          vals.forEach(v => { const cb = document.querySelector(`input[name="${name}"][value="${v}"]`); if (cb) cb.checked = true; });
+        } catch(e) {}
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        const inp = next.querySelector('.card-input');
+        if (inp) setTimeout(() => inp.focus(), 100);
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+      const text    = card.querySelector('.card-input');
+      let value = '';
+      if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      } else if (text) {
+        value = text.value.trim();
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) {
+          card.classList.add('expanded');
+          const inp = card.querySelector('.card-input');
+          if (inp) setTimeout(() => inp.focus(), 100);
+        }
+      });
+      card.querySelectorAll('.card-input').forEach(inp => inp.addEventListener('input', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => updateAnswerPreview(card)));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Compensation &amp; Expenses</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">50% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:50%"></div></div>
+    <div class="sections-remaining">4 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="ip.html">← Back to IP &amp; Ownership</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Compensation &amp; Expenses</h1>
+    <p class="page-desc">Money issues cause more divorce than infidelity and incompatibility. It'd be naive to think cofounderships are immune. Don't wait until someone is frustrated over uneven pay or unclear expenses. Agree on how money flows now and keep communication transparent to avoid costly fallout.</p>
+
+    <!-- Card 1: Taking salary -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Many early-stage cofounders defer salary until the company has funding. This is worth aligning on explicitly.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Are any cofounders currently taking compensation or salary from the company?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="comp-salary" value="Yes" /><span class="radio-circle"></span>Yes</label>
+          <label class="card-radio-option"><input type="radio" name="comp-salary" value="No" /><span class="radio-circle"></span>No</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: Spending limit -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Setting a clear spending threshold prevents financial decisions from being made unilaterally. $5,000 is a common default for early-stage companies.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What's the spending limit, in USD, before a cofounder needs to check with the others?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <input class="card-input" type="text" inputmode="numeric" placeholder="$5000.00" data-key="comp-spending-limit" />
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: Performance</span>
+      <a class="next-section-btn" href="performance.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_comp_';
+    const RADIO_NAMES = ['comp-salary'];
+    const CB_NAMES    = [];
+
+    function saveFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        localStorage.setItem(SK + el.dataset.key, el.value);
+      });
+      RADIO_NAMES.forEach(name => {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        localStorage.setItem(SK + name, r ? r.value : '');
+      });
+    }
+
+    function restoreFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        el.value = localStorage.getItem(SK + el.dataset.key) || '';
+      });
+      RADIO_NAMES.forEach(name => {
+        const val = localStorage.getItem(SK + name) || '';
+        if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        const inp = next.querySelector('.card-input');
+        if (inp) setTimeout(() => inp.focus(), 100);
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio = card.querySelector('input[type="radio"]:checked');
+      const text  = card.querySelector('.card-input');
+      let value = '';
+      if (radio) { value = radio.value; }
+      else if (text) { value = text.value.trim(); }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) {
+          card.classList.add('expanded');
+          const inp = card.querySelector('.card-input');
+          if (inp) setTimeout(() => inp.focus(), 100);
+        }
+      });
+      card.querySelectorAll('.card-input').forEach(inp => inp.addEventListener('input', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

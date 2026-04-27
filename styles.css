@@ -1,0 +1,333 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #F6F3EE;
+  color: #1a1a1a;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 210px;
+  min-width: 210px;
+  background: #F1EEE9;
+  /* border-right: 1px solid #d6d1c7; */
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0 24px;
+  overflow-y: auto;
+}
+
+.logo {
+  padding: 20px 30px 52px;
+}
+.logo img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+}
+
+.nav-group {
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+.nav-group-2 {
+  margin-bottom: 8px;
+  margin-top: 40px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 200;
+  color: #aaa;
+  padding: 0 20px 6px;
+  padding-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+
+.nav-list {
+  list-style: none;
+}
+.nav-list li a {
+  display: block;
+  padding: 7px 20px;
+  font-size: 13.5px;
+  font-weight: 100;
+  color: #666;
+  text-decoration: none;
+  border-radius: 0;
+  transition: color 0.15s, background 0.15s;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.nav-list li a:hover {
+  color: #1a1a1a;
+}
+.nav-list li.active a {
+  color: #1a1a1a;
+  font-weight: 500;
+  background: #e3dfd8;
+  border-radius: 5px;
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 52px 60px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 36px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ccc9c0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.avatar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.welcome {
+  font-family: 'Instrument Serif', serif;
+  font-size: 44px;
+  font-weight: 200;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.welcome em {
+  font-style: italic;
+}
+
+.welcome-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: #555;
+  line-height: 1.55;
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+
+/* ── AGREEMENT CARD ── */
+.agreement-card {
+  background: #e3dfd8;
+  border-radius: 5px;
+  padding: 22px 24px 0;
+  margin-bottom: 2%;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.agreement-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.card-left {
+  flex: 1;
+}
+
+.card-type {
+  font-size: 11.5px;
+  font-weight: 200;
+  color: #888;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+
+.card-company {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  font-weight: 1;
+  letter-spacing: -0.3px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+.card-tag {
+  font-size: 11.5px;
+  font-weight: 200;
+  color: #4e7068;
+  background: #C7CECB;
+  border-radius: 4px;
+  padding: 3px 10px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 18px;
+}
+.card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 300;
+  color: #666;
+}
+.card-meta-item svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  padding-top: 2px;
+}
+
+.card-percent-box {
+  background: #C7CECB;
+  border-radius: 4px;
+  padding: 14px 20px 10px;
+  text-align: center;
+  min-width: 100px;
+}
+.card-percent {
+  font-family: 'Instrument Serif', serif;
+  font-size: 40px;
+  font-weight: 400;
+  color: #4B7263;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+.card-percent-label {
+  font-size: 11px;
+  font-weight: 300;
+  color: #4B7263;
+  margin-top: 2px;
+}
+
+.card-continue-btn {
+  background: #4e7068;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 9px 24px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 200;
+  cursor: pointer;
+  margin-top:40%;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+.card-continue-btn:hover {
+  background: #3d5a54;
+}
+.card-continue-btn:active {
+  transform: scale(0.97);
+}
+
+.card-progress-bar {
+  height: 4px;
+  background: #c4c0b7;
+  margin: 0 -24px;
+  position: relative;
+}
+.card-progress-fill {
+  height: 100%;
+  background: #4B7263;
+  border-radius: 0;
+  transition: width 0.8s ease 0.3s;
+  width: 0;
+}
+.agreement-card.visible .card-progress-fill {
+  width: 25%;
+}
+
+/* ── CREATE CARD ── */
+.create-card {
+  background: #b6c8c0;
+  border-radius: 5px;
+  padding: 26px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease 0.1s, transform 0.45s ease 0.1s, background 0.2s;
+}
+.create-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.create-card:hover {
+  background: #A8BCB3;
+}
+
+.create-card-text {}
+.create-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 26px;
+  font-weight: 200;
+  color: #1a1a1a;
+  letter-spacing: -0.2px;
+  margin-bottom: 4px;
+}
+.create-sub {
+  font-size: 12.5px;
+  font-weight: 200;
+  color: #3a3a3a;
+}
+
+.create-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dedad2;
+  border: none;
+  font-size: 22px;
+  font-weight: 1;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+.create-btn:hover {
+  background: #ccc8bf;
+  transform: scale(1.08);
+}

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – General Provisions</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">80% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:80%"></div></div>
+    <div class="sections-remaining">1 section remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="compensation.html">Compensation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="performance.html">Performance</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="noncompete.html">← Back to Non-Competition</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">General Provisions</h1>
+    <p class="page-desc">Last stretch. Knock out these final questions, then review and green-light your agreement.</p>
+
+    <!-- Card 1: Dispute resolution -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Defining this now avoids having to agree on a process in the middle of a conflict, when emotions are running high.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How should disputes among cofounders be resolved?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="gen-dispute" value="Mediation first, then arbitration" /><span class="radio-circle"></span>Mediation first, then arbitration if mediation fails</label>
+          <label class="card-radio-option"><input type="radio" name="gen-dispute" value="Binding arbitration" /><span class="radio-circle"></span>Binding arbitration</label>
+          <label class="card-radio-option"><input type="radio" name="gen-dispute" value="Litigation in courts" /><span class="radio-circle"></span>Litigation in courts</label>
+          <label class="card-radio-option"><input type="radio" name="gen-dispute" value="Other" /><span class="radio-circle"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: Governing state — upgraded to custom dropdown -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Typically this should match the state where the company is incorporated.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Which state's laws will govern this agreement?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-select-wrapper" data-value="" data-key="gen-governing-state">
+          <button class="card-select-trigger" type="button">
+            <span class="card-select-value is-placeholder">Select a state</span>
+            <svg class="card-select-chevron" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul class="card-select-dropdown">
+            <li>Alabama</li><li>Alaska</li><li>Arizona</li><li>Arkansas</li>
+            <li>California</li><li>Colorado</li><li>Connecticut</li><li>Delaware</li>
+            <li>Florida</li><li>Georgia</li><li>Hawaii</li><li>Idaho</li>
+            <li>Illinois</li><li>Indiana</li><li>Iowa</li><li>Kansas</li>
+            <li>Kentucky</li><li>Louisiana</li><li>Maine</li><li>Maryland</li>
+            <li>Massachusetts</li><li>Michigan</li><li>Minnesota</li><li>Mississippi</li>
+            <li>Missouri</li><li>Montana</li><li>Nebraska</li><li>Nevada</li>
+            <li>New Hampshire</li><li>New Jersey</li><li>New Mexico</li><li>New York</li>
+            <li>North Carolina</li><li>North Dakota</li><li>Ohio</li><li>Oklahoma</li>
+            <li>Oregon</li><li>Pennsylvania</li><li>Rhode Island</li><li>South Carolina</li>
+            <li>South Dakota</li><li>Tennessee</li><li>Texas</li><li>Utah</li>
+            <li>Vermont</li><li>Virginia</li><li>Washington</li><li>West Virginia</li>
+            <li>Wisconsin</li><li>Wyoming</li><li>District of Columbia</li>
+          </ul>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 3: Amendment process -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This prevents any single cofounder from unilaterally changing the terms of the agreement.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How can this agreement be amended or modified?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="gen-amendment" value="Unanimous written consent" /><span class="radio-circle"></span>Unanimous written consent of all cofounders</label>
+          <label class="card-radio-option"><input type="radio" name="gen-amendment" value="Majority vote" /><span class="radio-circle"></span>Majority vote of cofounders</label>
+          <label class="card-radio-option"><input type="radio" name="gen-amendment" value="Other" /><span class="radio-circle"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 4: Review frequency -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Regular reviews keep the agreement relevant as the company evolves. Every 12 months is a common default.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How often, in months, should this agreement be reviewed by the cofounders?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <input class="card-input" type="text" inputmode="numeric" placeholder="Enter number of months" data-key="gen-review-months" />
+      </div></div>
+    </div>
+
+    <!-- Card 5: Ack review frequency -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This acknowledgment binds all cofounders to the review cadence you just selected.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge periodic review of this agreement</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that this Agreement shall be reviewed at the agreed frequency to ensure it remains current and effective.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="gen-ack-review" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 6: Ack material change review -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Material changes — like a pivot, new investor, or cofounder role shift — are a good trigger for re-evaluating the agreement.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge the right to request review on material changes</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that any Cofounder may request a review of this Agreement in the event of material changes in circumstances affecting the Company or the Cofounder's role. Any amendments proposed pursuant to such review shall become effective only if approved and executed in writing according to the amendment process set forth in this Agreement.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="gen-ack-material" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 7: Ack entire agreement -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This clause ensures prior handshake deals or verbal agreements are superseded by this formal document.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge this agreement supersedes all prior understandings</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that this Agreement constitutes the entire agreement between the Cofounders regarding the subject matter hereof and supersedes all prior agreements, understandings, negotiations, and discussions, whether oral or written.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="gen-ack-entire" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 8: Ack severability -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This standard clause ensures a single unenforceable provision doesn't invalidate the entire agreement.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge severability of individual provisions</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that if any provision of this Agreement is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="gen-ack-severability" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="card-note">
+      <strong>Important:</strong> This document is a starting point and should be reviewed by a qualified attorney before signing. Laws vary by jurisdiction, and this agreement may not cover all scenarios relevant to your specific situation.
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">All sections complete</span>
+      <a class="next-section-btn" href="#">Review &amp; Sign</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_gen_';
+    const RADIO_NAMES = ['gen-dispute', 'gen-amendment'];
+    const CB_NAMES    = ['gen-ack-review', 'gen-ack-material', 'gen-ack-entire', 'gen-ack-severability'];
+
+    function saveFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        localStorage.setItem(SK + el.dataset.key, el.value);
+      });
+      RADIO_NAMES.forEach(name => {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        localStorage.setItem(SK + name, r ? r.value : '');
+      });
+      CB_NAMES.forEach(name => {
+        const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+        localStorage.setItem(SK + name, JSON.stringify(vals));
+      });
+      document.querySelectorAll('.card-select-wrapper[data-key]').forEach(w => {
+        localStorage.setItem(SK + w.dataset.key, w.dataset.value || '');
+      });
+    }
+
+    function restoreDropdown(wrapper, val) {
+      if (!val) return;
+      wrapper.dataset.value = val;
+      const valueEl = wrapper.querySelector('.card-select-value');
+      if (valueEl) { valueEl.textContent = val; valueEl.classList.remove('is-placeholder'); }
+      wrapper.querySelectorAll('li').forEach(li => li.classList.toggle('selected', li.textContent.trim() === val));
+    }
+
+    function restoreFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        el.value = localStorage.getItem(SK + el.dataset.key) || '';
+      });
+      RADIO_NAMES.forEach(name => {
+        const val = localStorage.getItem(SK + name) || '';
+        if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
+      });
+      CB_NAMES.forEach(name => {
+        try {
+          const vals = JSON.parse(localStorage.getItem(SK + name) || '[]');
+          vals.forEach(v => { const cb = document.querySelector(`input[name="${name}"][value="${v}"]`); if (cb) cb.checked = true; });
+        } catch(e) {}
+      });
+      document.querySelectorAll('.card-select-wrapper[data-key]').forEach(w => {
+        restoreDropdown(w, localStorage.getItem(SK + w.dataset.key) || '');
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        const inp = next.querySelector('.card-input, .card-select-trigger');
+        if (inp) setTimeout(() => inp.focus(), 100);
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview    = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio      = card.querySelector('input[type="radio"]:checked');
+      const checked    = card.querySelectorAll('input[type="checkbox"]:checked');
+      const selectWrap = card.querySelector('.card-select-wrapper');
+      const text       = card.querySelector('.card-input');
+      let value = '';
+      if (radio) {
+        value = radio.value;
+      } else if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      } else if (selectWrap) {
+        value = selectWrap.dataset.value || '';
+      } else if (text) {
+        value = text.value.trim();
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label') || e.target.closest('.card-select-wrapper')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) {
+          card.classList.add('expanded');
+          const inp = card.querySelector('.card-input');
+          if (inp) setTimeout(() => inp.focus(), 100);
+        }
+      });
+      card.querySelectorAll('.card-input').forEach(inp => inp.addEventListener('input', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => updateAnswerPreview(card)));
+
+      // Custom dropdown
+      const selectWrap = card.querySelector('.card-select-wrapper');
+      if (selectWrap) {
+        const trigger  = selectWrap.querySelector('.card-select-trigger');
+        const dropdown = selectWrap.querySelector('.card-select-dropdown');
+        function positionDropdown() {
+          const r = trigger.getBoundingClientRect();
+          dropdown.style.top   = (r.bottom + 6) + 'px';
+          dropdown.style.left  = r.left + 'px';
+          dropdown.style.width = r.width + 'px';
+        }
+        trigger.addEventListener('click', e => {
+          e.stopPropagation();
+          const isOpen = selectWrap.classList.contains('open');
+          document.querySelectorAll('.card-select-wrapper.open').forEach(w => w.classList.remove('open'));
+          if (!isOpen) { positionDropdown(); selectWrap.classList.add('open'); }
+        });
+        selectWrap.querySelectorAll('li').forEach(li => {
+          li.addEventListener('click', e => {
+            e.stopPropagation();
+            const val = li.textContent;
+            selectWrap.dataset.value = val;
+            selectWrap.querySelector('.card-select-value').textContent = val;
+            selectWrap.querySelector('.card-select-value').classList.remove('is-placeholder');
+            selectWrap.querySelectorAll('li').forEach(l => l.classList.remove('selected'));
+            li.classList.add('selected');
+            selectWrap.classList.remove('open');
+            updateAnswerPreview(card);
+          });
+        });
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.card-select-wrapper.open').forEach(w => w.classList.remove('open'));
+    });
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Non-Competition</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">70% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:70%"></div></div>
+    <div class="sections-remaining">2 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="compensation.html">Compensation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="performance.html">Performance</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="performance.html">← Back to Performance</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Confidentiality, Non-Competition &amp; Non-Solicitation</h1>
+    <p class="page-desc">You know how when you go to a bar with your friend, you have an unspoken agreement to not hit on the same person? Confidentiality, Non-Competition and Non-Solicitation kind of work the same way. They take the unspoken worries off the table so nothing turns awkward later. Make sure everyone knows what's off limits.</p>
+
+    <!-- Card 1: Confidentiality ack -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This clause is the foundation of trust in any founding team — what's said in the room stays in the room.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge confidentiality obligations</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that each Cofounder agrees to hold all Confidential Information in strict confidence and not to disclose any Confidential Information to any third party without the Company's prior written consent.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="nc-ack-conf" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: Non-competition duration -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Note: non-competition clauses are unenforceable in some states (like California). Check the laws where your company is registered.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How long should the non-competition obligation last after a cofounder leaves?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="6 months" /><span class="radio-circle"></span>6 months</label>
+          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="1 year" /><span class="radio-circle"></span>1 year</label>
+          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="2 years" /><span class="radio-circle"></span>2 years</label>
+          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="No non-competition clause" /><span class="radio-circle"></span>No non-competition clause</label>
+          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="Other" /><span class="radio-circle"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 3: Non-solicitation duration -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Non-solicitation prevents a departing cofounder from poaching the company's employees or clients after leaving.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">How long should the non-solicitation obligation last after a cofounder leaves?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="6 months" /><span class="radio-circle"></span>6 months</label>
+          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="1 year" /><span class="radio-circle"></span>1 year</label>
+          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="2 years" /><span class="radio-circle"></span>2 years</label>
+          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="No non-solicitation clause" /><span class="radio-circle"></span>No non-solicitation clause</label>
+          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="Other" /><span class="radio-circle"></span>Other</label>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: General Provisions</span>
+      <a class="next-section-btn" href="general.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_nc_';
+    const RADIO_NAMES = ['nc-noncompete', 'nc-nonsolicitation'];
+    const CB_NAMES    = ['nc-ack-conf'];
+
+    function saveFormData() {
+      RADIO_NAMES.forEach(name => {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        localStorage.setItem(SK + name, r ? r.value : '');
+      });
+      CB_NAMES.forEach(name => {
+        const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+        localStorage.setItem(SK + name, JSON.stringify(vals));
+      });
+    }
+
+    function restoreFormData() {
+      RADIO_NAMES.forEach(name => {
+        const val = localStorage.getItem(SK + name) || '';
+        if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
+      });
+      CB_NAMES.forEach(name => {
+        try {
+          const vals = JSON.parse(localStorage.getItem(SK + name) || '[]');
+          vals.forEach(v => { const cb = document.querySelector(`input[name="${name}"][value="${v}"]`); if (cb) cb.checked = true; });
+        } catch(e) {}
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio   = card.querySelector('input[type="radio"]:checked');
+      const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+      let value = '';
+      if (radio) {
+        value = radio.value;
+      } else if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) card.classList.add('expanded');
+      });
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => updateAnswerPreview(card)));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

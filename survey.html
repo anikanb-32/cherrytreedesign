@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Formation and Purpose</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+  <script>
+    // Run before paint — hides content if we're entering via the card transition
+    if (sessionStorage.getItem('pageTransition') === 'fromDashboard') {
+      document.documentElement.classList.add('page-entering');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">25% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+    <div class="sections-remaining">4 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="active">
+        <span class="nav-dot active"></span>
+        <a href="survey.html">Formation &amp; Purpose</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="cofounder.html">Cofounder Info</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="#">Equity Allocation</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="vesting.html">Vesting Schedule</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="decision.html">Decision-Making</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="ip.html">IP &amp; Ownership</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="compensation.html">Compensation</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="performance.html">Performance</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="noncompete.html">Non-Competition</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="general.html">General Provisions</a>
+      </li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+        <div class="collab-item">Cofounder B</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" id="back-link">← <b></b>Back to Dashboard</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Formation and Purpose</h1>
+    <p class="page-desc">You've been talking about this idea for weeks, maybe months. Now you're sitting with your cofounder, naming the company, buying the domain, imagining what it could become. Coffee in hand, takeout on the table. Creating a cofounder agreement is what makes it real. Let's get started.</p>
+
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Make sure it's good, your company might go big one day.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What's your company's name?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner"><input class="card-input" type="text" placeholder="Enter company name" data-key="company-name" /></div></div>
+    </div>
+
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This defines how your company is structured for ownership, taxes, and decision-making. If you plan to raise venture capital, a C-Corp is usually preferred.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What is your company's current or intended legal structure?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="legal-structure" value="C-Corp" /><span class="radio-circle"></span>C-Corp</label>
+          <label class="card-radio-option"><input type="radio" name="legal-structure" value="S-Corp" /><span class="radio-circle"></span>S-Corp</label>
+          <label class="card-radio-option"><input type="radio" name="legal-structure" value="LLC" /><span class="radio-circle"></span>LLC</label>
+        </div>
+        <input class="card-input" type="text" placeholder="Please Specify" data-key="legal-specify" />
+      </div></div>
+    </div>
+
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Delaware is a popular choice for many startups because its laws and courts are well established. Just be aware you may have additional fees or filings if your business is based elsewhere.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What state will your company be registered in?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-select-wrapper" data-value="" data-key="reg-state">
+          <button class="card-select-trigger" type="button">
+            <span class="card-select-value is-placeholder">Select a state</span>
+            <svg class="card-select-chevron" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul class="card-select-dropdown">
+            <li>Alabama</li><li>Alaska</li><li>Arizona</li><li>Arkansas</li>
+            <li>California</li><li>Colorado</li><li>Connecticut</li><li>Delaware</li>
+            <li>Florida</li><li>Georgia</li><li>Hawaii</li><li>Idaho</li>
+            <li>Illinois</li><li>Indiana</li><li>Iowa</li><li>Kansas</li>
+            <li>Kentucky</li><li>Louisiana</li><li>Maine</li><li>Maryland</li>
+            <li>Massachusetts</li><li>Michigan</li><li>Minnesota</li><li>Mississippi</li>
+            <li>Missouri</li><li>Montana</li><li>Nebraska</li><li>Nevada</li>
+            <li>New Hampshire</li><li>New Jersey</li><li>New Mexico</li><li>New York</li>
+            <li>North Carolina</li><li>North Dakota</li><li>Ohio</li><li>Oklahoma</li>
+            <li>Oregon</li><li>Pennsylvania</li><li>Rhode Island</li><li>South Carolina</li>
+            <li>South Dakota</li><li>Tennessee</li><li>Texas</li><li>Utah</li>
+            <li>Vermont</li><li>Virginia</li><li>Washington</li><li>West Virginia</li>
+            <li>Wisconsin</li><li>Wyoming</li><li>District of Columbia</li>
+          </ul>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint"></div></div></div>
+      <div class="card-row">
+        <div class="card-question">What's your company mailing address?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-address-fields">
+          <div class="card-address-field">
+            <div class="card-field-label">Street Address</div>
+            <input class="card-input" type="text" placeholder="Start typing address..." data-preview data-key="addr-street" />
+          </div>
+          <div class="card-address-field">
+            <div class="card-field-label">Address Line 2 <span class="field-optional">(Optional)</span></div>
+            <input class="card-input" type="text" placeholder="Apt, Suite, Floor, etc." data-key="addr-line2" />
+          </div>
+          <div class="card-address-row">
+            <div class="card-address-field">
+              <div class="card-field-label">City</div>
+              <input class="card-input" type="text" placeholder="San Francisco" data-key="addr-city" />
+            </div>
+            <div class="card-address-field">
+              <div class="card-field-label">State</div>
+              <div class="card-select-wrapper" data-value="" data-key="addr-state">
+                <button class="card-select-trigger" type="button">
+                  <span class="card-select-value is-placeholder">Select state</span>
+                  <svg class="card-select-chevron" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <ul class="card-select-dropdown">
+                  <li>Alabama</li><li>Alaska</li><li>Arizona</li><li>Arkansas</li>
+                  <li>California</li><li>Colorado</li><li>Connecticut</li><li>Delaware</li>
+                  <li>Florida</li><li>Georgia</li><li>Hawaii</li><li>Idaho</li>
+                  <li>Illinois</li><li>Indiana</li><li>Iowa</li><li>Kansas</li>
+                  <li>Kentucky</li><li>Louisiana</li><li>Maine</li><li>Maryland</li>
+                  <li>Massachusetts</li><li>Michigan</li><li>Minnesota</li><li>Mississippi</li>
+                  <li>Missouri</li><li>Montana</li><li>Nebraska</li><li>Nevada</li>
+                  <li>New Hampshire</li><li>New Jersey</li><li>New Mexico</li><li>New York</li>
+                  <li>North Carolina</li><li>North Dakota</li><li>Ohio</li><li>Oklahoma</li>
+                  <li>Oregon</li><li>Pennsylvania</li><li>Rhode Island</li><li>South Carolina</li>
+                  <li>South Dakota</li><li>Tennessee</li><li>Texas</li><li>Utah</li>
+                  <li>Vermont</li><li>Virginia</li><li>Washington</li><li>West Virginia</li>
+                  <li>Wisconsin</li><li>Wyoming</li><li>District of Columbia</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-address-field">
+            <div class="card-field-label">ZIP Code</div>
+            <input class="card-input" type="text" placeholder="94102" inputmode="numeric" maxlength="10" data-key="addr-zip" />
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Describe what you do in plain language. No buzzwords needed.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Can you describe your company in 1 line?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner"><input class="card-input" type="text" placeholder="Your answer" data-key="description" /></div></div>
+    </div>
+
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Pick the industry that best describes what you currently do. Aspirations to conquer all markets can wait.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">What industry is it in?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="AI / Machine Learning" /><span class="checkbox-box"></span>AI / Machine Learning</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="AR / VR / Spatial Computing" /><span class="checkbox-box"></span>AR / VR / Spatial Computing</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Biotech" /><span class="checkbox-box"></span>Biotech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Climate / Clean Energy" /><span class="checkbox-box"></span>Climate / Clean Energy</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Consumer / D2C" /><span class="checkbox-box"></span>Consumer / D2C</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Cybersecurity" /><span class="checkbox-box"></span>Cybersecurity</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="E-commerce" /><span class="checkbox-box"></span>E-commerce</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Edtech" /><span class="checkbox-box"></span>Edtech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Fintech" /><span class="checkbox-box"></span>Fintech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Food &amp; Beverage / Foodtech" /><span class="checkbox-box"></span>Food &amp; Beverage / Foodtech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Gaming / Entertainment" /><span class="checkbox-box"></span>Gaming / Entertainment</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Hardware / IoT" /><span class="checkbox-box"></span>Hardware / IoT</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Healthtech / Medtech" /><span class="checkbox-box"></span>Healthtech / Medtech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="HR / Future of Work" /><span class="checkbox-box"></span>HR / Future of Work</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Legaltech / Regtech" /><span class="checkbox-box"></span>Legaltech / Regtech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Logistics / Supply Chain" /><span class="checkbox-box"></span>Logistics / Supply Chain</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Media / Creator Economy" /><span class="checkbox-box"></span>Media / Creator Economy</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Mobility / Transportation" /><span class="checkbox-box"></span>Mobility / Transportation</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Proptech / Real Estate" /><span class="checkbox-box"></span>Proptech / Real Estate</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Social Impact / Nonprofit Tech" /><span class="checkbox-box"></span>Social Impact / Nonprofit Tech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Software / SaaS" /><span class="checkbox-box"></span>Software / SaaS</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Sustainability / Carbon Tech" /><span class="checkbox-box"></span>Sustainability / Carbon Tech</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Travel / Hospitality" /><span class="checkbox-box"></span>Travel / Hospitality</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Web3 / Blockchain / Crypto" /><span class="checkbox-box"></span>Web3 / Blockchain / Crypto</label>
+          <label class="card-checkbox-option"><input type="checkbox" name="industry" value="Other" /><span class="checkbox-box"></span>Other</label>
+          <input class="card-input industry-specify" type="text" placeholder="Please specify" style="display:none" data-key="industry-specify" />
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: Cofounder Info</span>
+      <a class="next-section-btn" href="cofounder.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    // ── Entrance transition — fade content in over the page-bg colour ──
+    if (sessionStorage.getItem('pageTransition') === 'fromDashboard') {
+      sessionStorage.removeItem('pageTransition');
+      // Short delay lets the browser paint the hidden state first,
+      // then we remove the class to trigger the CSS transition
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        document.documentElement.classList.remove('page-entering');
+      }));
+    }
+
+    // ── Back to Dashboard — fade out then navigate ──
+    document.getElementById('back-link').addEventListener('click', () => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed; inset: 0;
+        background: #e3dfd8;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.38s ease;
+      `;
+      document.body.appendChild(overlay);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        setTimeout(() => {
+          sessionStorage.setItem('pageTransition', 'fromSurvey');
+          window.location.href = 'dashboard.html';
+        }, 400);
+      }));
+    });
+
+    // ── localStorage persistence ──
+    const SK = 'ct_survey_';
+
+    function saveFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        localStorage.setItem(SK + el.dataset.key, el.value);
+      });
+      const radio = document.querySelector('input[name="legal-structure"]:checked');
+      localStorage.setItem(SK + 'legal-structure', radio ? radio.value : '');
+      const checked = Array.from(document.querySelectorAll('input[name="industry"]:checked')).map(cb => cb.value);
+      localStorage.setItem(SK + 'industry', JSON.stringify(checked));
+      document.querySelectorAll('.card-select-wrapper[data-key]').forEach(w => {
+        localStorage.setItem(SK + w.dataset.key, w.dataset.value || '');
+      });
+    }
+
+    function restoreDropdown(wrapper, val) {
+      if (!val) return;
+      wrapper.dataset.value = val;
+      const valueEl = wrapper.querySelector('.card-select-value');
+      if (valueEl) { valueEl.textContent = val; valueEl.classList.remove('is-placeholder'); }
+      wrapper.querySelectorAll('li').forEach(li => li.classList.toggle('selected', li.textContent.trim() === val));
+    }
+
+    function restoreFormData() {
+      document.querySelectorAll('input[data-key]').forEach(el => {
+        el.value = localStorage.getItem(SK + el.dataset.key) || '';
+      });
+      const radioVal = localStorage.getItem(SK + 'legal-structure') || '';
+      if (radioVal) {
+        const r = document.querySelector(`input[name="legal-structure"][value="${radioVal}"]`);
+        if (r) r.checked = true;
+      }
+      try {
+        const vals = JSON.parse(localStorage.getItem(SK + 'industry') || '[]');
+        vals.forEach(v => {
+          const cb = document.querySelector(`input[name="industry"][value="${v}"]`);
+          if (cb) cb.checked = true;
+        });
+      } catch(e) {}
+      const otherCb = document.querySelector('input[name="industry"][value="Other"]');
+      const specifyEl = document.querySelector('.industry-specify');
+      if (otherCb && otherCb.checked && specifyEl) specifyEl.style.display = 'block';
+      document.querySelectorAll('.card-select-wrapper[data-key]').forEach(w => {
+        restoreDropdown(w, localStorage.getItem(SK + w.dataset.key) || '');
+      });
+      // Rebuild previews & answered states
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      // Collapse all, expand first unanswered
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const firstUnanswered = document.querySelector('.question-card:not(.answered)');
+      if (firstUnanswered) {
+        firstUnanswered.classList.add('expanded');
+      } else {
+        document.getElementById('next-section-bar').classList.add('visible');
+      }
+    }
+
+    // ── Advance to next card ──
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        const input = next.querySelector('.card-input, .card-select-trigger');
+        if (input) setTimeout(() => input.focus(), 100);
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    // ── Answer preview helper ──
+    function updateAnswerPreview(card) {
+      const preview    = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio      = card.querySelector('input[type="radio"]:checked');
+      const checked    = card.querySelectorAll('input[type="checkbox"]:checked');
+      const previewEl  = card.querySelector('[data-preview]');
+      const selectWrap = card.querySelector('.card-select-wrapper');
+      const text       = card.querySelector('.card-input');
+      let value = '';
+      if (radio) {
+        value = radio.value;
+      } else if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      } else if (previewEl) {
+        value = previewEl.value.trim();
+      } else if (selectWrap) {
+        value = selectWrap.dataset.value || '';
+      } else if (text) {
+        value = text.value.trim();
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    // ── Expanding card interactions ──
+    document.querySelectorAll('.question-card').forEach(card => {
+      // Save answer when clicking away
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label') || e.target.closest('.card-select-wrapper')) return;
+        const isExpanded = card.classList.contains('expanded');
+        // Snapshot answers for all currently expanded cards before collapsing
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) {
+          card.classList.add('expanded');
+          const input = card.querySelector('.card-input');
+          if (input) setTimeout(() => input.focus(), 100);
+        }
+      });
+
+      // Live-update preview as user types (covers all inputs in multi-field cards)
+      card.querySelectorAll('.card-input').forEach(inp => {
+        inp.addEventListener('input', () => updateAnswerPreview(card));
+      });
+
+      // Custom dropdown interactions
+      const selectWrap = card.querySelector('.card-select-wrapper');
+      if (selectWrap) {
+        const trigger  = selectWrap.querySelector('.card-select-trigger');
+        const dropdown = selectWrap.querySelector('.card-select-dropdown');
+        function positionDropdown() {
+          const r = trigger.getBoundingClientRect();
+          dropdown.style.top   = (r.bottom + 6) + 'px';
+          dropdown.style.left  = r.left + 'px';
+          dropdown.style.width = r.width + 'px';
+        }
+        trigger.addEventListener('click', e => {
+          e.stopPropagation();
+          const isOpen = selectWrap.classList.contains('open');
+          document.querySelectorAll('.card-select-wrapper.open').forEach(w => w.classList.remove('open'));
+          if (!isOpen) { positionDropdown(); selectWrap.classList.add('open'); }
+        });
+        selectWrap.querySelectorAll('li').forEach(li => {
+          li.addEventListener('click', e => {
+            e.stopPropagation();
+            const val = li.textContent;
+            selectWrap.dataset.value = val;
+            selectWrap.querySelector('.card-select-value').textContent = val;
+            selectWrap.querySelector('.card-select-value').classList.remove('is-placeholder');
+            selectWrap.querySelectorAll('li').forEach(l => l.classList.remove('selected'));
+            li.classList.add('selected');
+            selectWrap.classList.remove('open');
+            updateAnswerPreview(card);
+          });
+        });
+      }
+
+      // Live-update on radio selection
+      card.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.addEventListener('change', () => updateAnswerPreview(card));
+      });
+
+      // Live-update on checkbox selection + toggle "Other" specify input
+      const otherCb      = card.querySelector('input[type="checkbox"][value="Other"]');
+      const specifyInput = card.querySelector('.industry-specify');
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', () => {
+          if (otherCb && specifyInput) {
+            specifyInput.style.display = otherCb.checked ? 'block' : 'none';
+            if (cb === otherCb && otherCb.checked) setTimeout(() => specifyInput.focus(), 50);
+          }
+          updateAnswerPreview(card);
+        });
+      });
+      if (specifyInput) specifyInput.addEventListener('input', () => updateAnswerPreview(card));
+    });
+    // Global Enter — advance whichever card is currently expanded
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    // Restore saved data on load
+    restoreFormData();
+
+    // Close custom dropdowns when clicking outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.card-select-wrapper.open').forEach(w => w.classList.remove('open'));
+    });
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>

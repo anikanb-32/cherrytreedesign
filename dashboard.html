@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <nav class="nav-group">
+      <div class="nav-label">Platform</div>
+      <ul class="nav-list">
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Recent Documents</a></li>
+        <li><a href="#">Chat with AI</a></li>
+        <li><a href="#">Billing</a></li>
+      </ul>
+    </nav>
+
+    <nav class="nav-group-2">
+      <div class="nav-label">Resources</div>
+      <ul class="nav-list">
+        <li><a href="#">Newsletter</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="welcome">Welcome back, <em>Name</em>.</h1>
+    <p class="welcome-sub">Great companies start with great company. Let's jump back into your open agreements.</p>
+
+    <!-- Existing agreement -->
+    <div class="agreement-card">
+      <div class="card-inner">
+        <div class="card-left">
+          <div class="card-type">Cofounder Agreement</div>
+          <div class="card-company">My Company</div>
+          <div class="card-tags">
+            <span class="card-tag">Cofounder A</span>
+            <span class="card-tag">Cofounder B</span>
+          </div>
+          <div class="card-meta">
+            <div class="card-meta-item">
+              <!-- Clock -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 3" stroke-linecap="round"/>
+              </svg>
+              Edited 5 days ago
+            </div>
+            <div class="card-meta-item">
+              <!-- Sections -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 6h16M4 12h10M4 18h7" stroke-linecap="round"/>
+              </svg>
+              3 out of 10 sections
+            </div>
+            <div class="card-meta-item">
+              <!-- Trend -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 17l5-5 4 4 9-9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Complete by June 12, 2026
+            </div>
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="card-percent-box">
+            <div class="card-percent">25%</div>
+            <div class="card-percent-label">Completed</div>
+          </div>
+          <button class="card-continue-btn">Continue</button>
+        </div>
+      </div>
+      <div class="card-progress-bar">
+        <div class="card-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Create new -->
+    <div class="create-card">
+      <div class="create-card-text">
+        <div class="create-title">Create a new agreement</div>
+        <div class="create-sub">One document per company.</div>
+      </div>
+      <button class="create-btn">+</button>
+    </div>
+
+  </main>
+
+  <script src="interactions.js"></script>
+</body>
+</html>

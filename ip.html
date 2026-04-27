@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – IP &amp; Ownership</title>
+  <link rel="stylesheet" href="surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">40% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:40%"></div></div>
+    <div class="sections-remaining">5 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item">Cofounder A</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="decision.html">← Back to Decision-Making</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">IP &amp; Ownership of Work</h1>
+    <div class="page-desc">
+      <p>In 2013, Reggie Brown sued his Snapchat cofounders, Evan Spiegel and Bobby Murphy. He claimed they stole his idea: an app where messages vanish after being sent. Brown said he not only conceived the concept but also shook hands with Spiegel to serve as CMO. He claimed credit for the original name "Picaboo," the ghost logo, and even a draft patent for the disappearing-message technology.</p>
+      <p>Not long after they started, the partnership unraveled. Brown alleged he was locked out of company accounts and cut off all communication. One day a cofounder, the next day erased entirely. After a long legal battle, Snapchat settled, paying Brown $157 million.</p>
+      <p>Without being specific about IP, even college buddies can turn on each other.</p>
+    </div>
+
+    <!-- Card 1: Prior assets -->
+    <div class="question-card expanded">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Pre-existing IP (called "prior inventions") needs to be disclosed and addressed so there's no confusion about who owns what once the company is formed.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Has any cofounder created code, designs, or other assets before joining the company that might be used in the business?</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="ip-prior-assets" value="Yes" /><span class="radio-circle"></span>Yes</label>
+          <label class="card-radio-option"><input type="radio" name="ip-prior-assets" value="No" /><span class="radio-circle"></span>No</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: IP assignment acknowledgment -->
+    <div class="question-card">
+      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This assignment clause is standard in cofounder agreements and ensures the company owns what its founders build.</div></div></div>
+      <div class="card-row">
+        <div class="card-question">Acknowledge IP assignment to the company</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="card-ack-text">I acknowledge that all inventions, discoveries, designs, developments, improvements, processes, works of authorship, trade secrets, and other intellectual property conceived, created, developed, or reduced to practice by the Cofounder, either alone or with others, in the course of their work for the Company or using the Company's resources, shall be the sole and exclusive property of the Company.</p>
+        <div class="card-checkbox-group">
+          <label class="card-checkbox-option"><input type="checkbox" name="ip-ack-assignment" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <span class="next-section-label">Up next: Compensation</span>
+      <a class="next-section-btn" href="compensation.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const SK = 'ct_ip_';
+    const RADIO_NAMES = ['ip-prior-assets'];
+    const CB_NAMES    = ['ip-ack-assignment'];
+
+    function saveFormData() {
+      RADIO_NAMES.forEach(name => {
+        const r = document.querySelector(`input[name="${name}"]:checked`);
+        localStorage.setItem(SK + name, r ? r.value : '');
+      });
+      CB_NAMES.forEach(name => {
+        const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+        localStorage.setItem(SK + name, JSON.stringify(vals));
+      });
+    }
+
+    function restoreFormData() {
+      RADIO_NAMES.forEach(name => {
+        const val = localStorage.getItem(SK + name) || '';
+        if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
+      });
+      CB_NAMES.forEach(name => {
+        try {
+          const vals = JSON.parse(localStorage.getItem(SK + name) || '[]');
+          vals.forEach(v => { const cb = document.querySelector(`input[name="${name}"][value="${v}"]`); if (cb) cb.checked = true; });
+        } catch(e) {}
+      });
+      document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+      const first = document.querySelector('.question-card:not(.answered)');
+      if (first) { first.classList.add('expanded'); }
+      else { document.getElementById('next-section-bar').classList.add('visible'); }
+    }
+
+    function advanceCard(current) {
+      updateAnswerPreview(current);
+      current.classList.remove('expanded');
+      const cards = Array.from(document.querySelectorAll('.question-card'));
+      const next = cards[cards.indexOf(current) + 1];
+      if (next) {
+        next.classList.add('expanded');
+        setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      } else {
+        const bar = document.getElementById('next-section-bar');
+        bar.classList.add('visible');
+        setTimeout(() => bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+
+    function updateAnswerPreview(card) {
+      const preview = card.querySelector('.card-answer-preview');
+      if (!preview) return;
+      const radio   = card.querySelector('input[type="radio"]:checked');
+      const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+      let value = '';
+      if (radio) {
+        value = radio.value;
+      } else if (checked.length) {
+        const vals = Array.from(checked).map(cb => cb.value);
+        value = vals.length <= 2 ? vals.join(', ') : vals[0] + ` +${vals.length - 1} more`;
+      }
+      preview.textContent = value;
+      card.classList.toggle('answered', value !== '');
+      saveFormData();
+    }
+
+    document.querySelectorAll('.question-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        const isExpanded = card.classList.contains('expanded');
+        document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
+        document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
+        if (!isExpanded) card.classList.add('expanded');
+      });
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => updateAnswerPreview(card)));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const expanded = document.querySelector('.question-card.expanded');
+      if (!expanded) return;
+      e.preventDefault();
+      advanceCard(expanded);
+    });
+
+    restoreFormData();
+  </script>
+  <script src="sidebar.js"></script>
+</body>
+</html>
