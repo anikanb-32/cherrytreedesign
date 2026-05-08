@@ -64,6 +64,12 @@
     .eq2-entry { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f0ede6; }
     .eq2-remove { background:none; border:none; color:#c0a0a0; cursor:pointer; font-size:12px; font-family:inherit; padding:4px; }
     .eq2-remove:hover { color:#b97070; }
+    .eq2-pct-wrap { flex:0 0 auto; display:flex; align-items:stretch; border:1.5px solid #e0ddd6; border-radius:7px; overflow:hidden; }
+    .eq2-pct-btn { width:28px; height:auto; background:#faf9f6; border:none; color:#5a5650; font-size:16px; line-height:1; cursor:pointer; font-family:inherit; flex-shrink:0; transition:background 0.12s; }
+    .eq2-pct-btn:hover { background:#ede9e1; color:#2d2a22; }
+    .eq2-pct-inp { width:52px; border:none !important; border-left:1.5px solid #e0ddd6 !important; border-right:1.5px solid #e0ddd6 !important; border-radius:0 !important; text-align:center; padding:0 4px !important; margin-top:0 !important; display:flex !important; align-self:stretch; }
+    .eq2-pct-inp::-webkit-outer-spin-button, .eq2-pct-inp::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+    .eq2-pct-inp { -moz-appearance:textfield; appearance:textfield; }
     .eq2-total { font-size:13px; font-weight:700; color:#2d2a22; padding:10px 0 4px; }
     .eq2-total.err { color:#b97070; }
     .eq2-total-err { font-size:11px; color:#b97070; display:none; }
@@ -100,7 +106,7 @@
     .eq2-btn-ghost:hover { background:#faf9f6; }
     .eq2-btn-green {
       padding:10px 20px; background:#5a7a5c; color:#fff; border:none;
-      border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;
+      border-radius:7px; font-size:13px; font-weight:400; cursor:pointer; font-family:inherit;
     }
     .eq2-btn-green:hover { background:#496448; }
     .eq2-btns { display:flex; gap:10px; flex-wrap:wrap; }
@@ -326,7 +332,7 @@
         <p class="eq2-sub">You'll rate 18 factors across inputs, execution, and intangibles — the things that actually drive equity. Takes about 5 minutes.</p>
         <div class="eq2-btns">
           <button class="eq2-btn-primary" id="btn-start">Start →</button>
-          <button class="eq2-btn-ghost" id="btn-skip">Skip — I already know my split</button>
+          <button class="eq2-btn-ghost" id="btn-skip">Skip, I already know my split</button>
         </div>`;
     }
 
@@ -406,7 +412,10 @@
     }
 
     function rFinal() {
-      if (!finalEntries.length) finalEntries = cofounders.map(cf=>({name:cf.name,equity:''}));
+      if (!finalEntries.length) {
+        const eq = (100 / cofounders.length).toFixed(1);
+        finalEntries = cofounders.map(cf=>({name:cf.name,equity:eq}));
+      }
       const tot  = finalEntries.reduce((s,e)=>s+(parseFloat(e.equity)||0),0);
       const hasAny = finalEntries.some(e=>e.equity!=='');
       const isOff  = hasAny && Math.abs(tot-100)>0.01;
@@ -419,8 +428,12 @@
             <div class="eq2-entry">
               <input class="card-input" type="text" placeholder="Cofounder name"
                 value="${e.name||''}" data-fi="${i}" data-f="name" style="flex:1;" />
-              <input class="card-input" type="number" min="0" max="100" step="0.1" placeholder="%"
-                value="${e.equity||''}" data-fi="${i}" data-f="equity" style="flex:0 0 80px;" />
+              <div class="eq2-pct-wrap">
+                <button class="eq2-pct-btn" data-fi="${i}" data-dir="-1">−</button>
+                <input class="card-input eq2-pct-inp" type="number" min="0" max="100" step="0.5"
+                  value="${e.equity||''}" data-fi="${i}" data-f="equity" />
+                <button class="eq2-pct-btn" data-fi="${i}" data-dir="1">+</button>
+              </div>
               <button class="eq2-remove" data-r="${i}">Remove</button>
             </div>`).join('')}
         </div>
@@ -495,9 +508,19 @@
           if(t){t.textContent=`Total: ${tot.toFixed(2)}%`; t.classList.toggle('err',off);}
           if(e) e.style.display=off?'block':'none';
         };
-        c.querySelectorAll('[data-fi]').forEach(inp=>{
+        c.querySelectorAll('[data-fi][data-f]').forEach(inp=>{
           inp.addEventListener('input',()=>{
             finalEntries[parseInt(inp.dataset.fi)][inp.dataset.f]=inp.value;
+            save(); syncTotal();
+          });
+        });
+        c.querySelectorAll('.eq2-pct-btn').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            const i=parseInt(btn.dataset.fi);
+            const inp=btn.closest('.eq2-pct-wrap').querySelector('.eq2-pct-inp');
+            const next=Math.min(100,Math.max(0,(parseFloat(inp.value)||0)+parseFloat(btn.dataset.dir)));
+            inp.value=next.toFixed(1);
+            finalEntries[i].equity=inp.value;
             save(); syncTotal();
           });
         });
@@ -543,9 +566,16 @@
     loadData();
     cardQueue = buildQueue();
     const container = document.getElementById('eq2-container');
+    container.style.opacity = '0';
+    container.style.transform = 'translateY(10px)';
     container.innerHTML = render(cardQueue[0]);
     wire(cardQueue[0]);
     updateProgress();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      container.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+      container.style.opacity = '1';
+      container.style.transform = 'translateY(0)';
+    }));
   </script>
   <script src="../sidebar.js"></script>
 </body>

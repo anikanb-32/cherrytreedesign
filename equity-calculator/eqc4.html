@@ -176,6 +176,22 @@
     <h1 class="page-title">Equity Allocation</h1>
     <p class="page-desc">Score everyone on each factor. Watch how the picture takes shape — who brings what, and where you see each other differently.</p>
 
+    <!-- CHOICE CARD -->
+    <div class="question-card expanded" id="eq4-choice-card">
+      <div class="card-row">
+        <div class="card-question">Equity Calculator</div>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">An optional tool to help you score contributions and visualize your split.</div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button id="eq4-btn-use" style="padding:10px 20px;background:#2d2a22;color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;font-family:inherit;">Use Calculator →</button>
+          <button id="eq4-btn-skip" style="padding:10px 20px;background:transparent;color:#5a5650;border:1.5px solid #e0ddd6;border-radius:7px;font-size:13px;cursor:pointer;font-family:inherit;">Skip, know my split</button>
+        </div>
+      </div></div>
+    </div>
+
+    <div id="eq4-calc-body" style="opacity:0;transform:translateY(12px);pointer-events:none;">
+
     <!-- SCORING CARD -->
     <div class="question-card expanded">
       <div class="card-row">
@@ -233,8 +249,10 @@
       </div></div>
     </div>
 
+    </div><!-- end #eq4-calc-body -->
+
     <!-- FINAL ALLOCATION CARD -->
-    <div class="question-card expanded" style="margin-top:12px;">
+    <div class="question-card expanded" id="eq4-final-card" style="margin-top:12px;">
       <div class="card-row">
         <div class="card-question">Final Allocation</div>
       </div>
@@ -688,6 +706,28 @@
       signed=!signed;localStorage.setItem('ct_eq_signed',signed?'1':'0');
       document.getElementById('eq4-sign').classList.toggle('signed',signed);
       document.getElementById('eq4-sign-box').textContent=signed?'✓':'';
+    });
+
+    document.getElementById('eq4-btn-use')?.addEventListener('click', () => {
+      const card = document.getElementById('eq4-choice-card');
+      card.style.opacity = '1';
+      card.getBoundingClientRect();
+      card.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-6px)';
+      setTimeout(() => {
+        card.style.display = 'none';
+        const body = document.getElementById('eq4-calc-body');
+        body.style.pointerEvents = 'auto';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          body.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+          body.style.opacity = '1';
+          body.style.transform = 'translateY(0)';
+        }));
+      }, 220);
+    });
+    document.getElementById('eq4-btn-skip')?.addEventListener('click', () => {
+      document.getElementById('eq4-final-card')?.scrollIntoView({ behavior: 'smooth' });
     });
 
     // ── Init ──
