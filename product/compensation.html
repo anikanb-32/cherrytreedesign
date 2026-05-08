@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Compensation &amp; Expenses</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <link rel="stylesheet" href="../surveystyles.css" />
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
@@ -23,7 +23,7 @@
     <ul class="nav-list">
       <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
-      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../equity-calculator/eqc1.html">Equity Allocation</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
@@ -62,7 +62,6 @@
 
     <!-- Card 1: Taking salary -->
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Many early-stage cofounders defer salary until the company has funding. This is worth aligning on explicitly.</div></div></div>
       <div class="card-row">
         <div class="card-question">Are any cofounders currently taking compensation or salary from the company?</div>
         <span class="card-answer-preview"></span>
@@ -72,12 +71,45 @@
           <label class="card-radio-option"><input type="radio" name="comp-salary" value="Yes" /><span class="radio-circle"></span>Yes</label>
           <label class="card-radio-option"><input type="radio" name="comp-salary" value="No" /><span class="radio-circle"></span>No</label>
         </div>
+
+        <!-- Compensation details panel — shown when Yes -->
+        <div class="comp-panel" id="comp-panel">
+          <div class="comp-panel-header">
+            <span class="comp-panel-title">Compensation Details</span>
+            <button class="comp-add-btn" id="comp-add-btn" type="button">+ Add Compensation</button>
+          </div>
+          <div class="comp-entries" id="comp-entries">
+            <div class="comp-empty" id="comp-empty">Click "Add Compensation" to add entries</div>
+          </div>
+          <div class="comp-form-wrap" id="comp-form-wrap">
+            <div class="comp-form-inner">
+              <div class="comp-form-divider"></div>
+              <div class="comp-form-grid">
+                <div>
+                  <span class="cf-field-label">Name</span>
+                  <input class="card-input" type="text" id="comp-f-name" placeholder="Cofounder name" />
+                </div>
+                <div>
+                  <span class="cf-field-label">Role / Title</span>
+                  <input class="card-input" type="text" id="comp-f-role" placeholder="CEO, CTO…" />
+                </div>
+                <div>
+                  <span class="cf-field-label">Annual Salary (USD)</span>
+                  <input class="card-input" type="text" id="comp-f-amount" placeholder="$0" />
+                </div>
+              </div>
+              <div class="comp-form-footer">
+                <button class="comp-cancel-btn" type="button" id="comp-cancel-btn">Cancel</button>
+                <button class="cf-submit-btn" type="button" id="comp-save-btn">Add Entry</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div></div>
     </div>
 
     <!-- Card 2: Spending limit -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Setting a clear spending threshold prevents financial decisions from being made unilaterally. $5,000 is a common default for early-stage companies.</div></div></div>
       <div class="card-row">
         <div class="card-question">What's the spending limit, in USD, before a cofounder needs to check with the others?</div>
         <span class="card-answer-preview"></span>
@@ -87,9 +119,7 @@
       </div></div>
     </div>
 
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: Performance</span>
-      <a class="next-section-btn" href="performance.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="performance.html">Continue</a>
     </div>
   </main>
 
@@ -98,6 +128,79 @@
     const RADIO_NAMES = ['comp-salary'];
     const CB_NAMES    = [];
 
+    // ── Compensation entries ──
+    let compEntries = [];
+
+    function saveEntries() {
+      localStorage.setItem(SK + 'entries', JSON.stringify(compEntries));
+    }
+
+    function renderEntries() {
+      const list   = document.getElementById('comp-entries');
+      const empty  = document.getElementById('comp-empty');
+      const existing = list.querySelectorAll('.comp-entry');
+      existing.forEach(el => el.remove());
+      if (compEntries.length === 0) {
+        empty.style.display = '';
+      } else {
+        empty.style.display = 'none';
+        compEntries.forEach((entry, i) => {
+          const row = document.createElement('div');
+          row.className = 'comp-entry';
+          row.innerHTML = `
+            <span class="comp-entry-name">${entry.name}</span>
+            <span class="comp-entry-role">${entry.role}</span>
+            <span class="comp-entry-amount">${entry.amount}/yr</span>
+            <button class="comp-entry-remove" data-i="${i}" type="button">×</button>
+          `;
+          list.appendChild(row);
+        });
+        list.querySelectorAll('.comp-entry-remove').forEach(btn => {
+          btn.addEventListener('click', e => {
+            e.stopPropagation();
+            compEntries.splice(parseInt(btn.dataset.i), 1);
+            saveEntries();
+            renderEntries();
+          });
+        });
+      }
+    }
+
+    function toggleCompPanel(show) {
+      document.getElementById('comp-panel').classList.toggle('visible', show);
+    }
+
+    // Add / cancel form
+    document.getElementById('comp-add-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      document.getElementById('comp-form-wrap').classList.add('open');
+      setTimeout(() => document.getElementById('comp-f-name').focus(), 100);
+    });
+
+    document.getElementById('comp-cancel-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      document.getElementById('comp-form-wrap').classList.remove('open');
+      document.getElementById('comp-f-name').value = '';
+      document.getElementById('comp-f-role').value = '';
+      document.getElementById('comp-f-amount').value = '';
+    });
+
+    document.getElementById('comp-save-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      const name   = document.getElementById('comp-f-name').value.trim();
+      const role   = document.getElementById('comp-f-role').value.trim();
+      const amount = document.getElementById('comp-f-amount').value.trim();
+      if (!name && !amount) return;
+      compEntries.push({ name: name || '—', role: role || '—', amount: amount || '—' });
+      saveEntries();
+      renderEntries();
+      document.getElementById('comp-form-wrap').classList.remove('open');
+      document.getElementById('comp-f-name').value = '';
+      document.getElementById('comp-f-role').value = '';
+      document.getElementById('comp-f-amount').value = '';
+    });
+
+    // ── Form save / restore ──
     function saveFormData() {
       document.querySelectorAll('input[data-key]').forEach(el => {
         localStorage.setItem(SK + el.dataset.key, el.value);
@@ -116,6 +219,13 @@
         const val = localStorage.getItem(SK + name) || '';
         if (val) document.querySelectorAll(`input[name="${name}"]`).forEach(r => { if (r.value === val) r.checked = true; });
       });
+      try {
+        compEntries = JSON.parse(localStorage.getItem(SK + 'entries') || '[]');
+      } catch(e) { compEntries = []; }
+      renderEntries();
+      const salaryVal = localStorage.getItem(SK + 'comp-salary') || '';
+      toggleCompPanel(salaryVal === 'Yes');
+
       document.querySelectorAll('.question-card').forEach(updateAnswerPreview);
       document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
       const first = document.querySelector('.question-card:not(.answered)');
@@ -144,7 +254,7 @@
       const preview = card.querySelector('.card-answer-preview');
       if (!preview) return;
       const radio = card.querySelector('input[type="radio"]:checked');
-      const text  = card.querySelector('.card-input');
+      const text  = card.querySelector('input[data-key]');
       let value = '';
       if (radio) { value = radio.value; }
       else if (text) { value = text.value.trim(); }
@@ -155,30 +265,34 @@
 
     document.querySelectorAll('.question-card').forEach(card => {
       card.addEventListener('click', e => {
-        if (e.target.tagName === 'INPUT' || e.target.closest('label')) return;
+        if (e.target.tagName === 'INPUT' || e.target.closest('label') || e.target.closest('.comp-panel')) return;
         const isExpanded = card.classList.contains('expanded');
         document.querySelectorAll('.question-card.expanded').forEach(updateAnswerPreview);
         document.querySelectorAll('.question-card').forEach(c => c.classList.remove('expanded'));
         if (!isExpanded) {
           card.classList.add('expanded');
-          const inp = card.querySelector('.card-input');
+          const inp = card.querySelector('input[data-key]');
           if (inp) setTimeout(() => inp.focus(), 100);
         }
       });
-      card.querySelectorAll('.card-input').forEach(inp => inp.addEventListener('input', () => updateAnswerPreview(card)));
-      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[data-key]').forEach(inp => inp.addEventListener('input', () => updateAnswerPreview(card)));
+      card.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => {
+        updateAnswerPreview(card);
+        if (r.name === 'comp-salary') toggleCompPanel(r.value === 'Yes');
+      }));
     });
 
     document.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
       const expanded = document.querySelector('.question-card.expanded');
       if (!expanded) return;
+      if (document.activeElement && document.activeElement.closest('.comp-panel')) return;
       e.preventDefault();
       advanceCard(expanded);
     });
 
     restoreFormData();
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>

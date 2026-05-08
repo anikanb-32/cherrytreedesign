@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree — Built for Founders</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #F6F3EE;
+      --bg-2:  #F1EEE9;
+      --bg-3:  #E3DFD8;
+      --bg-4:  #D8D3CB;
+      --green: #4B7263;
+      --green-dk: #3d5f52;
+      --sage:  #C7CECB;
+      --ink:   #1a1a1a;
+      --muted: #666;
+      --faint: #aaa;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--ink); overflow-x:hidden; }
+
+    body::after {
+      content:''; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity:0.032; pointer-events:none; z-index:9000;
+    }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes ticker { from{transform:translateX(0);}to{transform:translateX(-50%);} }
+    @keyframes float  { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
+    @keyframes rotate { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
+
+    /* ── NAV — pill style ── */
+    .nav-wrap {
+      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      z-index:200; width:calc(100% - 80px); max-width:900px;
+    }
+    nav {
+      background:rgba(246,243,238,0.85);
+      backdrop-filter:blur(16px);
+      border:1px solid rgba(0,0,0,0.08);
+      border-radius:14px;
+      padding:12px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+      transition:box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; }
+    .nav-logo img { width:28px; height:28px; object-fit:contain; }
+    .nav-logo-text { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-cta {
+      background:var(--ink); color:#fff; border-radius:8px;
+      padding:8px 18px; font-size:13px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      transition:background 0.15s;
+    }
+    .nav-cta:hover { background:#333; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(18px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;} .d3{transition-delay:0.3s;} .d4{transition-delay:0.45s;}
+
+    /* ── HERO ── */
+    .hero {
+      min-height:100vh;
+      padding:140px 52px 80px;
+      display:flex; flex-direction:column;
+      align-items:flex-start; justify-content:center;
+      position:relative; overflow:hidden;
+    }
+    .hero-bg-circle {
+      position:absolute; right:-200px; top:50%; transform:translateY(-50%);
+      width:700px; height:700px; border-radius:50%;
+      background:radial-gradient(circle, rgba(75,114,99,0.08) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-bg-ring {
+      position:absolute; right:-80px; top:50%; transform:translateY(-50%);
+      width:500px; height:500px; border-radius:50%;
+      border:1px solid rgba(75,114,99,0.1);
+      pointer-events:none;
+    }
+    .hero-bg-ring2 {
+      position:absolute; right:40px; top:50%; transform:translateY(-50%);
+      width:300px; height:300px; border-radius:50%;
+      border:1px solid rgba(75,114,99,0.08);
+      pointer-events:none;
+    }
+    .hero-eyebrow {
+      display:flex; align-items:center; gap:10px;
+      font-size:11.5px; font-weight:400; letter-spacing:0.08em;
+      text-transform:uppercase; color:var(--faint);
+      margin-bottom:32px;
+      opacity:0; animation:fadeUp 0.6s ease 0.15s forwards;
+    }
+    .hero-eyebrow-line { width:24px; height:1px; background:var(--faint); }
+    .hero-headline {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(52px, 7.5vw, 110px);
+      font-weight:400; letter-spacing:-2.5px; line-height:0.97;
+      max-width:800px; margin-bottom:0;
+    }
+    .hero-headline-line {
+      display:block; overflow:hidden;
+    }
+    .hero-headline-inner {
+      display:block;
+      opacity:0; transform:translateY(100%);
+      animation:slideUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hl1 .hero-headline-inner { animation-delay:0.25s; }
+    .hl2 .hero-headline-inner { animation-delay:0.38s; }
+    .hl3 .hero-headline-inner { animation-delay:0.51s; color:var(--green); font-style:italic; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(110%);}to{opacity:1;transform:translateY(0);} }
+    .hero-bottom {
+      display:flex; align-items:flex-end; justify-content:space-between;
+      width:100%; margin-top:60px;
+      opacity:0; animation:fadeUp 0.8s ease 0.85s forwards;
+    }
+    .hero-sub { font-size:16px; font-weight:300; color:var(--muted); max-width:360px; line-height:1.7; }
+    .hero-cta-group { display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+    .btn-primary {
+      background:var(--green); color:#fff; border-radius:8px;
+      padding:14px 28px; font-size:14px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      transition:background 0.15s, transform 0.15s; display:inline-block;
+    }
+    .btn-primary:hover { background:var(--green-dk); transform:translateY(-1px); }
+    .hero-hint { font-size:11.5px; font-weight:300; color:var(--faint); }
+
+    /* ── CARDS MARQUEE ── */
+    .cards-marquee { overflow:hidden; padding:40px 0; border-top:1px solid rgba(0,0,0,0.07); background:var(--bg-2); }
+    .cards-track { display:flex; gap:16px; width:max-content; animation:ticker 40s linear infinite; }
+    .marquee-card {
+      background:var(--bg); border:1px solid rgba(0,0,0,0.07); border-radius:10px;
+      padding:20px 24px; min-width:200px; white-space:nowrap;
+    }
+    .mc-label { font-size:10.5px; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+    .mc-val { font-family:'Instrument Serif',serif; font-size:20px; font-weight:400; }
+    .mc-val.green { color:var(--green); }
+
+    /* ── STATEMENT ── */
+    .statement {
+      padding:140px 52px;
+      display:grid; grid-template-columns:1fr 2fr; gap:80px; align-items:start;
+      border-top:1px solid rgba(0,0,0,0.07);
+    }
+    .statement-left { padding-top:8px; }
+    .statement-num {
+      font-family:'Instrument Serif',serif;
+      font-size:130px; font-weight:400; color:var(--bg-3);
+      line-height:1; letter-spacing:-5px; margin-bottom:-20px;
+    }
+    .statement-label { font-size:13px; font-weight:300; color:var(--muted); line-height:1.6; max-width:180px; }
+    .statement-right {}
+    .statement-tag { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:24px; }
+    .statement-text {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(30px,3.5vw,50px); font-weight:400;
+      letter-spacing:-0.6px; line-height:1.15; margin-bottom:32px;
+    }
+    .statement-text em { font-style:italic; color:var(--green); }
+    .statement-body { font-size:15px; font-weight:300; color:var(--muted); line-height:1.7; max-width:500px; }
+
+    /* ── HORIZONTAL SCROLL FEATURES ── */
+    .hscroll-section { border-top:1px solid rgba(0,0,0,0.07); background:var(--bg-2); padding:80px 0 80px 52px; overflow:hidden; }
+    .hscroll-header { margin-bottom:40px; padding-right:52px; display:flex; align-items:flex-end; justify-content:space-between; }
+    .hscroll-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:12px; }
+    .hscroll-heading { font-family:'Instrument Serif',serif; font-size:clamp(28px,3vw,44px); font-weight:400; letter-spacing:-0.5px; line-height:1.1; }
+    .hscroll-heading em { font-style:italic; }
+    .hscroll-hint { font-size:12px; font-weight:300; color:var(--faint); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    .hscroll-track {
+      display:flex; gap:14px;
+      overflow-x:auto; padding-bottom:20px; padding-right:52px;
+      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .hscroll-track::-webkit-scrollbar { display:none; }
+    .hscroll-card {
+      background:var(--bg); border-radius:12px; padding:36px 32px;
+      min-width:300px; flex-shrink:0; scroll-snap-align:start;
+      border:1px solid rgba(0,0,0,0.06);
+      transition:transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hscroll-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.08); }
+    .hsc-icon {
+      width:44px; height:44px; border-radius:10px; background:var(--bg-3);
+      display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+    }
+    .hsc-icon svg { width:22px; height:22px; }
+    .hsc-title { font-family:'Instrument Serif',serif; font-size:22px; font-weight:400; margin-bottom:10px; letter-spacing:-0.2px; }
+    .hsc-desc { font-size:13.5px; font-weight:300; color:var(--muted); line-height:1.65; }
+    .hsc-tag {
+      display:inline-block; margin-top:20px;
+      font-size:10.5px; font-weight:400; color:var(--green);
+      background:#d4e0da; border-radius:20px; padding:3px 10px;
+    }
+
+    /* ── ACCORDION SECTIONS ── */
+    .accordion-section {
+      border-top:1px solid rgba(0,0,0,0.07);
+      display:grid; grid-template-columns:1fr 1fr;
+    }
+    .accordion-left {
+      padding:80px 60px 80px 52px;
+      border-right:1px solid rgba(0,0,0,0.07);
+      position:sticky; top:0; height:fit-content;
+    }
+    .accordion-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:18px; }
+    .accordion-heading { font-family:'Instrument Serif',serif; font-size:clamp(28px,3vw,42px); font-weight:400; letter-spacing:-0.5px; line-height:1.1; margin-bottom:18px; }
+    .accordion-body { font-size:14px; font-weight:300; color:var(--muted); line-height:1.65; }
+    .accordion-right { padding:40px 52px 40px 48px; }
+    .accordion-item {
+      border-bottom:1px solid rgba(0,0,0,0.08); overflow:hidden;
+    }
+    .accordion-trigger {
+      width:100%; background:none; border:none;
+      padding:22px 0; display:flex; align-items:center; justify-content:space-between; gap:16px;
+      cursor:pointer; text-align:left;
+      font-family:'Instrument Serif',serif; font-size:20px; font-weight:400;
+      color:var(--ink); transition:color 0.15s;
+    }
+    .accordion-trigger:hover { color:var(--green); }
+    .accordion-trigger-left { display:flex; align-items:center; gap:16px; }
+    .accordion-num { font-size:12px; font-weight:300; color:var(--faint); min-width:24px; }
+    .accordion-arrow {
+      width:24px; height:24px; border-radius:50%; background:var(--bg-3);
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      transition:transform 0.3s ease, background 0.2s;
+    }
+    .accordion-arrow svg { width:12px; height:12px; transition:transform 0.3s; }
+    .accordion-item.open .accordion-arrow { background:var(--green); transform:none; }
+    .accordion-item.open .accordion-arrow svg { transform:rotate(45deg); stroke:#fff; }
+    .accordion-body-wrap {
+      display:grid; grid-template-rows:0fr;
+      transition:grid-template-rows 0.35s ease;
+    }
+    .accordion-item.open .accordion-body-wrap { grid-template-rows:1fr; }
+    .accordion-body-inner { overflow:hidden; }
+    .accordion-content { font-size:14px; font-weight:300; color:var(--muted); line-height:1.7; padding:0 0 24px 40px; }
+
+    /* ── FLOATING CTA ── */
+    .cta-section {
+      padding:130px 52px;
+      display:flex; flex-direction:column; align-items:center;
+      text-align:center; position:relative; overflow:hidden;
+      border-top:1px solid rgba(0,0,0,0.07);
+    }
+    .cta-bg-text {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(100px,18vw,240px); font-weight:400; font-style:italic;
+      color:rgba(0,0,0,0.03); white-space:nowrap; pointer-events:none;
+      letter-spacing:-6px; line-height:1;
+    }
+    .cta-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:24px; position:relative; }
+    .cta-heading {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(40px,6vw,80px); font-weight:400;
+      letter-spacing:-1.5px; line-height:1.04;
+      max-width:700px; margin-bottom:28px; position:relative;
+    }
+    .cta-heading em { font-style:italic; color:var(--green); }
+    .cta-sub { font-size:16px; font-weight:300; color:var(--muted); margin-bottom:48px; position:relative; }
+    .btn-cta {
+      background:var(--ink); color:#fff; border-radius:8px;
+      padding:15px 36px; font-size:15px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      transition:background 0.15s, transform 0.15s, box-shadow 0.15s;
+      display:inline-block; position:relative;
+    }
+    .btn-cta:hover { background:#333; transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,0.15); }
+
+    /* Spinning badge */
+    .spin-badge {
+      position:absolute; top:48px; right:80px;
+      width:100px; height:100px;
+    }
+    .spin-svg { animation:rotate 14s linear infinite; width:100%; height:100%; }
+    .spin-center {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-family:'Instrument Serif',serif; font-size:20px; color:var(--faint);
+    }
+
+    /* ── FOOTER ── */
+    footer { background:var(--bg-2); padding:44px 52px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(0,0,0,0.07); }
+    .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .footer-logo img { width:26px; height:26px; object-fit:contain; }
+    .footer-logo-name { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
+    .footer-copy { font-size:12px; font-weight:300; color:var(--faint); }
+    .footer-links { display:flex; gap:24px; list-style:none; }
+    .footer-links a { font-size:12px; font-weight:300; color:var(--faint); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:var(--ink); }
+  </style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <nav id="nav">
+    <a class="nav-logo" href="marketing3.html">
+      <img src="../cherries.png" alt="Cherrytree" />
+      <span class="nav-logo-text">Cherrytree</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#covered">Coverage</a></li>
+    </ul>
+    <a class="nav-cta" href="../product/survey.html">Start for free</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-bg-ring"></div>
+  <div class="hero-bg-ring2"></div>
+
+  <div class="hero-eyebrow"><span class="hero-eyebrow-line"></span>Cofounder Agreement Tool</div>
+  <h1 class="hero-headline">
+    <span class="hero-headline-line hl1"><span class="hero-headline-inner">The agreement</span></span>
+    <span class="hero-headline-line hl2"><span class="hero-headline-inner">you make</span></span>
+    <span class="hero-headline-line hl3"><span class="hero-headline-inner">before.</span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">Cherrytree guides founding teams through the conversations that matter — equity, roles, decisions, and IP — before the hard moments force it.</p>
+    <div class="hero-cta-group">
+      <a class="btn-primary" href="../product/survey.html">Start your agreement →</a>
+      <span class="hero-hint">Free. No account required.</span>
+    </div>
+  </div>
+</section>
+
+<!-- CARDS MARQUEE -->
+<div class="cards-marquee">
+  <div class="cards-track">
+    <div class="marquee-card"><div class="mc-label">Equity split</div><div class="mc-val green">50 / 50</div></div>
+    <div class="marquee-card"><div class="mc-label">Vesting</div><div class="mc-val">4yr / 1yr cliff</div></div>
+    <div class="marquee-card"><div class="mc-label">Decision threshold</div><div class="mc-val">Unanimous</div></div>
+    <div class="marquee-card"><div class="mc-label">IP assigned</div><div class="mc-val green">✓ Confirmed</div></div>
+    <div class="marquee-card"><div class="mc-label">Non-compete</div><div class="mc-val">1 year</div></div>
+    <div class="marquee-card"><div class="mc-label">Spending limit</div><div class="mc-val">$5,000</div></div>
+    <div class="marquee-card"><div class="mc-label">Dispute resolution</div><div class="mc-val">Mediation</div></div>
+    <div class="marquee-card"><div class="mc-label">Notice period</div><div class="mc-val">30 days</div></div>
+    <div class="marquee-card"><div class="mc-label">Equity split</div><div class="mc-val green">50 / 50</div></div>
+    <div class="marquee-card"><div class="mc-label">Vesting</div><div class="mc-val">4yr / 1yr cliff</div></div>
+    <div class="marquee-card"><div class="mc-label">Decision threshold</div><div class="mc-val">Unanimous</div></div>
+    <div class="marquee-card"><div class="mc-label">IP assigned</div><div class="mc-val green">✓ Confirmed</div></div>
+    <div class="marquee-card"><div class="mc-label">Non-compete</div><div class="mc-val">1 year</div></div>
+    <div class="marquee-card"><div class="mc-label">Spending limit</div><div class="mc-val">$5,000</div></div>
+    <div class="marquee-card"><div class="mc-label">Dispute resolution</div><div class="mc-val">Mediation</div></div>
+    <div class="marquee-card"><div class="mc-label">Notice period</div><div class="mc-val">30 days</div></div>
+  </div>
+</div>
+
+<!-- STATEMENT -->
+<div class="statement">
+  <div class="statement-left reveal">
+    <div class="statement-num">65</div>
+    <div class="statement-label">percent of startups hit serious cofounder conflict</div>
+  </div>
+  <div class="statement-right">
+    <div class="statement-tag reveal">The hard truth</div>
+    <h2 class="statement-text reveal d1">Most cofounder relationships don't fail because the idea was bad. They fail because <em>the terms were never written down.</em></h2>
+    <p class="statement-body reveal d2">Cherrytree gives founding teams the structure to have important conversations before the hard moments force it. One question, one section at a time — plain English throughout.</p>
+  </div>
+</div>
+
+<!-- HORIZONTAL SCROLL FEATURES -->
+<div class="hscroll-section" id="features">
+  <div class="hscroll-header">
+    <div>
+      <div class="hscroll-overline reveal">Features</div>
+      <h2 class="hscroll-heading reveal d1">Built for the conversation, <em>not just the doc.</em></h2>
+    </div>
+    <div class="hscroll-hint reveal">Scroll to explore →</div>
+  </div>
+  <div class="hscroll-track">
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div class="hsc-title">Progressive disclosure</div>
+      <p class="hsc-desc">One question at a time. No overwhelming forms, no legal jargon. Just clear, human questions with context.</p>
+      <span class="hsc-tag">UX</span>
+    </div>
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg></div>
+      <div class="hsc-title">Auto-saved always</div>
+      <p class="hsc-desc">Pick up exactly where you left off. Progress is saved locally as you go. No account needed to start.</p>
+      <span class="hsc-tag">Persistence</span>
+    </div>
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></div>
+      <div class="hsc-title">Plain English</div>
+      <p class="hsc-desc">Every section explains why it matters. Make informed decisions — not just fill in blanks — with full context.</p>
+      <span class="hsc-tag">Clarity</span>
+    </div>
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+      <div class="hsc-title">Real agreement</div>
+      <p class="hsc-desc">Your answers become a full cofounder agreement document — every clause, every section, ready for review.</p>
+      <span class="hsc-tag">Output</span>
+    </div>
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+      <div class="hsc-title">Built for teams</div>
+      <p class="hsc-desc">Multiple cofounders, one agreement. Everyone contributes. Everyone reviews. Everyone signs off.</p>
+      <span class="hsc-tag">Collaboration</span>
+    </div>
+    <div class="hscroll-card">
+      <div class="hsc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
+      <div class="hsc-title">Revisit anytime</div>
+      <p class="hsc-desc">As your company grows, your agreement can evolve. Update any section whenever your situation changes.</p>
+      <span class="hsc-tag">Flexible</span>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION SECTIONS -->
+<div class="accordion-section" id="covered">
+  <div class="accordion-left">
+    <div class="accordion-overline reveal">What's covered</div>
+    <h2 class="accordion-heading reveal d1">Ten sections. Every angle.</h2>
+    <p class="accordion-body reveal d2">From your company name to what happens if things fall apart. Cherrytree covers everything your founding team needs to address — and explains why each section matters.</p>
+  </div>
+  <div class="accordion-right">
+    <div class="accordion-item" data-desc="Company name, incorporation state, business purpose, and founding mission.">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">01</span>Formation &amp; Purpose</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Company name, incorporation state, business purpose, and founding mission. Sets the legal foundation for everything that follows.</div></div></div>
+    </div>
+    <div class="accordion-item" data-desc="Roles, responsibilities, titles, and contact details for each cofounder.">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">02</span>Cofounder Info</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Roles, responsibilities, titles, and contact details for each cofounder. Establishes who's who from day one.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">03</span>Equity Allocation</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">How ownership is divided between cofounders and why. The most important number in your company, written down clearly.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">04</span>Vesting Schedule</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Cliff period, vesting timeline, acceleration triggers, and what happens to unvested equity when a cofounder leaves.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">05</span>Decision-Making</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Voting rights, which decisions require full agreement, and how deadlocks get resolved before they become disputes.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">06</span>IP &amp; Ownership</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Who owns what was built — before and after the company formed. Prior inventions, assignment clauses, and work-for-hire.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">07</span>Compensation</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Salaries, deferred pay, and the spending limit before a cofounder needs to check with the rest of the team.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">08</span>Performance &amp; Departure</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">What happens when someone isn't performing, or decides to leave. Cure periods, termination causes, and notice periods.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">09</span>Non-Competition</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Confidentiality obligations, non-compete duration, and non-solicitation terms to protect the company after a departure.</div></div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-trigger">
+        <div class="accordion-trigger-left"><span class="accordion-num">10</span>General Provisions</div>
+        <div class="accordion-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2v8M2 6h8"/></svg></div>
+      </button>
+      <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-content">Governing law, dispute resolution method, amendment process, and the legal framework for the entire agreement.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-bg-text">Cherrytree</div>
+  <div class="spin-badge">
+    <svg class="spin-svg" viewBox="0 0 100 100">
+      <path id="sp" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" fill="none"/>
+      <text><textPath style="font-size:9px;font-family:Outfit,sans-serif;font-weight:300;letter-spacing:0.14em;fill:#aaa;text-transform:uppercase;" href="#sp">FREE TO START · TAKES 15 MIN · FREE TO START · </textPath></text>
+    </svg>
+    <div class="spin-center">✦</div>
+  </div>
+  <div class="cta-overline reveal">Get started</div>
+  <h2 class="cta-heading reveal d1">Don't wait. Write it <em>down.</em></h2>
+  <p class="cta-sub reveal d2">Start your cofounder agreement today — free, clear, and built for founders.</p>
+  <a class="btn-cta reveal d3" href="../product/survey.html">Start for free →</a>
+</div>
+
+<footer>
+  <a class="footer-logo" href="marketing3.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="footer-logo-name">Cherrytree</span>
+  </a>
+  <span class="footer-copy">© 2025 Cherrytree. Made for founders.</span>
+  <ul class="footer-links">
+    <li><a href="../product/survey.html">Start agreement</a></li>
+    <li><a href="../product/dashboard.html">Dashboard</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+
+  // Reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Accordion
+  document.querySelectorAll('.accordion-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.accordion-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

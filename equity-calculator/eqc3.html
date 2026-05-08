@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Equity Allocation</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
+  <style>
+    /* ── Split bar ── */
+    .eq3-bar-wrap { margin:20px 0 10px; }
+    .eq3-bar {
+      position:relative; display:flex; height:80px;
+      border-radius:10px; overflow:hidden; user-select:none;
+    }
+    .eq3-seg {
+      position:relative; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      overflow:hidden; transition:flex-basis 0s;
+      flex-shrink:0;
+    }
+    .eq3-seg-name { font-size:12px; font-weight:600; color:rgba(255,255,255,0.85); letter-spacing:0.02em; }
+    .eq3-seg-pct  { font-size:20px; font-weight:800; color:#fff; line-height:1; }
+    .eq3-handle {
+      position:absolute; right:-5px; top:0; bottom:0; width:10px;
+      cursor:col-resize; z-index:10; display:flex; align-items:center; justify-content:center;
+    }
+    .eq3-handle::after {
+      content:''; width:2px; height:36px; background:rgba(255,255,255,0.5);
+      border-radius:1px;
+    }
+    .eq3-handle:hover::after { background:rgba(255,255,255,0.9); }
+
+    /* Segment colors */
+    .eq3-seg:nth-child(1) { background:#2d2a22; }
+    .eq3-seg:nth-child(2) { background:#5a7a5c; }
+    .eq3-seg:nth-child(3) { background:#c8a87a; }
+    .eq3-seg:nth-child(4) { background:#7a8a9c; }
+    .eq3-seg:nth-child(5) { background:#9c7a8a; }
+
+    /* Fine-tune inputs under bar */
+    .eq3-inputs { display:flex; flex-direction:column; gap:8px; margin-top:16px; }
+    .eq3-input-row { display:flex; align-items:center; gap:10px; }
+    .eq3-color-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .eq3-color-dot:nth-child(1) { background:#2d2a22; }
+    .eq3-input-row:nth-child(1) .eq3-color-dot { background:#2d2a22; }
+    .eq3-input-row:nth-child(2) .eq3-color-dot { background:#5a7a5c; }
+    .eq3-input-row:nth-child(3) .eq3-color-dot { background:#c8a87a; }
+    .eq3-input-row:nth-child(4) .eq3-color-dot { background:#7a8a9c; }
+    .eq3-input-row:nth-child(5) .eq3-color-dot { background:#9c7a8a; }
+    .eq3-cf-name-lbl { flex:1; font-size:13px; color:#3a3630; font-weight:500; }
+    .eq3-pct-input {
+      flex:0 0 70px; text-align:right; border:none; border-bottom:1.5px solid #e0ddd6;
+      font-size:15px; font-weight:700; color:#2d2a22; background:transparent;
+      outline:none; font-family:inherit; padding:2px 4px;
+    }
+    .eq3-pct-input:focus { border-bottom-color:#2d2a22; }
+    .eq3-pct-label { font-size:13px; color:#aaa; }
+    .eq3-total-row {
+      margin-top:10px; padding-top:10px; border-top:1px solid #e8e4dc;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .eq3-total-lbl { font-size:12px; font-weight:600; color:#aaa; }
+    .eq3-total-val { font-size:14px; font-weight:700; color:#2d2a22; }
+    .eq3-total-val.err { color:#b97070; }
+    .eq3-total-err { font-size:11px; color:#b97070; }
+
+    /* Agreement indicator */
+    .eq3-agreement {
+      margin-top:16px; padding:12px 16px; border-radius:8px;
+      border:1px solid #e8e4dc; background:#faf9f6;
+      display:flex; align-items:center; gap:12px; font-size:12px; color:#5a5650;
+    }
+    .eq3-agree-icon { font-size:16px; flex-shrink:0; }
+    .eq3-agree-label { font-weight:600; color:#2d2a22; }
+
+    /* Validate section */
+    .eq3-validate-card { margin-top:12px; }
+    .eq3-validate-intro { font-size:13px; color:#888; line-height:1.55; margin-bottom:16px; }
+    .eq3-bucket { border:1px solid #e8e4dc; border-radius:10px; margin-bottom:10px; overflow:hidden; }
+    .eq3-bucket-hdr {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px; cursor:pointer; background:#faf9f6; user-select:none;
+    }
+    .eq3-bucket-hdr:hover { background:#f3f1eb; }
+    .eq3-bucket-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#2d2a22; }
+    .eq3-bucket-meta  { font-size:11px; color:#bbb; }
+    .eq3-chevron { font-size:10px; color:#bbb; transition:transform 0.22s; }
+    .eq3-bucket.open .eq3-chevron { transform:rotate(180deg); }
+    .eq3-bucket-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.26s; }
+    .eq3-bucket.open .eq3-bucket-body { grid-template-rows:1fr; }
+    .eq3-bucket-inner { overflow:hidden; }
+
+    /* Category scoring row */
+    .eq3-cat-row {
+      padding:10px 16px; border-top:1px solid #f0ede6;
+      display:grid; gap:8px;
+    }
+    .eq3-cat-top { display:flex; align-items:center; justify-content:space-between; }
+    .eq3-cat-name { font-size:12px; font-weight:600; color:#2d2a22; }
+    .eq3-imp-dots { display:flex; gap:3px; }
+    .eq3-imp-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:#e8e4dc; cursor:pointer; transition:background 0.1s;
+    }
+    .eq3-imp-dot.on { background:#2d2a22; }
+    .eq3-cf-score-row { display:flex; align-items:center; gap:8px; }
+    .eq3-cf-score-lbl { flex:0 0 110px; font-size:11px; color:#888; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .eq3-mini-segs { display:flex; gap:2px; }
+    .eq3-mini-seg {
+      width:22px; height:22px; border-radius:4px; border:1px solid #e8e4dc;
+      background:#fff; font-size:10px; font-weight:500; color:#aaa;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all 0.1s; font-family:inherit;
+    }
+    .eq3-mini-seg:hover { border-color:#aaa; color:#2d2a22; }
+    .eq3-mini-seg.sel { background:#2d2a22; border-color:#2d2a22; color:#fff; }
+
+    /* Calculator result strip */
+    .eq3-calc-strip {
+      margin-top:14px; padding:12px 16px; background:#f4f2ed;
+      border-radius:8px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+    }
+    .eq3-calc-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#999; }
+    .eq3-calc-item { font-size:12px; color:#3a3630; }
+    .eq3-calc-item strong { font-weight:700; color:#2d2a22; }
+    .eq3-calc-vs { font-size:11px; color:#aaa; margin-left:2px; }
+
+    /* Final allocation */
+    .eq3-final-desc { font-size:13px; color:#888; line-height:1.55; margin-bottom:16px; }
+    .eq3-entry { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f0ede6; }
+    .eq3-remove { background:none; border:none; color:#c0a0a0; cursor:pointer; font-size:12px; font-family:inherit; }
+    .eq3-remove:hover { color:#b97070; }
+    .eq3-final-total { font-size:13px; font-weight:700; color:#2d2a22; padding:10px 0 4px; }
+    .eq3-final-total.err { color:#b97070; }
+    .eq3-final-err { font-size:11px; color:#b97070; display:none; }
+    .eq3-add-btn { display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:8px 14px; border-radius:6px; border:1.5px solid #e0ddd6; background:#fff; font-size:12px; color:#3a3630; cursor:pointer; font-family:inherit; }
+    .eq3-add-btn:hover { background:#faf9f6; }
+    .eq3-legal-toggle { font-size:11px; color:#bbb; background:none; border:none; cursor:pointer; padding:0; margin-top:12px; display:block; font-family:inherit; }
+    .eq3-legal-toggle:hover { color:#888; }
+    .eq3-legal-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.24s; }
+    .eq3-legal-body.open { grid-template-rows:1fr; }
+    .eq3-legal-inner { overflow:hidden; font-size:11px; color:#bbb; line-height:1.65; font-style:italic; padding-top:6px; }
+    .eq3-sign {
+      margin-top:18px; padding:14px 16px; border:1.5px solid #e0ddd6;
+      border-radius:10px; background:#faf9f6; display:flex; align-items:center;
+      gap:10px; cursor:pointer; transition:border-color 0.15s, background 0.15s;
+    }
+    .eq3-sign:hover { border-color:#c8c4bc; }
+    .eq3-sign.signed { border-color:#5a7a5c; background:#f0f6f0; }
+    .eq3-sign-box { width:18px; height:18px; border-radius:4px; border:1.5px solid #d0cdc6; background:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; color:transparent; flex-shrink:0; transition:all 0.15s; }
+    .eq3-sign.signed .eq3-sign-box { background:#5a7a5c; border-color:#5a7a5c; color:#fff; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo"><img src="../cherries.png" alt="Cherrytree" /></div>
+    <div class="company-name">Company</div>
+    <div class="progress-label">30% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+    <div class="sections-remaining">7 sections remaining</div>
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="../product/survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="../product/cofounder.html">Cofounder Info</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/vesting.html">Vesting Schedule</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/decision.html">Decision-Making</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/general.html">General Provisions</a></li>
+    </ul>
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item" id="sidebar-cofounder-list">—</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="../product/cofounder.html">← Back to Cofounder Info</a>
+        <span class="saved-label" id="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Equity Allocation</h1>
+    <p class="page-desc">Start with the number. Drag the bar to set your split, then use the validator below to check your reasoning.</p>
+
+    <!-- SPLIT BAR CARD -->
+    <div class="question-card expanded">
+      <div class="card-row">
+        <div class="card-question">Your Split</div>
+        <span class="card-answer-preview" id="split-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Drag the dividers to adjust. Fine-tune with the inputs below.</div>
+
+        <div class="eq3-bar-wrap">
+          <div class="eq3-bar" id="eq3-bar"></div>
+        </div>
+
+        <div class="eq3-inputs" id="eq3-inputs"></div>
+
+        <div class="eq3-total-row">
+          <span class="eq3-total-lbl">Total</span>
+          <div style="text-align:right;">
+            <div class="eq3-total-val" id="eq3-total">100.0%</div>
+            <div class="eq3-total-err" id="eq3-total-err">Must equal 100%</div>
+          </div>
+        </div>
+
+        <div class="eq3-agreement" id="eq3-agreement" style="display:none;">
+          <span class="eq3-agree-icon" id="agree-icon">—</span>
+          <div>
+            <div class="eq3-agree-label" id="agree-label"></div>
+            <div id="agree-detail" style="font-size:11px;color:#888;margin-top:2px;"></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- VALIDATE CARD -->
+    <div class="question-card eq3-validate-card">
+      <div class="card-row">
+        <div class="card-question">Validate Your Split</div>
+        <span class="card-answer-preview">Optional</span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <p class="eq3-validate-intro">Score each cofounder on the factors below. The calculator will tell you whether your chosen split lines up with the scores — or where it doesn't.</p>
+        <div id="eq3-buckets"></div>
+        <div class="eq3-calc-strip" id="eq3-calc-strip" style="display:none;">
+          <span class="eq3-calc-label">Calculator suggests</span>
+          <div id="eq3-calc-items"></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- FINAL ALLOCATION CARD -->
+    <div class="question-card expanded" style="margin-top:12px;">
+      <div class="card-row">
+        <div class="card-question">Final Allocation</div>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">This is the number that goes in your agreement. Synced from the bar above.</div>
+        <p class="eq3-final-desc">Once agreed, this is the commitment. Don't revisit it.</p>
+
+        <div id="eq3-final-list"></div>
+        <div class="eq3-final-total" id="eq3-final-tot">Total Equity: 0.00%</div>
+        <div class="eq3-final-err" id="eq3-final-err">Total equity must equal 100% before proceeding.</div>
+        <button class="eq3-add-btn" id="eq3-add-btn">+ Add Cofounder</button>
+
+        <button class="eq3-legal-toggle" id="eq3-legal-toggle">▸ Legal note</button>
+        <div class="eq3-legal-body" id="eq3-legal-body">
+          <div class="eq3-legal-inner">This calculator is for planning purposes only and does not grant, issue, or transfer any equity. Equity is valid only when formalized through proper corporate action and legally binding agreements such as a stock purchase agreement or option grant.</div>
+        </div>
+
+        <div class="eq3-sign" id="eq3-sign">
+          <div class="eq3-sign-box" id="eq3-sign-box"></div>
+          <span style="font-size:13px;color:#3a3630;">I acknowledge and accept this equity allocation — <strong id="eq3-sign-name">Cofounder</strong></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar">
+      <a class="next-section-btn" href="../product/vesting.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const BUCKETS = [
+      { label:'Input', cats:[
+        {key:'cash',label:'Cash Invested'}, {key:'time',label:'Time Commitment'},
+        {key:'ip',label:'Existing Work & IP'}, {key:'tools',label:'Equipment & Tools'},
+      ]},
+      { label:'Execution', cats:[
+        {key:'leadership',label:'Leadership & Management'}, {key:'eng',label:'Engineering'},
+        {key:'sales',label:'Sales'}, {key:'product',label:'Product'},
+        {key:'fundraising',label:'Fundraising'}, {key:'recruiting',label:'Recruiting'},
+        {key:'ops',label:'Operations'},
+      ]},
+      { label:'Intangibles', cats:[
+        {key:'domain',label:'Domain Expertise'}, {key:'network',label:'Network Value'},
+        {key:'irreplace',label:'Irreplaceability'}, {key:'scalability',label:'Role Scalability'},
+        {key:'oppcost',label:'Opportunity Cost'}, {key:'risk',label:'Risk Tolerance'},
+        {key:'idea',label:'Idea Origination'},
+      ]}
+    ];
+    const ALL_CATS = BUCKETS.flatMap(b => b.cats);
+
+    // Importance maps to 5-dot levels: 0=0,1=25,2=50,3=75,4=100
+    const IMP_LEVELS = [0,25,50,75,100];
+    function valToDots(v) { return IMP_LEVELS.indexOf(v); } // -1 if not found, default 0
+    function dotsToVal(d) { return IMP_LEVELS[d] ?? 0; }
+
+    let splits       = [];   // percentages, sum=100
+    let importance   = {};
+    let myScores     = {};
+    let finalEntries = [];
+    let signed       = false;
+    let cofounders   = [];
+
+    // drag state
+    let dragging = null; // { handleIdx, startX, startSplits }
+
+    function loadData() {
+      importance   = JSON.parse(localStorage.getItem('ct_eq_importance')||'{}');
+      myScores     = JSON.parse(localStorage.getItem('ct_eq_my_scores') ||'{}');
+      finalEntries = JSON.parse(localStorage.getItem('ct_eq_final')     ||'[]');
+      signed       = localStorage.getItem('ct_eq_signed')==='1';
+      let raw = JSON.parse(localStorage.getItem('ct_cofounders')||'[]');
+      cofounders = raw.map(c => typeof c==='string'?{name:c}:c);
+      if (!cofounders.length) cofounders=[{name:'Cofounder A'}];
+
+      // Load or init splits
+      const storedSplits = JSON.parse(localStorage.getItem('ct_eq3_splits')||'null');
+      if (storedSplits && storedSplits.length===cofounders.length) {
+        splits = storedSplits;
+      } else {
+        splits = cofounders.map(()=>parseFloat((100/cofounders.length).toFixed(1)));
+        normalise();
+      }
+
+      const s = document.getElementById('sidebar-cofounder-list');
+      if (s) s.textContent = cofounders.map(c=>c.name).join(', ')||'—';
+
+      const sn = document.getElementById('eq3-sign-name');
+      if (sn) sn.textContent = cofounders[0]?.name||'Cofounder';
+
+      if (signed) {
+        document.getElementById('eq3-sign')?.classList.add('signed');
+        const box = document.getElementById('eq3-sign-box');
+        if (box) box.textContent='✓';
+      }
+    }
+
+    function save() {
+      localStorage.setItem('ct_eq_importance',  JSON.stringify(importance));
+      localStorage.setItem('ct_eq_my_scores',   JSON.stringify(myScores));
+      localStorage.setItem('ct_eq_final',        JSON.stringify(finalEntries));
+      localStorage.setItem('ct_eq3_splits',      JSON.stringify(splits));
+      const lbl=document.getElementById('saved-label');
+      if(lbl){lbl.textContent='Saved';clearTimeout(lbl._t);lbl._t=setTimeout(()=>lbl.textContent='Saved 2 min ago',2000);}
+    }
+
+    function normalise() {
+      const tot = splits.reduce((a,b)=>a+b,0);
+      if (tot===0) return;
+      splits = splits.map(s=>s/tot*100);
+    }
+
+    // ── Bar ──
+    function renderBar() {
+      const bar = document.getElementById('eq3-bar');
+      if (!bar) return;
+      bar.innerHTML='';
+      splits.forEach((pct,i)=>{
+        const seg = document.createElement('div');
+        seg.className='eq3-seg';
+        seg.style.flexBasis=pct.toFixed(3)+'%';
+        seg.innerHTML=`<span class="eq3-seg-name">${cofounders[i]?.name||''}</span><span class="eq3-seg-pct">${pct.toFixed(1)}%</span>`;
+        if (i<splits.length-1) {
+          const handle=document.createElement('div');
+          handle.className='eq3-handle';
+          handle.dataset.hi=i;
+          handle.addEventListener('mousedown', startDrag);
+          handle.addEventListener('touchstart', startDragTouch, {passive:false});
+          seg.appendChild(handle);
+        }
+        bar.appendChild(seg);
+      });
+      updateSplitPreview();
+    }
+
+    function startDrag(e) {
+      e.preventDefault();
+      dragging={ hi:parseInt(e.currentTarget.dataset.hi), startX:e.clientX, startSplits:[...splits] };
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', stopDrag);
+    }
+    function startDragTouch(e) {
+      e.preventDefault();
+      const t=e.touches[0];
+      dragging={ hi:parseInt(e.currentTarget.dataset.hi), startX:t.clientX, startSplits:[...splits] };
+      document.addEventListener('touchmove', onDragTouch, {passive:false});
+      document.addEventListener('touchend', stopDrag);
+    }
+    function onDrag(e) { doDrag(e.clientX); }
+    function onDragTouch(e) { e.preventDefault(); doDrag(e.touches[0].clientX); }
+    function doDrag(clientX) {
+      if (!dragging) return;
+      const bar = document.getElementById('eq3-bar');
+      if (!bar) return;
+      const barW = bar.getBoundingClientRect().width;
+      const delta = (clientX - dragging.startX) / barW * 100;
+      const hi = dragging.hi;
+      let a = dragging.startSplits[hi] + delta;
+      let b = dragging.startSplits[hi+1] - delta;
+      const min = 5;
+      if (a < min) { b += a - min; a = min; }
+      if (b < min) { a += b - min; b = min; }
+      splits = [...dragging.startSplits];
+      splits[hi] = Math.max(min, Math.min(100 - (splits.length-1)*min, a));
+      splits[hi+1] = Math.max(min, Math.min(100 - (splits.length-1)*min, b));
+      renderBar();
+      renderInputs();
+      syncFinalFromSplits();
+      updateAgreement();
+      save();
+    }
+    function stopDrag() {
+      dragging=null;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchmove', onDragTouch);
+      document.removeEventListener('touchend', stopDrag);
+    }
+
+    function updateSplitPreview() {
+      const el = document.getElementById('split-preview');
+      if (el) el.textContent = splits.map(s=>s.toFixed(0)+'%').join(' / ');
+    }
+
+    // ── Inputs under bar ──
+    function renderInputs() {
+      const wrap = document.getElementById('eq3-inputs');
+      if (!wrap) return;
+      wrap.innerHTML = splits.map((pct,i)=>`
+        <div class="eq3-input-row">
+          <span class="eq3-color-dot"></span>
+          <span class="eq3-cf-name-lbl">${cofounders[i]?.name||''}</span>
+          <input class="eq3-pct-input" type="number" min="0" max="100" step="0.1"
+            value="${pct.toFixed(1)}" data-si="${i}" />
+          <span class="eq3-pct-label">%</span>
+        </div>`).join('');
+
+      wrap.querySelectorAll('.eq3-pct-input').forEach(inp=>{
+        inp.addEventListener('input', ()=>{
+          const i=parseInt(inp.dataset.si);
+          splits[i]=parseFloat(inp.value)||0;
+          const tot=splits.reduce((a,b)=>a+b,0);
+          const tv=document.getElementById('eq3-total');
+          const te=document.getElementById('eq3-total-err');
+          if(tv){tv.textContent=tot.toFixed(1)+'%'; tv.classList.toggle('err',Math.abs(tot-100)>0.5);}
+          if(te) te.style.display=Math.abs(tot-100)>0.5?'block':'none';
+          renderBar();
+          syncFinalFromSplits();
+          updateAgreement();
+          save();
+        });
+      });
+
+      const tot=splits.reduce((a,b)=>a+b,0);
+      const tv=document.getElementById('eq3-total');
+      const te=document.getElementById('eq3-total-err');
+      if(tv){tv.textContent=tot.toFixed(1)+'%'; tv.classList.toggle('err',Math.abs(tot-100)>0.5);}
+      if(te) te.style.display=Math.abs(tot-100)>0.5?'block':'none';
+    }
+
+    // ── Validate section ──
+    function renderBuckets() {
+      const wrap = document.getElementById('eq3-buckets');
+      if (!wrap) return;
+      wrap.innerHTML='';
+      BUCKETS.forEach(bucket=>{
+        const el=document.createElement('div');
+        el.className='eq3-bucket';
+        const dots=v=>{
+          const d=valToDots(v)<0?0:valToDots(v);
+          return [0,1,2,3,4].map(i=>`<span class="eq3-imp-dot${i<=d&&v>0?' on':''}" data-d="${i}"></span>`).join('');
+        };
+        el.innerHTML=`
+          <div class="eq3-bucket-hdr">
+            <span class="eq3-bucket-title">${bucket.label}</span>
+            <span class="eq3-bucket-meta">· ${bucket.cats.length}</span>
+            <span class="eq3-chevron">▾</span>
+          </div>
+          <div class="eq3-bucket-body">
+            <div class="eq3-bucket-inner">
+              ${bucket.cats.map(cat=>`
+                <div class="eq3-cat-row" data-cat="${cat.key}">
+                  <div class="eq3-cat-top">
+                    <span class="eq3-cat-name">${cat.label}</span>
+                    <div class="eq3-imp-dots">${dots(importance[cat.key]||0)}</div>
+                  </div>
+                  ${(importance[cat.key]||0)>0 ? cofounders.map((cf,ci)=>`
+                    <div class="eq3-cf-score-row">
+                      <span class="eq3-cf-score-lbl">${cf.name}</span>
+                      <div class="eq3-mini-segs">
+                        ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>{
+                          const cur=(myScores[ci]||{})[cat.key];
+                          return `<button class="eq3-mini-seg${cur===n?' sel':''}" data-ci="${ci}" data-cat="${cat.key}" data-n="${n}">${n}</button>`;
+                        }).join('')}
+                      </div>
+                    </div>`).join('') : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+
+        // Toggle
+        el.querySelector('.eq3-bucket-hdr').addEventListener('click',()=>el.classList.toggle('open'));
+
+        // Importance dots
+        el.querySelectorAll('.eq3-imp-dot').forEach(dot=>{
+          dot.addEventListener('click', e=>{
+            e.stopPropagation();
+            const catRow=dot.closest('[data-cat]');
+            if (!catRow) return;
+            const key=catRow.dataset.cat;
+            const d=parseInt(dot.dataset.d);
+            const cur=importance[key]||0;
+            const curD=valToDots(cur)<0?0:valToDots(cur);
+            // clicking same dot toggles off (set to 0), else sets level
+            const newD = (curD===d&&cur>0) ? -1 : d;
+            importance[key] = newD<0 ? 0 : dotsToVal(newD);
+            save();
+            renderBuckets();
+            updateAgreement();
+            updateCalcStrip();
+          });
+        });
+
+        // Score buttons
+        el.querySelectorAll('.eq3-mini-seg').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            const ci=parseInt(btn.dataset.ci), key=btn.dataset.cat, n=parseInt(btn.dataset.n);
+            if (!myScores[ci]) myScores[ci]={};
+            myScores[ci][key]=n; save();
+            el.querySelectorAll(`.eq3-mini-seg[data-ci="${ci}"][data-cat="${key}"]`)
+              .forEach(b=>b.classList.toggle('sel',parseInt(b.dataset.n)===n));
+            updateAgreement();
+            updateCalcStrip();
+          });
+        });
+
+        wrap.appendChild(el);
+      });
+    }
+
+    function calcSplit() {
+      const act=ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+      if (!act.length) return null;
+      const w=cofounders.map((_,ci)=>act.reduce((s,cat)=>s+(importance[cat.key]||0)*((myScores[ci]||{})[cat.key]||0),0));
+      const tot=w.reduce((a,b)=>a+b,0);
+      if (tot===0) return null;
+      return w.map(x=>x/tot*100);
+    }
+
+    function updateCalcStrip() {
+      const pcts=calcSplit();
+      const strip=document.getElementById('eq3-calc-strip');
+      const items=document.getElementById('eq3-calc-items');
+      if (!strip||!items) return;
+      if (!pcts) { strip.style.display='none'; return; }
+      strip.style.display='flex';
+      items.innerHTML=cofounders.map((cf,i)=>`
+        <span class="eq3-calc-item"><strong>${pcts[i].toFixed(1)}%</strong> ${cf.name}<span class="eq3-calc-vs">vs ${splits[i].toFixed(1)}%</span></span>
+      `).join('');
+    }
+
+    function updateAgreement() {
+      const pcts=calcSplit();
+      const el=document.getElementById('eq3-agreement');
+      if (!el) return;
+      if (!pcts) { el.style.display='none'; return; }
+      el.style.display='flex';
+      const maxDiff=Math.max(...pcts.map((p,i)=>Math.abs(p-splits[i])));
+      const icon=document.getElementById('agree-icon');
+      const lbl=document.getElementById('agree-label');
+      const det=document.getElementById('agree-detail');
+      if (maxDiff<3) {
+        icon.textContent='✓'; lbl.textContent='Calculator agrees with your split';
+        det.textContent=`Largest difference: ${maxDiff.toFixed(1)}pp — well within rounding.`;
+        el.style.borderColor='#5a7a5c'; el.style.background='#f0f6f0';
+      } else if (maxDiff<8) {
+        icon.textContent='≈'; lbl.textContent='Calculator is close — minor differences';
+        det.textContent=`Largest gap: ${maxDiff.toFixed(1)}pp. Worth a quick conversation.`;
+        el.style.borderColor='#c8b87a'; el.style.background='#fdf8ee';
+      } else {
+        icon.textContent='⚠'; lbl.textContent='Calculator diverges from your split';
+        det.textContent=`Largest gap: ${maxDiff.toFixed(1)}pp. Talk about this before finalizing.`;
+        el.style.borderColor='#c8a090'; el.style.background='#fdf4f0';
+      }
+    }
+
+    // ── Final allocation (synced with splits) ──
+    function syncFinalFromSplits() {
+      finalEntries=cofounders.map((cf,i)=>({name:cf.name,equity:splits[i].toFixed(1)}));
+      renderFinal();
+    }
+
+    function renderFinal() {
+      const list=document.getElementById('eq3-final-list');
+      if (!list) return;
+      if (!finalEntries.length) finalEntries=cofounders.map((cf,i)=>({name:cf.name,equity:splits[i]?.toFixed(1)||''}));
+      list.innerHTML=finalEntries.map((e,i)=>`
+        <div class="eq3-entry">
+          <input class="card-input" type="text" placeholder="Cofounder name"
+            value="${e.name||''}" data-fi="${i}" data-f="name" style="flex:1;" />
+          <input class="card-input" type="number" min="0" max="100" step="0.1"
+            value="${e.equity||''}" data-fi="${i}" data-f="equity" style="flex:0 0 80px;" />
+          <button class="eq3-remove" data-r="${i}">Remove</button>
+        </div>`).join('');
+
+      list.querySelectorAll('[data-fi]').forEach(inp=>{
+        inp.addEventListener('input',()=>{
+          const i=parseInt(inp.dataset.fi);
+          finalEntries[i][inp.dataset.f]=inp.value;
+          // Sync splits from equity inputs
+          if (inp.dataset.f==='equity') {
+            splits[i]=parseFloat(inp.value)||0;
+            renderBar(); renderInputs();
+          }
+          save(); updateFinalTotal();
+        });
+      });
+      list.querySelectorAll('[data-r]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          finalEntries.splice(parseInt(btn.dataset.r),1);
+          save(); renderFinal(); updateFinalTotal();
+        });
+      });
+      updateFinalTotal();
+    }
+
+    function updateFinalTotal() {
+      const tot=finalEntries.reduce((s,e)=>s+(parseFloat(e.equity)||0),0);
+      const el=document.getElementById('eq3-final-tot');
+      const er=document.getElementById('eq3-final-err');
+      const hasAny=finalEntries.some(e=>e.equity!=='');
+      const off=hasAny&&Math.abs(tot-100)>0.01;
+      if(el){el.textContent=`Total Equity: ${tot.toFixed(2)}%`; el.classList.toggle('err',off);}
+      if(er) er.style.display=off?'block':'none';
+    }
+
+    // ── Init ──
+    loadData();
+    renderBar();
+    renderInputs();
+    renderBuckets();
+    syncFinalFromSplits();
+
+    document.getElementById('eq3-add-btn')?.addEventListener('click',()=>{
+      finalEntries.push({name:'',equity:''}); save(); renderFinal();
+    });
+    document.getElementById('eq3-legal-toggle')?.addEventListener('click', function(){
+      const b=document.getElementById('eq3-legal-body');
+      const open=b.classList.toggle('open');
+      this.textContent=(open?'▾':'▸')+' Legal note';
+    });
+    document.getElementById('eq3-sign')?.addEventListener('click',()=>{
+      signed=!signed; localStorage.setItem('ct_eq_signed',signed?'1':'0');
+      document.getElementById('eq3-sign').classList.toggle('signed',signed);
+      document.getElementById('eq3-sign-box').textContent=signed?'✓':'';
+    });
+  </script>
+  <script src="../sidebar.js"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Formation and Purpose</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <link rel="stylesheet" href="../surveystyles.css" />
   <script>
     // Run before paint — hides content if we're entering via the card transition
     if (sessionStorage.getItem('pageTransition') === 'fromDashboard') {
@@ -17,7 +17,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
@@ -37,7 +37,7 @@
       </li>
       <li>
         <span class="nav-dot notstarted"></span>
-        <a href="#">Equity Allocation</a>
+        <a href="../equity-calculator/eqc1.html">Equity Allocation</a>
       </li>
       <li>
         <span class="nav-dot notstarted"></span>
@@ -98,21 +98,21 @@
     <p class="page-desc">You've been talking about this idea for weeks, maybe months. Now you're sitting with your cofounder, naming the company, buying the domain, imagining what it could become. Coffee in hand, takeout on the table. Creating a cofounder agreement is what makes it real. Let's get started.</p>
 
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Make sure it's good, your company might go big one day.</div></div></div>
       <div class="card-row">
         <div class="card-question">What's your company's name?</div>
         <span class="card-answer-preview"></span>
       </div>
-      <div class="card-bottom"><div class="card-bottom-inner"><input class="card-input" type="text" placeholder="Enter company name" data-key="company-name" /></div></div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Make sure it's good, your company might go big one day.</div><input class="card-input" type="text" placeholder="Enter company name" data-key="company-name" /></div></div>
     </div>
 
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This defines how your company is structured for ownership, taxes, and decision-making. If you plan to raise venture capital, a C-Corp is usually preferred.</div></div></div>
       <div class="card-row">
         <div class="card-question">What is your company's current or intended legal structure?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">This defines how your company is structured for ownership, taxes, and decision-making. If you plan to raise venture capital, a C-Corp is usually preferred.</div>
         <div class="card-radio-group">
           <label class="card-radio-option"><input type="radio" name="legal-structure" value="C-Corp" /><span class="radio-circle"></span>C-Corp</label>
           <label class="card-radio-option"><input type="radio" name="legal-structure" value="S-Corp" /><span class="radio-circle"></span>S-Corp</label>
@@ -123,12 +123,12 @@
     </div>
 
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Delaware is a popular choice for many startups because its laws and courts are well established. Just be aware you may have additional fees or filings if your business is based elsewhere.</div></div></div>
       <div class="card-row">
         <div class="card-question">What state will your company be registered in?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Delaware is a popular choice for many startups because its laws and courts are well established. Just be aware you may have additional fees or filings if your business is based elsewhere.</div>
         <div class="card-select-wrapper" data-value="" data-key="reg-state">
           <button class="card-select-trigger" type="button">
             <span class="card-select-value is-placeholder">Select a state</span>
@@ -156,7 +156,6 @@
     </div>
 
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint"></div></div></div>
       <div class="card-row">
         <div class="card-question">What's your company mailing address?</div>
         <span class="card-answer-preview"></span>
@@ -212,21 +211,21 @@
     </div>
 
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Describe what you do in plain language. No buzzwords needed.</div></div></div>
       <div class="card-row">
         <div class="card-question">Can you describe your company in 1 line?</div>
         <span class="card-answer-preview"></span>
       </div>
-      <div class="card-bottom"><div class="card-bottom-inner"><input class="card-input" type="text" placeholder="Your answer" data-key="description" /></div></div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Describe what you do in plain language. No buzzwords needed.</div><input class="card-input" type="text" placeholder="Your answer" data-key="description" /></div></div>
     </div>
 
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Pick the industry that best describes what you currently do. Aspirations to conquer all markets can wait.</div></div></div>
       <div class="card-row">
         <div class="card-question">What industry is it in?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Pick the industry that best describes what you currently do. Aspirations to conquer all markets can wait.</div>
         <div class="card-checkbox-group">
           <label class="card-checkbox-option"><input type="checkbox" name="industry" value="AI / Machine Learning" /><span class="checkbox-box"></span>AI / Machine Learning</label>
           <label class="card-checkbox-option"><input type="checkbox" name="industry" value="AR / VR / Spatial Computing" /><span class="checkbox-box"></span>AR / VR / Spatial Computing</label>
@@ -258,9 +257,7 @@
       </div></div>
     </div>
 
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: Cofounder Info</span>
-      <a class="next-section-btn" href="cofounder.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="cofounder.html">Continue</a>
     </div>
   </main>
 
@@ -488,6 +485,6 @@
       document.querySelectorAll('.card-select-wrapper.open').forEach(w => w.classList.remove('open'));
     });
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>

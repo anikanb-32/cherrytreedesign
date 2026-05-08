@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Equity Allocation</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
+  <style>
+    /* ── Scoring table ── */
+    .eq4-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .eq4-table th {
+      font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em;
+      color:#bbb; padding:6px 10px; text-align:center; border-bottom:1.5px solid #e8e4dc;
+      white-space:nowrap;
+    }
+    .eq4-table th:first-child { text-align:left; }
+    .eq4-bucket-hdr td {
+      padding:10px 10px 4px; font-size:9px; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; color:#bbb; background:#faf9f6; border-top:1px solid #f0ede6;
+    }
+    .eq4-cat-row td { padding:5px 10px; border-bottom:1px solid #f4f2ed; }
+    .eq4-cat-row.inactive td { opacity:0.35; }
+    .eq4-cat-name { color:#3a3630; font-weight:500; white-space:nowrap; }
+    .eq4-dots { display:flex; gap:3px; justify-content:center; }
+    .eq4-dot {
+      width:7px; height:7px; border-radius:50%; background:#e8e4dc;
+      cursor:pointer; transition:background 0.1s; flex-shrink:0;
+    }
+    .eq4-dot.on { background:#2d2a22; }
+    .eq4-score-input {
+      width:36px; text-align:center; border:none; border-bottom:1.5px solid #e8e4dc;
+      font-size:13px; font-weight:600; color:#2d2a22; background:transparent;
+      outline:none; font-family:inherit; padding:2px 0;
+    }
+    .eq4-score-input:focus { border-bottom-color:#2d2a22; }
+    .eq4-cf-th { min-width:52px; }
+
+    /* ── Profile cards ── */
+    .eq4-profiles-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+      gap:14px; margin-bottom:24px;
+    }
+    .eq4-profile-card {
+      border:1.5px solid #e8e4dc; border-radius:12px; padding:16px;
+      background:#fff; display:flex; flex-direction:column; align-items:center;
+      gap:10px; transition:border-color 0.15s, box-shadow 0.15s;
+    }
+    .eq4-profile-card:hover { border-color:#c8c4bc; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+    .eq4-profile-name { font-size:13px; font-weight:700; color:#2d2a22; text-align:center; }
+    .eq4-profile-name.you::after { content:' (you)'; font-weight:400; color:#aaa; font-size:11px; }
+    .eq4-mini-radar { display:block; }
+    .eq4-top-cats { width:100%; }
+    .eq4-top-cat {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:3px 0; border-bottom:1px solid #f4f2ed; font-size:11px;
+    }
+    .eq4-top-cat:last-child { border-bottom:none; }
+    .eq4-top-cat-name { color:#5a5650; }
+    .eq4-top-cat-score {
+      font-weight:700; color:#2d2a22; background:#f0ede6;
+      padding:1px 5px; border-radius:4px; font-size:10px;
+    }
+    .eq4-equity-pct {
+      font-size:28px; font-weight:800; color:#2d2a22; line-height:1;
+      font-variant-numeric:tabular-nums;
+    }
+    .eq4-equity-label { font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:0.08em; }
+
+    /* ── Split bar (top of profiles section) ── */
+    .eq4-split-bar-wrap { margin-bottom:20px; }
+    .eq4-split-bar {
+      display:flex; height:8px; border-radius:4px; overflow:hidden;
+      margin-bottom:8px;
+    }
+    .eq4-split-seg { transition:flex-basis 0.4s ease; }
+    .eq4-split-labels { display:flex; font-size:11px; color:#888; }
+    .eq4-split-lbl { flex:1; text-align:center; }
+
+    /* ── Combined radar ── */
+    .eq4-combined-wrap {
+      display:grid; grid-template-columns:1fr 1fr; gap:24px;
+      align-items:start; margin-bottom:24px;
+    }
+    .eq4-radar-box { display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .eq4-radar-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#aaa; }
+    .eq4-radar-legend { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .eq4-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:#5a5650; }
+    .eq4-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+    /* ── Scatter / bubble chart ── */
+    .eq4-scatter-box { display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .eq4-scatter-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#aaa; }
+    .eq4-scatter-sub { font-size:11px; color:#aaa; text-align:center; line-height:1.5; max-width:220px; }
+
+    /* ── Suggested split ── */
+    .eq4-suggested {
+      padding:16px 18px; background:#f4f2ed; border-radius:10px; margin-bottom:4px;
+    }
+    .eq4-sug-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#999; margin-bottom:12px; }
+    .eq4-sug-row { display:flex; align-items:center; gap:12px; margin-bottom:7px; }
+    .eq4-sug-name { flex:0 0 130px; font-size:13px; color:#3a3630; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .eq4-sug-track { flex:1; height:9px; background:#e0ddd6; border-radius:5px; overflow:hidden; }
+    .eq4-sug-fill { height:100%; border-radius:5px; background:#2d2a22; transition:width 0.5s; }
+    .eq4-sug-pct { flex:0 0 44px; text-align:right; font-size:13px; font-weight:700; color:#2d2a22; }
+    .eq4-use-btn { margin-top:14px; padding:9px 18px; background:#2d2a22; color:#fff; border:none; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; }
+    .eq4-use-btn:hover { background:#1a1810; }
+
+    /* ── Final allocation ── */
+    .eq4-entry { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f0ede6; }
+    .eq4-remove { background:none; border:none; color:#c0a0a0; cursor:pointer; font-size:12px; font-family:inherit; padding:4px; }
+    .eq4-remove:hover { color:#b97070; }
+    .eq4-total { font-size:13px; font-weight:700; color:#2d2a22; padding:10px 0 4px; }
+    .eq4-total.err { color:#b97070; }
+    .eq4-total-err { font-size:11px; color:#b97070; display:none; }
+    .eq4-add-btn { display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:8px 14px; border-radius:6px; border:1.5px solid #e0ddd6; background:#fff; font-size:12px; color:#3a3630; cursor:pointer; font-family:inherit; }
+    .eq4-add-btn:hover { background:#faf9f6; }
+    .eq4-legal-toggle { font-size:11px; color:#bbb; background:none; border:none; cursor:pointer; padding:0; margin-top:12px; display:block; font-family:inherit; }
+    .eq4-legal-toggle:hover { color:#888; }
+    .eq4-legal-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.24s; }
+    .eq4-legal-body.open { grid-template-rows:1fr; }
+    .eq4-legal-inner { overflow:hidden; font-size:11px; color:#bbb; line-height:1.65; font-style:italic; padding-top:6px; }
+    .eq4-sign { margin-top:18px; padding:14px 16px; border:1.5px solid #e0ddd6; border-radius:10px; background:#faf9f6; display:flex; align-items:center; gap:10px; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+    .eq4-sign:hover { border-color:#c8c4bc; }
+    .eq4-sign.signed { border-color:#5a7a5c; background:#f0f6f0; }
+    .eq4-sign-box { width:18px; height:18px; border-radius:4px; border:1.5px solid #d0cdc6; background:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; color:transparent; flex-shrink:0; transition:all 0.15s; }
+    .eq4-sign.signed .eq4-sign-box { background:#5a7a5c; border-color:#5a7a5c; color:#fff; }
+
+    /* ── Empty state ── */
+    .eq4-empty { text-align:center; padding:32px 16px; color:#bbb; font-size:13px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo"><img src="../cherries.png" alt="Cherrytree" /></div>
+    <div class="company-name">Company</div>
+    <div class="progress-label">30% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+    <div class="sections-remaining">7 sections remaining</div>
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="../product/survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="../product/cofounder.html">Cofounder Info</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/vesting.html">Vesting Schedule</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/decision.html">Decision-Making</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/general.html">General Provisions</a></li>
+    </ul>
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item" id="sidebar-cofounder-list">—</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="../product/cofounder.html">← Back to Cofounder Info</a>
+        <span class="saved-label" id="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Equity Allocation</h1>
+    <p class="page-desc">Score everyone on each factor. Watch how the picture takes shape — who brings what, and where you see each other differently.</p>
+
+    <!-- SCORING CARD -->
+    <div class="question-card expanded">
+      <div class="card-row">
+        <div class="card-question">Score Everyone</div>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Rate how important each factor is (the dots), then score every cofounder 0–10. Charts update live.</div>
+        <div style="overflow-x:auto; margin-top:16px;">
+          <table class="eq4-table" id="eq4-scoring-table">
+            <thead><tr id="eq4-thead"></tr></thead>
+            <tbody id="eq4-tbody"></tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- PROFILES + VISUALIZATION CARD -->
+    <div class="question-card expanded" style="margin-top:12px;">
+      <div class="card-row">
+        <div class="card-question">Contribution Profiles</div>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Each person's shape shows where they contribute most. The scatter shows where you see each other differently.</div>
+
+        <!-- Split bar -->
+        <div class="eq4-split-bar-wrap" id="eq4-split-bar-wrap">
+          <div class="eq4-split-bar" id="eq4-split-bar"></div>
+          <div class="eq4-split-labels" id="eq4-split-labels"></div>
+        </div>
+
+        <!-- Profile cards -->
+        <div class="eq4-profiles-grid" id="eq4-profiles"></div>
+
+        <!-- Combined radar + bubble scatter -->
+        <div class="eq4-combined-wrap">
+          <div class="eq4-radar-box">
+            <div class="eq4-radar-title">Contribution Shape</div>
+            <svg id="eq4-radar" width="240" height="220" style="overflow:visible;"></svg>
+            <div class="eq4-radar-legend" id="eq4-radar-legend"></div>
+          </div>
+          <div class="eq4-scatter-box">
+            <div class="eq4-scatter-title" id="eq4-scatter-title">Where You Differ</div>
+            <svg id="eq4-scatter" width="220" height="220" style="overflow:visible;border:1px solid #f0ede6;border-radius:8px;"></svg>
+            <div class="eq4-scatter-sub" id="eq4-scatter-sub">Score at least one category to see this chart</div>
+          </div>
+        </div>
+
+        <!-- Suggested split -->
+        <div class="eq4-suggested" id="eq4-suggested">
+          <div class="eq4-sug-label">Calculator Suggestion</div>
+          <div id="eq4-sug-rows"></div>
+          <button class="eq4-use-btn" id="eq4-use-btn">Use this split below →</button>
+        </div>
+
+      </div></div>
+    </div>
+
+    <!-- FINAL ALLOCATION CARD -->
+    <div class="question-card expanded" style="margin-top:12px;">
+      <div class="card-row">
+        <div class="card-question">Final Allocation</div>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">The agreed number. Once settled, don't revisit it.</div>
+        <div style="margin-top:16px;" id="eq4-final-list"></div>
+        <div class="eq4-total" id="eq4-total">Total Equity: 0.00%</div>
+        <div class="eq4-total-err" id="eq4-total-err">Total equity must equal 100% before proceeding.</div>
+        <button class="eq4-add-btn" id="eq4-add-btn">+ Add Cofounder</button>
+        <button class="eq4-legal-toggle" id="eq4-legal-toggle">▸ Legal note</button>
+        <div class="eq4-legal-body" id="eq4-legal-body">
+          <div class="eq4-legal-inner">This calculator is for planning purposes only and does not grant, issue, or transfer any equity. Equity is valid only when formalized through proper corporate action and legally binding agreements.</div>
+        </div>
+        <div class="eq4-sign" id="eq4-sign">
+          <div class="eq4-sign-box" id="eq4-sign-box"></div>
+          <span style="font-size:13px;color:#3a3630;">I acknowledge and accept this equity allocation — <strong id="eq4-sign-name">Cofounder</strong></span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="next-section-bar">
+      <a class="next-section-btn" href="../product/vesting.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    // ── Data ──
+    const BUCKETS = [
+      { label:'Input', color:'#c8a878', cats:[
+        {key:'cash',label:'Cash Invested'}, {key:'time',label:'Time Commitment'},
+        {key:'ip',label:'Existing Work & IP'}, {key:'tools',label:'Equipment & Tools'},
+      ]},
+      { label:'Execution', color:'#5a7a5c', cats:[
+        {key:'leadership',label:'Leadership & Management'}, {key:'eng',label:'Engineering'},
+        {key:'sales',label:'Sales'}, {key:'product',label:'Product'},
+        {key:'fundraising',label:'Fundraising'}, {key:'recruiting',label:'Recruiting'},
+        {key:'ops',label:'Operations'},
+      ]},
+      { label:'Intangibles', color:'#7a8a9c', cats:[
+        {key:'domain',label:'Domain Expertise'}, {key:'network',label:'Network Value'},
+        {key:'irreplace',label:'Irreplaceability'}, {key:'scalability',label:'Role Scalability'},
+        {key:'oppcost',label:'Opportunity Cost'}, {key:'risk',label:'Risk Tolerance'},
+        {key:'idea',label:'Idea Origination'},
+      ]}
+    ];
+    const ALL_CATS = BUCKETS.flatMap(b => b.cats);
+    const CAT_BUCKET = {};
+    BUCKETS.forEach(b => b.cats.forEach(c => CAT_BUCKET[c.key] = b));
+
+    const IMP_LEVELS = [0,25,50,75,100];
+    const CF_COLORS  = ['#2d2a22','#5a7a5c','#c8a878','#7a8a9c','#9c7a8a'];
+
+    // ── State ──
+    let importance={}, myScores={}, finalEntries=[], signed=false, cofounders=[];
+
+    function loadData() {
+      importance   = JSON.parse(localStorage.getItem('ct_eq_importance')||'{}');
+      myScores     = JSON.parse(localStorage.getItem('ct_eq_my_scores') ||'{}');
+      finalEntries = JSON.parse(localStorage.getItem('ct_eq_final')     ||'[]');
+      signed       = localStorage.getItem('ct_eq_signed')==='1';
+      let raw = JSON.parse(localStorage.getItem('ct_cofounders')||'[]');
+      cofounders = raw.map(c=>typeof c==='string'?{name:c}:c);
+      if (!cofounders.length) cofounders=[{name:'Cofounder A'}];
+      const s=document.getElementById('sidebar-cofounder-list');
+      if(s) s.textContent=cofounders.map(c=>c.name).join(', ')||'—';
+      const sn=document.getElementById('eq4-sign-name');
+      if(sn) sn.textContent=cofounders[0]?.name||'Cofounder';
+      if(signed){document.getElementById('eq4-sign')?.classList.add('signed');const b=document.getElementById('eq4-sign-box');if(b)b.textContent='✓';}
+    }
+
+    function save() {
+      localStorage.setItem('ct_eq_importance', JSON.stringify(importance));
+      localStorage.setItem('ct_eq_my_scores',  JSON.stringify(myScores));
+      localStorage.setItem('ct_eq_final',       JSON.stringify(finalEntries));
+      const l=document.getElementById('saved-label');
+      if(l){l.textContent='Saved';clearTimeout(l._t);l._t=setTimeout(()=>l.textContent='Saved 2 min ago',2000);}
+    }
+
+    // ── Scoring table ──
+    function buildTable() {
+      const thead = document.getElementById('eq4-thead');
+      const tbody = document.getElementById('eq4-tbody');
+
+      // Header
+      thead.innerHTML = `<th style="text-align:left;min-width:140px;">Category</th><th>Priority</th>`
+        + cofounders.map((cf,i)=>`<th class="eq4-cf-th" style="color:${CF_COLORS[i]};">${cf.name.split(' ')[0]}</th>`).join('');
+
+      // Body
+      tbody.innerHTML='';
+      BUCKETS.forEach(bucket=>{
+        const hr=document.createElement('tr');
+        hr.className='eq4-bucket-hdr';
+        hr.innerHTML=`<td colspan="${2+cofounders.length}">${bucket.label}</td>`;
+        tbody.appendChild(hr);
+
+        bucket.cats.forEach(cat=>{
+          const imp=importance[cat.key]||0;
+          const impDots=IMP_LEVELS.indexOf(imp)<0?0:IMP_LEVELS.indexOf(imp);
+          const tr=document.createElement('tr');
+          tr.className=`eq4-cat-row${imp===0?' inactive':''}`;
+          tr.dataset.cat=cat.key;
+
+          const dotHTML=[0,1,2,3,4].map(d=>
+            `<span class="eq4-dot${d<=impDots&&imp>0?' on':''}" data-d="${d}" data-cat="${cat.key}"></span>`
+          ).join('');
+
+          const scoreInputs=cofounders.map((_,ci)=>{
+            const v=(myScores[ci]||{})[cat.key];
+            return `<td style="text-align:center;"><input class="eq4-score-input" type="number" min="0" max="10"
+              value="${v!=null?v:''}" data-ci="${ci}" data-cat="${cat.key}" placeholder="—" /></td>`;
+          }).join('');
+
+          tr.innerHTML=`
+            <td class="eq4-cat-name">${cat.label}</td>
+            <td><div class="eq4-dots">${dotHTML}</div></td>
+            ${scoreInputs}`;
+          tbody.appendChild(tr);
+
+          // Dot clicks
+          tr.querySelectorAll('.eq4-dot').forEach(dot=>{
+            dot.addEventListener('click',()=>{
+              const d=parseInt(dot.dataset.d);
+              const key=dot.dataset.cat;
+              const cur=importance[key]||0;
+              const curD=IMP_LEVELS.indexOf(cur);
+              // Click same dot = toggle off
+              importance[key] = (curD===d&&cur>0) ? 0 : IMP_LEVELS[d];
+              save(); updateAll();
+            });
+          });
+
+          // Score inputs
+          tr.querySelectorAll('.eq4-score-input').forEach(inp=>{
+            inp.addEventListener('input',()=>{
+              const ci=parseInt(inp.dataset.ci), key=inp.dataset.cat;
+              const v=parseFloat(inp.value);
+              if(!myScores[ci]) myScores[ci]={};
+              if(inp.value===''||isNaN(v)) delete myScores[ci][key];
+              else myScores[ci][key]=Math.min(10,Math.max(0,v));
+              save(); updateAll();
+            });
+          });
+        });
+      });
+    }
+
+    // ── Math ──
+    function calcWeighted() {
+      const act=ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+      const w=cofounders.map((_,ci)=>act.reduce((s,c)=>s+(importance[c.key]||0)*((myScores[ci]||{})[c.key]||0),0));
+      const tot=w.reduce((a,b)=>a+b,0);
+      const pcts=w.map(x=>tot>0?(x/tot*100):(100/cofounders.length));
+      return {act,w,tot,pcts};
+    }
+
+    function bucketScore(ci, bucket) {
+      const act=bucket.cats.filter(c=>(importance[c.key]||0)>0);
+      if (!act.length) return 0;
+      const maxP=act.reduce((s,c)=>s+(importance[c.key]||0)*10,0);
+      const actual=act.reduce((s,c)=>s+(importance[c.key]||0)*((myScores[ci]||{})[c.key]||0),0);
+      return maxP>0?actual/maxP:0;
+    }
+
+    function topCats(ci, n=3) {
+      return ALL_CATS
+        .filter(c=>(importance[c.key]||0)>0 && (myScores[ci]||{})[c.key]!=null)
+        .map(c=>({label:c.label, score:(myScores[ci]||{})[c.key]||0, key:c.key}))
+        .sort((a,b)=>b.score-a.score)
+        .slice(0,n);
+    }
+
+    // ── Update all visuals ──
+    function updateAll() {
+      // Refresh inactive rows
+      document.querySelectorAll('.eq4-cat-row').forEach(tr=>{
+        const imp=importance[tr.dataset.cat]||0;
+        tr.classList.toggle('inactive', imp===0);
+        tr.querySelectorAll('.eq4-dot').forEach((dot,d)=>{
+          const curD=IMP_LEVELS.indexOf(imp);
+          dot.classList.toggle('on', d<=curD&&imp>0);
+        });
+      });
+
+      const {pcts}=calcWeighted();
+      drawSplitBar(pcts);
+      drawProfiles(pcts);
+      drawRadar();
+      drawScatter();
+      drawSuggested(pcts);
+    }
+
+    // ── Split bar ──
+    function drawSplitBar(pcts) {
+      const bar=document.getElementById('eq4-split-bar');
+      const lbls=document.getElementById('eq4-split-labels');
+      if(!bar||!lbls) return;
+      bar.innerHTML=cofounders.map((cf,i)=>
+        `<div class="eq4-split-seg" style="flex-basis:${pcts[i].toFixed(2)}%;background:${CF_COLORS[i]};"></div>`
+      ).join('');
+      lbls.innerHTML=cofounders.map((cf,i)=>
+        `<span class="eq4-split-lbl" style="color:${CF_COLORS[i]};font-weight:600;">${pcts[i].toFixed(1)}%</span>`
+      ).join('');
+    }
+
+    // ── Profile cards ──
+    function drawProfiles(pcts) {
+      const wrap=document.getElementById('eq4-profiles');
+      if(!wrap) return;
+      wrap.innerHTML='';
+      cofounders.forEach((cf,ci)=>{
+        const top=topCats(ci);
+        const card=document.createElement('div');
+        card.className='eq4-profile-card';
+
+        // Mini radar SVG
+        const svgSize=120, cx=60, cy=55, R=42;
+        const angles=[-90,30,150].map(a=>a*Math.PI/180);
+        const scores=BUCKETS.map(b=>bucketScore(ci,b));
+        const poly=angles.map((a,i)=>{const r=scores[i]*R;return`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;}).join(' ');
+        const gridLines=[0.25,0.5,0.75,1].map(t=>{
+          const pts=angles.map(a=>`${cx+t*R*Math.cos(a)},${cy+t*R*Math.sin(a)}`).join(' ');
+          return`<polygon points="${pts}" fill="none" stroke="#e8e4dc" stroke-width="0.8"/>`;
+        }).join('');
+        const axisLines=angles.map(a=>`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a)}" y2="${cy+R*Math.sin(a)}" stroke="#e0ddd6" stroke-width="0.8"/>`).join('');
+        const bucketLabels=BUCKETS.map((b,i)=>{
+          const a=angles[i]; const lx=cx+(R+12)*Math.cos(a); const ly=cy+(R+12)*Math.sin(a);
+          return`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#bbb">${b.label}</text>`;
+        }).join('');
+        const color=CF_COLORS[ci];
+
+        const miniSvg=`<svg class="eq4-mini-radar" width="${svgSize}" height="110" viewBox="0 0 ${svgSize} 110">
+          ${gridLines}${axisLines}${bucketLabels}
+          <polygon points="${poly}" fill="${color}" fill-opacity="0.2" stroke="${color}" stroke-width="1.5"/>
+          ${angles.map((a,i)=>{const r=scores[i]*R;return`<circle cx="${cx+r*Math.cos(a)}" cy="${cy+r*Math.sin(a)}" r="2.5" fill="${color}"/>`;}).join('')}
+        </svg>`;
+
+        const topHTML=top.length
+          ? `<div class="eq4-top-cats">${top.map(t=>`
+              <div class="eq4-top-cat">
+                <span class="eq4-top-cat-name">${t.label}</span>
+                <span class="eq4-top-cat-score">${t.score}</span>
+              </div>`).join('')}</div>`
+          : `<div style="font-size:11px;color:#bbb;text-align:center;">Score to see top areas</div>`;
+
+        card.innerHTML=`
+          <div class="eq4-profile-name${ci===0?' you':''}">${cf.name}</div>
+          ${miniSvg}
+          ${topHTML}
+          <div style="text-align:center;margin-top:4px;">
+            <div class="eq4-equity-pct" style="color:${color};">${pcts[ci].toFixed(1)}%</div>
+            <div class="eq4-equity-label">suggested equity</div>
+          </div>`;
+        wrap.appendChild(card);
+      });
+    }
+
+    // ── Combined radar ──
+    function drawRadar() {
+      const svg=document.getElementById('eq4-radar');
+      const legend=document.getElementById('eq4-radar-legend');
+      if(!svg) return;
+      const cx=120, cy=106, R=86;
+      const angles=[-90,30,150].map(a=>a*Math.PI/180);
+
+      let html='';
+      // Grid
+      [0.25,0.5,0.75,1].forEach(t=>{
+        const pts=angles.map(a=>`${cx+t*R*Math.cos(a)},${cy+t*R*Math.sin(a)}`).join(' ');
+        html+=`<polygon points="${pts}" fill="none" stroke="#e8e4dc" stroke-width="1"/>`;
+        // tick label on top axis
+        const lx=cx+t*R*Math.cos(angles[0]), ly=cy+t*R*Math.sin(angles[0]);
+        html+=`<text x="${lx+4}" y="${ly}" font-size="8" fill="#ccc" dominant-baseline="middle">${Math.round(t*100)}</text>`;
+      });
+      // Axes
+      angles.forEach((a,i)=>{
+        html+=`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a)}" y2="${cy+R*Math.sin(a)}" stroke="#e0ddd6" stroke-width="1"/>`;
+        const lx=cx+(R+18)*Math.cos(a), ly=cy+(R+18)*Math.sin(a);
+        html+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#999" font-weight="600">${BUCKETS[i].label}</text>`;
+      });
+      // Center dot
+      html+=`<circle cx="${cx}" cy="${cy}" r="2" fill="#e0ddd6"/>`;
+
+      // Cofounder polygons (back to front, largest first)
+      const allScores=cofounders.map((_,ci)=>BUCKETS.map(b=>bucketScore(ci,b)));
+      // Sort by total area descending so smaller ones render on top
+      const order=[...cofounders.keys()].sort((a,b)=>allScores[b].reduce((s,x)=>s+x,0)-allScores[a].reduce((s,x)=>s+x,0));
+      order.forEach(ci=>{
+        const scores=allScores[ci];
+        const pts=angles.map((a,i)=>{const r=scores[i]*R;return`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;}).join(' ');
+        const col=CF_COLORS[ci];
+        html+=`<polygon points="${pts}" fill="${col}" fill-opacity="0.18" stroke="${col}" stroke-width="2"/>`;
+        angles.forEach((a,i)=>{
+          const r=scores[i]*R;
+          html+=`<circle cx="${cx+r*Math.cos(a)}" cy="${cy+r*Math.sin(a)}" r="3" fill="${col}" stroke="#fff" stroke-width="1"/>`;
+        });
+      });
+
+      svg.innerHTML=html;
+
+      if(legend) legend.innerHTML=cofounders.map((cf,i)=>
+        `<div class="eq4-legend-item"><span class="eq4-legend-dot" style="background:${CF_COLORS[i]};"></span>${cf.name}</div>`
+      ).join('');
+    }
+
+    // ── Bubble scatter (2-cofounder focus, CF1 vs CF2 per category) ──
+    function drawScatter() {
+      const svg=document.getElementById('eq4-scatter');
+      const sub=document.getElementById('eq4-scatter-sub');
+      const titleEl=document.getElementById('eq4-scatter-title');
+      if(!svg) return;
+
+      const act=ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+      const cf0=cofounders[0], cf1=cofounders[1];
+
+      if (act.length===0) {
+        svg.innerHTML=''; svg.style.display='none';
+        if(sub){sub.style.display='block';sub.textContent='Rate at least one category to see this chart.';}
+        return;
+      }
+      if (cofounders.length<2) {
+        svg.innerHTML=''; svg.style.display='none';
+        if(sub){sub.style.display='block';sub.textContent='Add a second cofounder to see the comparison chart.';}
+        return;
+      }
+      svg.style.display='block';
+      if(sub) sub.style.display='none';
+      if(titleEl) titleEl.textContent=`Where You Differ — ${cf0.name} vs ${cf1.name}`;
+
+      const W=220,H=220,pad=28;
+      const scale=(v)=>pad+v*(W-pad*2)/10;
+      let html='';
+
+      // Axis lines and labels
+      html+=`<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="#e0ddd6" stroke-width="1"/>`;
+      html+=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#e0ddd6" stroke-width="1"/>`;
+      // Diagonal (agreement line)
+      html+=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${pad}" stroke="#e0ddd6" stroke-width="1" stroke-dasharray="4,3"/>`;
+      // Grid
+      [2,4,6,8,10].forEach(n=>{
+        const x=scale(n), y=scale(10-n)+pad;
+        html+=`<line x1="${x}" y1="${pad}" x2="${x}" y2="${H-pad}" stroke="#f0ede6" stroke-width="0.8"/>`;
+        html+=`<line x1="${pad}" y1="${scale(n)}" x2="${W-pad}" y2="${scale(n)}" stroke="#f0ede6" stroke-width="0.8"/>`;
+        html+=`<text x="${x}" y="${H-pad+12}" text-anchor="middle" font-size="8" fill="#ccc">${n}</text>`;
+        html+=`<text x="${pad-10}" y="${scale(n)+1}" text-anchor="middle" font-size="8" fill="#ccc" dominant-baseline="middle">${n}</text>`;
+      });
+      // Axis labels
+      html+=`<text x="${W/2}" y="${H-4}" text-anchor="middle" font-size="9" fill="#aaa" font-weight="600">${cf0.name.split(' ')[0]}</text>`;
+      html+=`<text x="10" y="${H/2}" text-anchor="middle" font-size="9" fill="#aaa" font-weight="600" transform="rotate(-90,10,${H/2})">${cf1.name.split(' ')[0]}</text>`;
+
+      // Region labels
+      html+=`<text x="${W-pad-8}" y="${pad+14}" text-anchor="end" font-size="8" fill="#c8a878" opacity="0.8">${cf0.name.split(' ')[0]} led</text>`;
+      html+=`<text x="${pad+8}" y="${pad+8}" text-anchor="start" font-size="8" fill="#5a7a5c" opacity="0.8">${cf1.name.split(' ')[0]} led</text>`;
+
+      // Dots per active category
+      const hasScores = act.some(c=>(myScores[0]||{})[c.key]!=null||(myScores[1]||{})[c.key]!=null);
+      if (!hasScores) {
+        html+=`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="11" fill="#ccc">Score categories to see dots</text>`;
+      } else {
+        act.forEach(cat=>{
+          const x0=(myScores[0]||{})[cat.key]??null;
+          const x1=(myScores[1]||{})[cat.key]??null;
+          if(x0===null&&x1===null) return;
+          const cx=scale(x0??0), cy2=scale(x1??0);
+          const imp=importance[cat.key]||0;
+          const r=3+imp/100*6; // bubble size by importance
+          const bucket=CAT_BUCKET[cat.key];
+          const col=bucket?.color||'#2d2a22';
+          const delta=Math.abs((x0??0)-(x1??0));
+          // Bigger delta = more opaque
+          const opacity=0.3+delta/10*0.7;
+          html+=`<circle cx="${cx}" cy="${cy2}" r="${r}" fill="${col}" fill-opacity="${opacity}" stroke="${col}" stroke-width="1" stroke-opacity="0.6">
+            <title>${cat.label}: ${cf0.name.split(' ')[0]}=${x0??'?'}, ${cf1.name.split(' ')[0]}=${x1??'?'}</title>
+          </circle>`;
+          // Label for big deltas
+          if(delta>=4 && r>=5) {
+            html+=`<text x="${cx}" y="${cy2-r-3}" text-anchor="middle" font-size="8" fill="${col}" font-weight="600">${cat.label.split(' ')[0]}</text>`;
+          }
+        });
+      }
+
+      // Legend (bucket colors)
+      const lx=pad, ly=pad+6;
+      BUCKETS.forEach((b,i)=>{
+        html+=`<rect x="${lx+i*68}" y="${ly}" width="6" height="6" rx="3" fill="${b.color}"/>`;
+        html+=`<text x="${lx+i*68+9}" y="${ly+5}" font-size="7.5" fill="#aaa">${b.label}</text>`;
+      });
+
+      svg.innerHTML=html;
+    }
+
+    // ── Suggested split ──
+    function drawSuggested(pcts) {
+      const wrap=document.getElementById('eq4-sug-rows');
+      if(!wrap) return;
+      wrap.innerHTML=cofounders.map((cf,i)=>`
+        <div class="eq4-sug-row">
+          <span class="eq4-sug-name">${cf.name}</span>
+          <div class="eq4-sug-track"><div class="eq4-sug-fill" style="width:${pcts[i].toFixed(2)}%;background:${CF_COLORS[i]};"></div></div>
+          <span class="eq4-sug-pct">${pcts[i].toFixed(1)}%</span>
+        </div>`).join('');
+    }
+
+    // ── Final allocation ──
+    function renderFinal() {
+      const list=document.getElementById('eq4-final-list');
+      if(!list) return;
+      if(!finalEntries.length) finalEntries=cofounders.map(cf=>({name:cf.name,equity:''}));
+      list.innerHTML=finalEntries.map((e,i)=>`
+        <div class="eq4-entry">
+          <input class="card-input" type="text" placeholder="Cofounder name"
+            value="${e.name||''}" data-fi="${i}" data-f="name" style="flex:1;" />
+          <input class="card-input" type="number" min="0" max="100" step="0.1" placeholder="%"
+            value="${e.equity||''}" data-fi="${i}" data-f="equity" style="flex:0 0 80px;" />
+          <button class="eq4-remove" data-r="${i}">Remove</button>
+        </div>`).join('');
+
+      list.querySelectorAll('[data-fi]').forEach(inp=>{
+        inp.addEventListener('input',()=>{
+          finalEntries[parseInt(inp.dataset.fi)][inp.dataset.f]=inp.value;
+          save(); updateFinalTotal();
+        });
+      });
+      list.querySelectorAll('[data-r]').forEach(btn=>{
+        btn.addEventListener('click',()=>{finalEntries.splice(parseInt(btn.dataset.r),1);save();renderFinal();});
+      });
+      updateFinalTotal();
+    }
+
+    function updateFinalTotal() {
+      const tot=finalEntries.reduce((s,e)=>s+(parseFloat(e.equity)||0),0);
+      const el=document.getElementById('eq4-total'),er=document.getElementById('eq4-total-err');
+      const hasAny=finalEntries.some(e=>e.equity!==''), off=hasAny&&Math.abs(tot-100)>0.01;
+      if(el){el.textContent=`Total Equity: ${tot.toFixed(2)}%`;el.classList.toggle('err',off);}
+      if(er) er.style.display=off?'block':'none';
+    }
+
+    // ── Wire static buttons ──
+    document.getElementById('eq4-use-btn')?.addEventListener('click',()=>{
+      const {pcts}=calcWeighted();
+      finalEntries=cofounders.map((cf,i)=>({name:cf.name,equity:pcts[i].toFixed(1)}));
+      save(); renderFinal();
+      document.querySelector('.question-card:last-of-type')?.scrollIntoView({behavior:'smooth'});
+    });
+    document.getElementById('eq4-add-btn')?.addEventListener('click',()=>{finalEntries.push({name:'',equity:''});save();renderFinal();});
+    document.getElementById('eq4-legal-toggle')?.addEventListener('click',function(){
+      const b=document.getElementById('eq4-legal-body');
+      const open=b.classList.toggle('open');
+      this.textContent=(open?'▾':'▸')+' Legal note';
+    });
+    document.getElementById('eq4-sign')?.addEventListener('click',()=>{
+      signed=!signed;localStorage.setItem('ct_eq_signed',signed?'1':'0');
+      document.getElementById('eq4-sign').classList.toggle('signed',signed);
+      document.getElementById('eq4-sign-box').textContent=signed?'✓':'';
+    });
+
+    // ── Init ──
+    loadData();
+    buildTable();
+    const {pcts}=calcWeighted();
+    drawSplitBar(pcts);
+    drawProfiles(pcts);
+    drawRadar();
+    drawScatter();
+    drawSuggested(pcts);
+    renderFinal();
+  </script>
+  <script src="../sidebar.js"></script>
+</body>
+</html>

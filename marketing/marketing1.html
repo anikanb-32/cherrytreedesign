@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree — Cofounder Agreement, Done Right</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #F6F3EE;
+      --bg-2:  #F1EEE9;
+      --bg-3:  #E3DFD8;
+      --green: #4B7263;
+      --green-dk: #3d5f52;
+      --sage:  #C7CECB;
+      --ink:   #1a1a1a;
+      --muted: #666;
+      --faint: #aaa;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+    @keyframes float    { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+    @keyframes ticker   { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+    @keyframes barFill  { to { width: 40%; } }
+    @keyframes spinSlow { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top:0; left:0; right:0;
+      z-index: 200;
+      padding: 22px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.35s, border-color 0.35s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(246,243,238,0.9);
+      backdrop-filter: blur(16px);
+      border-color: rgba(0,0,0,0.07);
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo img { width:32px; height:32px; object-fit:contain; }
+    .nav-logo-text { font-family:'Instrument Serif',serif; font-size:19px; color:var(--ink); }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-cta {
+      background:var(--ink); color:#fff;
+      border-radius:6px; padding:9px 20px;
+      font-size:13px; font-weight:400; font-family:'Outfit',sans-serif;
+      text-decoration:none; transition:background 0.15s;
+    }
+    .nav-cta:hover { background:#333; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 56px 80px 52px;
+      padding-top: 160px;
+    }
+    .hero-overline {
+      font-size: 11px; font-weight:400; letter-spacing:0.13em;
+      text-transform:uppercase; color:var(--green);
+      margin-bottom: 26px;
+      opacity:0; animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+    }
+    .hero-headline {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(44px, 5.5vw, 80px);
+      font-weight:400; letter-spacing:-1.5px; line-height:1.03;
+      margin-bottom:28px;
+      opacity:0; animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
+    }
+    .hero-headline em { font-style:italic; color:var(--green); }
+    .hero-sub {
+      font-size:16px; font-weight:300; color:var(--muted);
+      max-width:400px; line-height:1.7; margin-bottom:44px;
+      opacity:0; animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+    }
+    .hero-actions {
+      display:flex; align-items:center; gap:14px;
+      opacity:0; animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.65s forwards;
+    }
+    .btn-primary {
+      background:var(--green); color:#fff; border-radius:6px;
+      padding:13px 26px; font-size:13.5px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none; display:inline-block;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-primary:hover { background:var(--green-dk); transform:translateY(-1px); }
+    .btn-ghost {
+      color:var(--muted); font-size:13.5px; font-weight:300;
+      text-decoration:none; transition:color 0.15s;
+    }
+    .btn-ghost:hover { color:var(--ink); }
+
+    .hero-right {
+      background: var(--bg-2);
+      display:flex; flex-direction:column;
+      justify-content:flex-end;
+      padding: 140px 52px 80px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right::before {
+      content:'';
+      position:absolute; top:-120px; right:-120px;
+      width:400px; height:400px;
+      border-radius:50%;
+      background: radial-gradient(circle, rgba(75,114,99,0.1) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-tag {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--faint);
+      margin-bottom:60px;
+      opacity:0; animation: fadeIn 1s ease 0.8s forwards;
+    }
+    .hero-card {
+      background:#fff;
+      border-radius:10px; padding:28px 30px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.09), 0 3px 12px rgba(0,0,0,0.04);
+      position:relative;
+      opacity:0; animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.9s forwards;
+    }
+    .hero-card::before {
+      content:''; position:absolute; top:0; left:0; right:0;
+      height:3px; background:var(--green); border-radius:10px 10px 0 0;
+    }
+    .hc-label {
+      font-size:10.5px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--green); margin-bottom:12px;
+    }
+    .hc-title {
+      font-family:'Instrument Serif',serif;
+      font-size:22px; color:var(--ink); margin-bottom:20px; letter-spacing:-0.2px;
+    }
+    .hc-items { display:flex; flex-direction:column; gap:7px; }
+    .hc-item {
+      display:flex; align-items:center; gap:10px;
+      padding:9px 12px; background:var(--bg-2);
+      border-radius:5px; font-size:12.5px; font-weight:300; color:#444;
+    }
+    .hc-item.cur { background:var(--bg); box-shadow:0 1px 6px rgba(0,0,0,0.07); font-weight:400; color:var(--ink); }
+    .hcd { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .hcd.done { background:var(--green); }
+    .hcd.cur  { background:var(--ink); }
+    .hcd.pend { background:transparent; border:1.5px solid var(--green); }
+    .hcd.none { background:transparent; border:1.5px solid #ccc; }
+    .hc-bar { margin-top:18px; height:2px; background:var(--bg-2); border-radius:2px; overflow:hidden; }
+    .hc-bar-fill { height:100%; background:var(--green); width:0; animation:barFill 1.6s cubic-bezier(0.16,1,0.3,1) 1.6s forwards; }
+
+    .float-badge {
+      position:absolute; background:#fff; border-radius:8px;
+      padding:9px 14px; box-shadow:0 6px 24px rgba(0,0,0,0.09);
+      font-size:11.5px; font-weight:300; color:var(--ink); white-space:nowrap;
+    }
+    .float-badge strong { font-weight:500; color:var(--green); }
+    .fb-1 { top:-16px; right:20px; animation:float 4s ease-in-out infinite; }
+    .fb-2 { bottom:-14px; left:0px; animation:float 4s ease-in-out 1.8s infinite; }
+
+    .hero-scroll-hint {
+      position:absolute; bottom:36px; left:52px;
+      font-size:11px; font-weight:300; color:var(--faint);
+      display:flex; align-items:center; gap:8px;
+      opacity:0; animation: fadeIn 1s ease 1.4s forwards;
+    }
+    .scroll-line {
+      width:28px; height:1px; background:var(--faint);
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      overflow:hidden;
+      border-top:1px solid rgba(0,0,0,0.07);
+      border-bottom:1px solid rgba(0,0,0,0.07);
+      padding:13px 0; background:var(--bg-2);
+    }
+    .ticker-track { display:flex; width:max-content; animation:ticker 30s linear infinite; }
+    .ticker-item {
+      display:flex; align-items:center; gap:14px;
+      padding:0 28px; font-size:12.5px; font-weight:300; color:var(--muted); white-space:nowrap;
+    }
+    .tdot { width:4px; height:4px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity:0; transform:translateY(20px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;}
+    .d3{transition-delay:0.3s;} .d4{transition-delay:0.45s;}
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      display:grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .manifesto-left {
+      background: var(--bg-3);
+      padding: 80px 40px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .manifesto-stat-num {
+      font-family:'Instrument Serif',serif;
+      font-size:88px; font-weight:400; color:var(--green);
+      letter-spacing:-3px; line-height:1;
+    }
+    .manifesto-stat-label {
+      font-size:12px; font-weight:300; color:var(--muted); line-height:1.5; margin-top:10px;
+    }
+    .manifesto-right {
+      padding: 80px 64px 80px 56px;
+    }
+    .manifesto-overline {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--faint); margin-bottom:28px;
+    }
+    .manifesto-text {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight:400; letter-spacing:-0.5px; line-height:1.25;
+      margin-bottom:36px;
+    }
+    .manifesto-text em { font-style:italic; color:var(--green); }
+    .manifesto-body {
+      font-size:15px; font-weight:300; color:var(--muted);
+      line-height:1.7; max-width:520px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display:grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .stat-cell {
+      padding: 60px 52px;
+      border-right: 1px solid rgba(0,0,0,0.08);
+    }
+    .stat-cell:last-child { border-right:none; }
+    .stat-cell.large { background:var(--green); }
+    .stat-n {
+      font-family:'Instrument Serif',serif;
+      font-size:72px; font-weight:400; letter-spacing:-2px; line-height:1;
+      margin-bottom:12px; color:var(--ink);
+    }
+    .stat-cell.large .stat-n { color:#fff; }
+    .stat-d { font-size:14px; font-weight:300; color:var(--muted); line-height:1.5; max-width:240px; }
+    .stat-cell.large .stat-d { color:rgba(255,255,255,0.7); }
+
+    /* ── HOW IT WORKS (sticky) ── */
+    .how-wrap {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      min-height:100vh;
+    }
+    .how-left {
+      position:sticky; top:0; height:100vh;
+      display:flex; flex-direction:column; justify-content:center;
+      padding: 0 56px 0 52px;
+      background: var(--bg-2);
+      border-right:1px solid rgba(0,0,0,0.08);
+    }
+    .how-overline {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--green); margin-bottom:20px;
+    }
+    .how-heading {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight:400; letter-spacing:-0.8px; line-height:1.08;
+      margin-bottom:20px;
+    }
+    .how-sub { font-size:15px; font-weight:300; color:var(--muted); line-height:1.65; max-width:360px; }
+    .how-right {
+      padding: 80px 52px 80px 56px;
+      display:flex; flex-direction:column; justify-content:center; gap:0;
+    }
+    .step {
+      padding: 44px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .step:first-child { border-top:1px solid rgba(0,0,0,0.08); }
+    .step-row { display:flex; align-items:flex-start; gap:24px; }
+    .step-num-box {
+      width:40px; height:40px; flex-shrink:0;
+      border:1px solid rgba(0,0,0,0.12); border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:400; color:var(--muted);
+    }
+    .step-title {
+      font-family:'Instrument Serif',serif;
+      font-size:26px; font-weight:400; margin-bottom:10px; letter-spacing:-0.2px;
+    }
+    .step-desc { font-size:14px; font-weight:300; color:var(--muted); line-height:1.65; }
+
+    /* ── BENTO FEATURES ── */
+    .bento {
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap:10px;
+      padding:10px;
+      background:var(--bg-3);
+    }
+    .bento-header {
+      grid-column: span 3;
+      padding: 64px 52px 40px;
+      background:var(--bg-3);
+    }
+    .bento-overline {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--green); margin-bottom:16px;
+    }
+    .bento-heading {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(34px, 4vw, 54px);
+      font-weight:400; letter-spacing:-0.8px; line-height:1.08;
+    }
+    .bento-heading em { font-style:italic; }
+    .bc {
+      background:var(--bg-2); border-radius:8px;
+      padding:32px; overflow:hidden; position:relative;
+    }
+    .bc.tall { grid-row:span 2; }
+    .bc.wide { grid-column:span 2; }
+    .bc.dark { background:var(--ink); }
+    .bc.green { background:var(--green); }
+    .bc-icon {
+      width:36px; height:36px; background:var(--bg-3); border-radius:7px;
+      display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+    }
+    .bc-icon svg { width:18px; height:18px; }
+    .bc.dark .bc-icon { background:rgba(255,255,255,0.1); }
+    .bc.green .bc-icon { background:rgba(255,255,255,0.15); }
+    .bc-title {
+      font-family:'Instrument Serif',serif;
+      font-size:22px; font-weight:400; margin-bottom:10px; letter-spacing:-0.2px;
+    }
+    .bc.dark .bc-title, .bc.green .bc-title { color:#fff; }
+    .bc-desc { font-size:13.5px; font-weight:300; color:var(--muted); line-height:1.65; }
+    .bc.dark .bc-desc { color:rgba(255,255,255,0.55); }
+    .bc.green .bc-desc { color:rgba(255,255,255,0.65); }
+
+    .bc-visual {
+      margin-top:28px;
+      display:flex; flex-direction:column; gap:7px;
+    }
+    .bcv-item {
+      display:flex; align-items:center; gap:10px;
+      padding:11px 14px; background:var(--bg-3);
+      border-radius:6px; font-size:12.5px; font-weight:300; color:#444;
+    }
+    .bcv-dot { width:6px; height:6px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+    .bc-big-num {
+      font-family:'Instrument Serif',serif;
+      font-size:100px; font-weight:400; color:rgba(255,255,255,0.12);
+      letter-spacing:-4px; line-height:1; position:absolute;
+      bottom:-10px; right:16px; pointer-events:none;
+    }
+
+    .spinning-badge {
+      position:absolute; bottom:24px; right:24px;
+      width:72px; height:72px;
+    }
+    .spinning-ring {
+      width:100%; height:100%;
+      animation:spinSlow 12s linear infinite;
+    }
+    .spinning-dot {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; font-weight:400; color:var(--green);
+    }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      display:grid;
+      grid-template-columns: 1fr 2fr;
+      min-height:60vh;
+      border-top:1px solid rgba(0,0,0,0.08);
+    }
+    .quote-left {
+      background:var(--green);
+      padding:80px 48px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      position:relative; overflow:hidden;
+    }
+    .quote-left::before {
+      content:'\201C';
+      position:absolute; bottom:-60px; left:20px;
+      font-family:'Instrument Serif',serif;
+      font-size:260px; color:rgba(255,255,255,0.1); line-height:1; pointer-events:none;
+    }
+    .quote-label {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:rgba(255,255,255,0.5);
+    }
+    .quote-author { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); }
+    .quote-right {
+      padding:80px 64px 80px 60px;
+      display:flex; align-items:center;
+    }
+    .quote-text {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight:400; font-style:italic;
+      letter-spacing:-0.5px; line-height:1.22; color:var(--ink);
+    }
+
+    /* ── SECTIONS TABLE ── */
+    .sections-section {
+      display:grid;
+      grid-template-columns:380px 1fr;
+      border-top:1px solid rgba(0,0,0,0.08);
+    }
+    .sections-left {
+      padding:80px 48px 80px 52px;
+      position:sticky; top:0; height:fit-content;
+    }
+    .sections-overline {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--green); margin-bottom:20px;
+    }
+    .sections-heading {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(30px, 3vw, 44px);
+      font-weight:400; letter-spacing:-0.6px; line-height:1.1; margin-bottom:20px;
+    }
+    .sections-body { font-size:14px; font-weight:300; color:var(--muted); line-height:1.65; }
+    .sections-right {
+      border-left:1px solid rgba(0,0,0,0.08);
+      padding:0;
+    }
+    .sec-item {
+      display:flex; align-items:center; gap:20px;
+      padding:22px 40px;
+      border-bottom:1px solid rgba(0,0,0,0.08);
+      transition:background 0.15s, padding-left 0.2s;
+      cursor:default;
+    }
+    .sec-item:hover { background:var(--bg-2); padding-left:52px; }
+    .sec-num { font-size:11.5px; font-weight:300; color:var(--faint); min-width:24px; }
+    .sec-name {
+      font-family:'Instrument Serif',serif;
+      font-size:19px; font-weight:400; flex:1; letter-spacing:-0.1px;
+    }
+    .sec-desc { font-size:12.5px; font-weight:300; color:var(--muted); max-width:240px; line-height:1.45; }
+    .sec-tag {
+      font-size:10.5px; font-weight:400; color:var(--green);
+      background:#d4e0da; border-radius:20px; padding:3px 10px; white-space:nowrap;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      background:var(--ink);
+      min-height:60vh;
+      border-top:1px solid rgba(0,0,0,0.08);
+    }
+    .cta-left {
+      padding:100px 56px 100px 52px;
+      display:flex; flex-direction:column; justify-content:center;
+      border-right:1px solid rgba(255,255,255,0.07);
+    }
+    .cta-overline {
+      font-size:11px; font-weight:400; letter-spacing:0.1em;
+      text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:24px;
+    }
+    .cta-heading {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(36px, 4.5vw, 62px);
+      font-weight:400; color:#fff; letter-spacing:-1px; line-height:1.07; margin-bottom:20px;
+    }
+    .cta-heading em { font-style:italic; color:rgba(255,255,255,0.55); }
+    .cta-sub { font-size:15px; font-weight:300; color:rgba(255,255,255,0.5); line-height:1.65; max-width:380px; }
+    .cta-right {
+      padding:100px 52px 100px 56px;
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:flex-start; gap:24px;
+      position:relative; overflow:hidden;
+    }
+    .cta-right::before {
+      content:'';
+      position:absolute; bottom:-100px; right:-100px;
+      width:400px; height:400px; border-radius:50%;
+      background:radial-gradient(circle, rgba(75,114,99,0.3) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .btn-white {
+      background:#fff; color:var(--ink);
+      border-radius:6px; padding:14px 32px;
+      font-size:14px; font-weight:500;
+      font-family:'Outfit',sans-serif; text-decoration:none; display:inline-block;
+      transition:transform 0.15s, box-shadow 0.15s; position:relative;
+    }
+    .btn-white:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,0,0,0.3); }
+    .cta-note { font-size:12px; font-weight:300; color:rgba(255,255,255,0.3); }
+
+    .cta-circle {
+      position:absolute; top:40px; right:40px;
+      width:130px; height:130px;
+    }
+    .cta-circle-text {
+      font-size:9px; font-weight:300; letter-spacing:0.18em;
+      text-transform:uppercase; fill:rgba(255,255,255,0.18);
+    }
+    .cta-circle-dot {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .cta-circle-dot span {
+      font-family:'Instrument Serif',serif; font-size:28px; color:rgba(255,255,255,0.12);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background:var(--bg-2); padding:44px 52px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-top:1px solid rgba(0,0,0,0.07);
+    }
+    .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .footer-logo img { width:26px; height:26px; object-fit:contain; }
+    .footer-logo-name { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
+    .footer-copy { font-size:12px; font-weight:300; color:var(--faint); }
+    .footer-links { display:flex; gap:24px; list-style:none; }
+    .footer-links a { font-size:12px; font-weight:300; color:var(--faint); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:var(--ink); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="marketing1.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="nav-logo-text">Cherrytree</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#covered">What's covered</a></li>
+  </ul>
+  <a class="nav-cta" href="../product/survey.html">Start for free</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-overline">Cofounder Agreement Tool</div>
+    <h1 class="hero-headline">The agreement you make <em>before</em> things get complicated.</h1>
+    <p class="hero-sub">Cherrytree guides you through the conversations every founding team needs to have — before the awkward ones happen on their own.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="../product/survey.html">Start your agreement</a>
+      <a class="btn-ghost" href="#how">See how it works →</a>
+    </div>
+    <div class="hero-scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-tag">Live agreement preview</div>
+    <div style="position:relative;">
+      <div class="float-badge fb-1"><strong>Saved</strong> 2 min ago</div>
+      <div class="float-badge fb-2">✓ <strong>Equity</strong> locked in</div>
+      <div class="hero-card">
+        <div class="hc-label">Cherrytree · Cofounder Agreement</div>
+        <div class="hc-title">YourCompany, Inc.</div>
+        <div class="hc-items">
+          <div class="hc-item"><span class="hcd done"></span>Formation &amp; Purpose</div>
+          <div class="hc-item"><span class="hcd done"></span>Cofounder Info</div>
+          <div class="hc-item cur"><span class="hcd cur"></span>Vesting Schedule</div>
+          <div class="hc-item"><span class="hcd pend"></span>Decision-Making</div>
+          <div class="hc-item"><span class="hcd none"></span>IP &amp; Ownership</div>
+        </div>
+        <div class="hc-bar"><div class="hc-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="tdot"></span>Equity Allocation</div>
+    <div class="ticker-item"><span class="tdot"></span>Vesting Schedules</div>
+    <div class="ticker-item"><span class="tdot"></span>Decision-Making Rights</div>
+    <div class="ticker-item"><span class="tdot"></span>IP Ownership</div>
+    <div class="ticker-item"><span class="tdot"></span>Compensation</div>
+    <div class="ticker-item"><span class="tdot"></span>Non-Competition</div>
+    <div class="ticker-item"><span class="tdot"></span>Departure Terms</div>
+    <div class="ticker-item"><span class="tdot"></span>Dispute Resolution</div>
+    <div class="ticker-item"><span class="tdot"></span>Equity Allocation</div>
+    <div class="ticker-item"><span class="tdot"></span>Vesting Schedules</div>
+    <div class="ticker-item"><span class="tdot"></span>Decision-Making Rights</div>
+    <div class="ticker-item"><span class="tdot"></span>IP Ownership</div>
+    <div class="ticker-item"><span class="tdot"></span>Compensation</div>
+    <div class="ticker-item"><span class="tdot"></span>Non-Competition</div>
+    <div class="ticker-item"><span class="tdot"></span>Departure Terms</div>
+    <div class="ticker-item"><span class="tdot"></span>Dispute Resolution</div>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-left reveal">
+    <div>
+      <div class="manifesto-stat-num">65%</div>
+      <div class="manifesto-stat-label">of startups experience significant cofounder conflict</div>
+    </div>
+    <div style="font-size:12px;font-weight:300;color:var(--faint);margin-top:40px;">— First Round Capital</div>
+  </div>
+  <div class="manifesto-right">
+    <div class="manifesto-overline reveal">The hard truth</div>
+    <h2 class="manifesto-text reveal d1">Most cofounder relationships don't fail because the idea was bad. They fail because the <em>terms were never written down.</em></h2>
+    <p class="manifesto-body reveal d2">Cherrytree helps founding teams get aligned before the stress of a real startup kicks in — covering equity, roles, decisions, IP, and everything in between. One question at a time.</p>
+  </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat-cell large reveal">
+    <div class="stat-n">23%</div>
+    <div class="stat-d">of startup failures are directly attributed to team and cofounder issues</div>
+  </div>
+  <div class="stat-cell reveal d1">
+    <div class="stat-n">10×</div>
+    <div class="stat-d">more likely to reach agreement when terms are set early</div>
+  </div>
+  <div class="stat-cell reveal d2">
+    <div class="stat-n">$0</div>
+    <div class="stat-d">to get started. No lawyer required to begin the conversation</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-wrap" id="how">
+  <div class="how-left">
+    <div class="how-overline">How it works</div>
+    <h2 class="how-heading">Simple questions.<br>Serious outcomes.</h2>
+    <p class="how-sub">No lawyers required. Cherrytree walks you through every section — one at a time.</p>
+  </div>
+  <div class="how-right">
+    <div class="step reveal">
+      <div class="step-row">
+        <div class="step-num-box">01</div>
+        <div class="step-body">
+          <div class="step-title">Answer the questions</div>
+          <p class="step-desc">Cherrytree guides you through every section — from equity splits to what happens if someone leaves. Each question is explained in plain English, with context to help you decide.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step reveal d1">
+      <div class="step-row">
+        <div class="step-num-box">02</div>
+        <div class="step-body">
+          <div class="step-title">Align with your cofounders</div>
+          <p class="step-desc">Share your progress and compare answers. The conversation is the point — Cherrytree gives you the structure to have it before the hard moments force it.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step reveal d2">
+      <div class="step-row">
+        <div class="step-num-box">03</div>
+        <div class="step-body">
+          <div class="step-title">Get your agreement</div>
+          <p class="step-desc">Your responses compile into a full cofounder agreement, ready for review. Revisit and update any time as your company evolves and the stakes get higher.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BENTO FEATURES -->
+<div id="features">
+  <div class="bento-header">
+    <div class="bento-overline reveal">Features</div>
+    <h2 class="bento-heading reveal d1">Built for the conversation,<br><em>not just the document.</em></h2>
+  </div>
+  <div class="bento">
+    <div class="bc wide reveal">
+      <div class="bc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+      </div>
+      <h3 class="bc-title">Progressive disclosure — not a wall of text</h3>
+      <p class="bc-desc">One question at a time. No overwhelming forms, no legal jargon. Just clear, human questions with context to help you answer with confidence.</p>
+      <div class="bc-visual">
+        <div class="bcv-item"><span class="bcv-dot"></span>Are any cofounders taking salary?</div>
+        <div class="bcv-item"><span class="bcv-dot"></span>How should equity vest over time?</div>
+        <div class="bcv-item"><span class="bcv-dot"></span>What happens if someone leaves early?</div>
+      </div>
+    </div>
+    <div class="bc dark reveal d1">
+      <div class="bc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+      </div>
+      <h3 class="bc-title">Auto-saved as you go</h3>
+      <p class="bc-desc">Pick up exactly where you left off. No account needed to start.</p>
+      <div class="bc-big-num">∞</div>
+    </div>
+    <div class="bc reveal d2">
+      <div class="bc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </div>
+      <h3 class="bc-title">Plain English, always</h3>
+      <p class="bc-desc">Every section explains why it matters — not just what to fill in. Make informed decisions, not just checkboxes.</p>
+    </div>
+    <div class="bc green reveal d1">
+      <div class="bc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3 class="bc-title">A real agreement at the end</h3>
+      <p class="bc-desc">Every answer becomes a clause. Your cofounder agreement is generated from your responses — ready for review.</p>
+      <div class="spinning-badge">
+        <svg class="spinning-ring" viewBox="0 0 100 100">
+          <path id="circle" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
+          <text>
+            <textPath class="cta-circle-text" href="#circle">READY TO REVIEW · READY TO REVIEW · </textPath>
+          </text>
+        </svg>
+        <div class="cta-circle-dot"><span style="font-family:'Instrument Serif',serif;font-size:22px;color:rgba(255,255,255,0.3);">✓</span></div>
+      </div>
+    </div>
+    <div class="bc reveal d2">
+      <div class="bc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4B7263" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <h3 class="bc-title">Built for teams</h3>
+      <p class="bc-desc">Multiple cofounders, one agreement. Invite your team to contribute and review together.</p>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <div class="quote-left reveal">
+    <div class="quote-label">The idea behind Cherrytree</div>
+    <div class="quote-author">— Every founding team that waited too long</div>
+  </div>
+  <div class="quote-right">
+    <blockquote class="quote-text reveal d1">"Like a prenup, but for your startup. And unlike a prenup, you actually want to talk about it."</blockquote>
+  </div>
+</div>
+
+<!-- SECTIONS TABLE -->
+<div class="sections-section" id="covered">
+  <div class="sections-left">
+    <div class="sections-overline reveal">What's covered</div>
+    <h2 class="sections-heading reveal d1">Every section your team needs.</h2>
+    <p class="sections-body reveal d2">Ten sections. Every angle. From your company name to what happens if things fall apart.</p>
+  </div>
+  <div class="sections-right">
+    <div class="sec-item reveal"><span class="sec-num">01</span><span class="sec-name">Formation &amp; Purpose</span><span class="sec-desc">Company name, state, and founding mission</span><span class="sec-tag">Foundation</span></div>
+    <div class="sec-item reveal d1"><span class="sec-num">02</span><span class="sec-name">Cofounder Info</span><span class="sec-desc">Roles, responsibilities, and contact details</span><span class="sec-tag">People</span></div>
+    <div class="sec-item reveal d2"><span class="sec-num">03</span><span class="sec-name">Equity Allocation</span><span class="sec-desc">How ownership is divided and why</span><span class="sec-tag">Ownership</span></div>
+    <div class="sec-item reveal d3"><span class="sec-num">04</span><span class="sec-name">Vesting Schedule</span><span class="sec-desc">Cliff, timeline, acceleration, departure</span><span class="sec-tag">Equity</span></div>
+    <div class="sec-item reveal"><span class="sec-num">05</span><span class="sec-name">Decision-Making</span><span class="sec-desc">Voting rights, major decisions, deadlock</span><span class="sec-tag">Governance</span></div>
+    <div class="sec-item reveal d1"><span class="sec-num">06</span><span class="sec-name">IP &amp; Ownership</span><span class="sec-desc">Who owns what was built, before and after</span><span class="sec-tag">Legal</span></div>
+    <div class="sec-item reveal d2"><span class="sec-num">07</span><span class="sec-name">Compensation</span><span class="sec-desc">Salaries, deferred pay, spending limits</span><span class="sec-tag">Finance</span></div>
+    <div class="sec-item reveal d3"><span class="sec-num">08</span><span class="sec-name">Performance &amp; Departure</span><span class="sec-desc">What happens when things don't go as planned</span><span class="sec-tag">Protection</span></div>
+    <div class="sec-item reveal"><span class="sec-num">09</span><span class="sec-name">Non-Competition</span><span class="sec-desc">Confidentiality, non-compete, non-solicitation</span><span class="sec-tag">Protection</span></div>
+    <div class="sec-item reveal d1"><span class="sec-num">10</span><span class="sec-name">General Provisions</span><span class="sec-desc">Governing law, dispute resolution, amendments</span><span class="sec-tag">Legal</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-left">
+    <div class="cta-overline reveal">Get started</div>
+    <h2 class="cta-heading reveal d1">Don't wait for things to get <em>complicated.</em></h2>
+    <p class="cta-sub reveal d2">Start your cofounder agreement today. Free, clear, and built for actual founders.</p>
+  </div>
+  <div class="cta-right">
+    <svg class="cta-circle" viewBox="0 0 130 130" style="position:absolute;top:32px;right:32px;animation:spinSlow 18s linear infinite;">
+      <path id="ctaCircle" d="M 65,65 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" fill="none"/>
+      <text><textPath class="cta-circle-text" href="#ctaCircle">FREE TO START · FREE TO START · FREE TO START · </textPath></text>
+    </svg>
+    <a class="btn-white reveal" href="../product/survey.html">Start for free →</a>
+    <span class="cta-note reveal d1">No account required. Takes about 15 minutes.</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="marketing1.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="footer-logo-name">Cherrytree</span>
+  </a>
+  <span class="footer-copy">© 2025 Cherrytree. Made for founders.</span>
+  <ul class="footer-links">
+    <li><a href="../product/survey.html">Start agreement</a></li>
+    <li><a href="../product/dashboard.html">Dashboard</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

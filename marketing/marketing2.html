@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree — Dark Edition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #F6F3EE;
+      --bg-2:  #F1EEE9;
+      --bg-3:  #E3DFD8;
+      --dark:  #141410;
+      --dark2: #1e1e18;
+      --green: #4B7263;
+      --green-lt: #6a9e8a;
+      --sage:  #C7CECB;
+      --ink:   #1a1a1a;
+      --muted: #666;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.04; pointer-events: none; z-index: 9000;
+    }
+
+    /* ── CURSOR ORB ── */
+    .cursor-orb {
+      position: fixed;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(75,114,99,0.18) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      transition: left 0.12s ease, top 0.12s ease;
+      will-change: left, top;
+    }
+
+    @keyframes fadeUp  { from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn  { from{opacity:0;}to{opacity:1;} }
+    @keyframes float   { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+    @keyframes ticker  { from{transform:translateX(0);}to{transform:translateX(-50%);} }
+    @keyframes pulse   { 0%,100%{opacity:0.4;transform:scale(1);}50%{opacity:0.8;transform:scale(1.04);} }
+    @keyframes wordIn  { from{opacity:0;transform:translateY(12px) skewY(2deg);}to{opacity:1;transform:translateY(0) skewY(0);} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 22px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.35s, border-color 0.35s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled { background: rgba(20,20,16,0.92); backdrop-filter: blur(16px); border-color: rgba(255,255,255,0.06); }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo img { width:32px; height:32px; object-fit:contain; filter:brightness(1.1); }
+    .nav-logo-text { font-family:'Instrument Serif',serif; font-size:19px; color:#fff; }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { font-size:13px; font-weight:300; color:rgba(255,255,255,0.45); text-decoration:none; transition:color 0.15s; }
+    .nav-links a:hover { color:#fff; }
+    .nav-cta {
+      background: var(--green); color:#fff;
+      border-radius:6px; padding:9px 20px;
+      font-size:13px; font-weight:400; font-family:'Outfit',sans-serif;
+      text-decoration:none; transition:background 0.15s;
+    }
+    .nav-cta:hover { background:var(--green-lt); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 160px 60px 100px 52px;
+      position: relative; z-index: 1;
+    }
+    .hero-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(75,114,99,0.2); border: 1px solid rgba(75,114,99,0.35);
+      border-radius: 20px; padding: 5px 14px 5px 8px;
+      font-size: 11.5px; font-weight: 400; color: var(--green-lt);
+      margin-bottom: 36px;
+      opacity: 0; animation: fadeIn 0.6s ease 0.2s forwards;
+    }
+    .hero-chip-dot { width:6px; height:6px; border-radius:50%; background:var(--green-lt); animation:pulse 2s ease infinite; }
+    .hero-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(46px, 5.5vw, 78px);
+      font-weight: 400; letter-spacing: -1.5px; line-height: 1.04;
+      margin-bottom: 30px;
+    }
+    .word {
+      display: inline-block;
+      opacity: 0;
+      animation: wordIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-headline em { font-style:italic; color:var(--green-lt); }
+    .hero-sub {
+      font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.5);
+      max-width: 400px; line-height: 1.7; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.9s forwards;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 14px;
+      opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 1.05s forwards;
+    }
+    .btn-green {
+      background: var(--green); color:#fff; border-radius:6px;
+      padding:13px 26px; font-size:13.5px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      transition:background 0.15s, transform 0.15s; display:inline-block;
+    }
+    .btn-green:hover { background:var(--green-lt); transform:translateY(-1px); }
+    .btn-outline {
+      color:rgba(255,255,255,0.4); font-size:13.5px; font-weight:300;
+      text-decoration:none; transition:color 0.15s;
+    }
+    .btn-outline:hover { color:#fff; }
+
+    .hero-right {
+      display: flex; align-items: center; justify-content: center;
+      padding: 160px 52px 100px 40px;
+      position: relative; z-index: 1;
+    }
+    .terminal {
+      width: 100%; max-width: 400px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; overflow: hidden;
+      opacity: 0; animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+    }
+    .terminal-bar {
+      background: rgba(255,255,255,0.06);
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .t-dot { width:10px; height:10px; border-radius:50%; }
+    .t-dot.r{background:#ff5f57;} .t-dot.y{background:#febc2e;} .t-dot.g{background:#28c840;}
+    .t-title { font-size:11.5px; font-weight:300; color:rgba(255,255,255,0.3); margin:0 auto; }
+    .terminal-body { padding:24px; font-family:'Outfit',sans-serif; }
+    .t-section {
+      margin-bottom:18px; padding-bottom:18px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .t-section:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+    .t-label { font-size:10px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green-lt); margin-bottom:10px; }
+    .t-row {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:7px; font-size:12.5px; font-weight:300;
+    }
+    .t-row-key { color:rgba(255,255,255,0.45); }
+    .t-row-val { color:rgba(255,255,255,0.85); font-weight:400; }
+    .t-row-val.green { color:var(--green-lt); }
+    .t-bar-wrap { margin-top:14px; }
+    .t-bar-label { font-size:10.5px; font-weight:300; color:rgba(255,255,255,0.35); margin-bottom:5px; display:flex; justify-content:space-between; }
+    .t-bar-track { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+    .t-bar-fill { height:100%; background:var(--green); border-radius:2px; animation:barW 2s cubic-bezier(0.16,1,0.3,1) 1.4s both; }
+    @keyframes barW { from{width:0} to{width:var(--w,40%)} }
+
+    /* Divider line */
+    .hero-divider {
+      position:absolute; top:0; right:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent);
+    }
+
+    /* ── LIGHT TRANSITION ── */
+    .light-zone { background: var(--bg); color: var(--ink); }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      overflow:hidden;
+      border-top:1px solid rgba(255,255,255,0.07);
+      border-bottom:1px solid rgba(255,255,255,0.07);
+      padding:13px 0; background:var(--dark2);
+    }
+    .ticker-track { display:flex; width:max-content; animation:ticker 28s linear infinite; }
+    .ticker-item {
+      display:flex; align-items:center; gap:14px;
+      padding:0 28px; font-size:12.5px; font-weight:300; color:rgba(255,255,255,0.3); white-space:nowrap;
+    }
+    .tdot { width:4px; height:4px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;} .d3{transition-delay:0.3s;} .d4{transition-delay:0.4s;}
+
+    /* ── PROBLEM ── */
+    .problem {
+      background: var(--bg);
+      padding: 130px 52px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .problem-big {
+      font-family:'Instrument Serif',serif;
+      font-size:160px; font-weight:400; color:var(--bg-3);
+      letter-spacing:-6px; line-height:1;
+      position:relative;
+    }
+    .problem-big-over {
+      position:absolute; inset:0;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .problem-big-num {
+      font-family:'Instrument Serif',serif;
+      font-size:80px; font-weight:400; color:var(--green);
+      letter-spacing:-3px; line-height:1;
+    }
+    .problem-big-label { font-size:14px; font-weight:300; color:var(--muted); margin-top:8px; }
+    .problem-right {}
+    .problem-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:20px; }
+    .problem-heading {
+      font-family:'Instrument Serif',serif;
+      font-size: clamp(28px,3.5vw,46px);
+      font-weight:400; letter-spacing:-0.5px; line-height:1.15; margin-bottom:22px;
+    }
+    .problem-heading em { font-style:italic; color:var(--green); }
+    .problem-body { font-size:15px; font-weight:300; color:var(--muted); line-height:1.7; }
+
+    /* ── TILT CARDS ── */
+    .tilt-section {
+      background: var(--bg-2);
+      padding: 100px 52px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .tilt-header { margin-bottom:56px; }
+    .tilt-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); margin-bottom:16px; }
+    .tilt-heading { font-family:'Instrument Serif',serif; font-size:clamp(30px,3.5vw,48px); font-weight:400; letter-spacing:-0.6px; line-height:1.1; }
+    .tilt-heading em { font-style:italic; }
+    .tilt-grid {
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:16px;
+    }
+    .tilt-card {
+      background: var(--bg-3);
+      border-radius:12px; padding:36px 32px;
+      transform-style:preserve-3d;
+      transition:transform 0.1s ease, box-shadow 0.2s ease;
+      cursor:default;
+      will-change:transform;
+    }
+    .tilt-card:hover { box-shadow:0 24px 60px rgba(0,0,0,0.12); }
+    .tc-num {
+      font-family:'Instrument Serif',serif;
+      font-size:56px; font-weight:400; color:#ccc9c0;
+      line-height:1; margin-bottom:20px;
+    }
+    .tc-title { font-family:'Instrument Serif',serif; font-size:22px; font-weight:400; margin-bottom:10px; letter-spacing:-0.2px; }
+    .tc-desc { font-size:14px; font-weight:300; color:var(--muted); line-height:1.65; }
+    .tc-accent { width:32px; height:3px; background:var(--green); border-radius:2px; margin-bottom:20px; }
+
+    /* ── COUNTERS ── */
+    .counter-band {
+      background: var(--dark);
+      padding: 90px 52px;
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      gap:0;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .counter-item {
+      padding:20px 40px;
+      border-right:1px solid rgba(255,255,255,0.06);
+      text-align:center;
+    }
+    .counter-item:last-child { border-right:none; }
+    .counter-num {
+      font-family:'Instrument Serif',serif;
+      font-size:62px; font-weight:400; color:#fff;
+      letter-spacing:-2px; line-height:1; margin-bottom:10px;
+    }
+    .counter-suffix { font-size:0.6em; color:var(--green-lt); }
+    .counter-label { font-size:13px; font-weight:300; color:rgba(255,255,255,0.35); line-height:1.5; }
+
+    /* ── SCROLLING TEXT ── */
+    .scroll-text-section {
+      background: var(--bg);
+      padding:100px 0;
+      overflow:hidden;
+      border-top:1px solid rgba(0,0,0,0.08);
+    }
+    .scroll-text {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(52px, 8vw, 120px);
+      font-weight:400; font-style:italic;
+      white-space:nowrap; color:var(--bg-3);
+      letter-spacing:-2px;
+      display:flex; gap:60px; align-items:center;
+      animation:ticker 20s linear infinite;
+      width:max-content;
+    }
+    .scroll-text span { color:var(--green); font-style:normal; font-size:0.5em; vertical-align:middle; }
+
+    /* ── FEATURE SPLIT ── */
+    .feature-split {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      min-height:80vh;
+      border-top:1px solid rgba(0,0,0,0.08);
+    }
+    .fs-left {
+      background: var(--dark);
+      padding:80px 60px 80px 52px;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .fs-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green-lt); margin-bottom:20px; }
+    .fs-heading { font-family:'Instrument Serif',serif; font-size:clamp(30px,3.5vw,48px); font-weight:400; letter-spacing:-0.6px; line-height:1.1; margin-bottom:20px; color:#fff; }
+    .fs-heading em { font-style:italic; color:var(--green-lt); }
+    .fs-body { font-size:15px; font-weight:300; color:rgba(255,255,255,0.45); line-height:1.7; max-width:380px; margin-bottom:36px; }
+    .fs-list { display:flex; flex-direction:column; gap:14px; }
+    .fs-item {
+      display:flex; align-items:center; gap:12px;
+      font-size:13.5px; font-weight:300; color:rgba(255,255,255,0.5);
+    }
+    .fs-item::before {
+      content:''; width:20px; height:20px; border-radius:50%;
+      background:rgba(75,114,99,0.25); flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .fs-check { width:20px; height:20px; border-radius:50%; background:rgba(75,114,99,0.2); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .fs-check svg { width:10px; height:10px; }
+
+    .fs-right {
+      background: var(--bg-2);
+      padding:80px 52px 80px 60px;
+      display:flex; flex-direction:column; justify-content:center;
+      gap:12px;
+    }
+    .fs-section-card {
+      background:#fff;
+      border-radius:8px; padding:18px 20px;
+      display:flex; align-items:center; gap:14px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      transition:transform 0.2s ease, box-shadow 0.2s ease;
+      cursor:default;
+    }
+    .fs-section-card:hover { transform:translateX(4px); box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+    .fsc-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .fsc-dot.done { background:var(--green); }
+    .fsc-dot.active { background:var(--ink); }
+    .fsc-dot.pend { background:transparent; border:1.5px solid var(--green); }
+    .fsc-dot.empty { background:transparent; border:1.5px solid #ccc; }
+    .fsc-name { font-family:'Instrument Serif',serif; font-size:17px; font-weight:400; flex:1; }
+    .fsc-badge { font-size:10.5px; font-weight:400; color:var(--green); background:#d4e0da; border-radius:20px; padding:2px 9px; }
+
+    /* ── CTA ── */
+    .cta {
+      background: var(--dark);
+      padding: 0;
+      min-height: 100vh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+    }
+    .cta-left {
+      padding:100px 60px 100px 52px;
+      display:flex; flex-direction:column; justify-content:center;
+      border-right:1px solid rgba(255,255,255,0.06);
+    }
+    .cta-overline { font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:var(--green-lt); margin-bottom:24px; }
+    .cta-heading {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(38px,5vw,70px); font-weight:400; color:#fff;
+      letter-spacing:-1.5px; line-height:1.04; margin-bottom:24px;
+    }
+    .cta-heading em { font-style:italic; color:rgba(255,255,255,0.35); }
+    .cta-sub { font-size:15px; font-weight:300; color:rgba(255,255,255,0.4); line-height:1.7; max-width:380px; }
+    .cta-right {
+      padding:100px 52px 100px 60px;
+      display:flex; flex-direction:column; justify-content:center; gap:20px;
+      position:relative; overflow:hidden;
+    }
+    .cta-glow {
+      position:absolute; width:500px; height:500px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(75,114,99,0.25) 0%, transparent 70%);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .btn-big {
+      background:var(--green); color:#fff;
+      border-radius:8px; padding:16px 36px;
+      font-size:15px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      display:inline-block; position:relative; z-index:1;
+      transition:background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-big:hover { background:var(--green-lt); transform:translateY(-2px); box-shadow:0 12px 32px rgba(75,114,99,0.35); }
+    .cta-note { font-size:12px; font-weight:300; color:rgba(255,255,255,0.2); position:relative; z-index:1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background:var(--dark2); padding:44px 52px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,0.05);
+    }
+    .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .footer-logo img { width:24px; height:24px; object-fit:contain; }
+    .footer-logo-name { font-family:'Instrument Serif',serif; font-size:16px; color:rgba(255,255,255,0.7); }
+    .footer-copy { font-size:12px; font-weight:300; color:rgba(255,255,255,0.2); }
+    .footer-links { display:flex; gap:24px; list-style:none; }
+    .footer-links a { font-size:12px; font-weight:300; color:rgba(255,255,255,0.2); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+
+<div class="cursor-orb" id="cursorOrb"></div>
+
+<nav id="nav">
+  <a class="nav-logo" href="marketing2.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="nav-logo-text">Cherrytree</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#sections">Coverage</a></li>
+  </ul>
+  <a class="nav-cta" href="../product/survey.html">Start for free</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-divider"></div>
+  <div class="hero-left">
+    <div class="hero-chip"><span class="hero-chip-dot"></span>Cofounder Agreement Tool</div>
+    <h1 class="hero-headline" id="heroHeadline">
+      <span class="word" style="animation-delay:0.3s">The</span>
+      <span class="word" style="animation-delay:0.38s">agreement</span>
+      <span class="word" style="animation-delay:0.46s">you</span>
+      <span class="word" style="animation-delay:0.54s">make</span>
+      <br>
+      <span class="word" style="animation-delay:0.62s"><em>before</em></span>
+      <span class="word" style="animation-delay:0.7s">things</span>
+      <span class="word" style="animation-delay:0.78s">get</span>
+      <br>
+      <span class="word" style="animation-delay:0.86s">complicated.</span>
+    </h1>
+    <p class="hero-sub">Cherrytree guides founding teams through the conversations that matter — equity, roles, decisions, IP — before the hard moments force it.</p>
+    <div class="hero-actions">
+      <a class="btn-green" href="../product/survey.html">Start your agreement</a>
+      <a class="btn-outline" href="#features">See how it works →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span>
+        <span class="t-title">cherrytree.agreement</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-section">
+          <div class="t-label">Formation</div>
+          <div class="t-row"><span class="t-row-key">company</span><span class="t-row-val">YourCo, Inc.</span></div>
+          <div class="t-row"><span class="t-row-key">state</span><span class="t-row-val">Delaware</span></div>
+          <div class="t-row"><span class="t-row-key">founded</span><span class="t-row-val green">2025</span></div>
+        </div>
+        <div class="t-section">
+          <div class="t-label">Equity</div>
+          <div class="t-row"><span class="t-row-key">cofounder_a</span><span class="t-row-val green">50%</span></div>
+          <div class="t-row"><span class="t-row-key">cofounder_b</span><span class="t-row-val green">50%</span></div>
+          <div class="t-row"><span class="t-row-key">vesting</span><span class="t-row-val">4yr / 1yr cliff</span></div>
+        </div>
+        <div class="t-section">
+          <div class="t-label">Progress</div>
+          <div class="t-bar-wrap">
+            <div class="t-bar-label"><span>Sections completed</span><span>4 / 10</span></div>
+            <div class="t-bar-track"><div class="t-bar-fill" style="--w:40%"></div></div>
+          </div>
+          <div class="t-bar-wrap" style="margin-top:10px">
+            <div class="t-bar-label"><span>Cofounders signed</span><span>1 / 2</span></div>
+            <div class="t-bar-track"><div class="t-bar-fill" style="--w:50%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="tdot"></span>Equity Allocation</div>
+    <div class="ticker-item"><span class="tdot"></span>Vesting Schedules</div>
+    <div class="ticker-item"><span class="tdot"></span>Decision-Making</div>
+    <div class="ticker-item"><span class="tdot"></span>IP Ownership</div>
+    <div class="ticker-item"><span class="tdot"></span>Compensation</div>
+    <div class="ticker-item"><span class="tdot"></span>Non-Competition</div>
+    <div class="ticker-item"><span class="tdot"></span>Departure Terms</div>
+    <div class="ticker-item"><span class="tdot"></span>Dispute Resolution</div>
+    <div class="ticker-item"><span class="tdot"></span>Equity Allocation</div>
+    <div class="ticker-item"><span class="tdot"></span>Vesting Schedules</div>
+    <div class="ticker-item"><span class="tdot"></span>Decision-Making</div>
+    <div class="ticker-item"><span class="tdot"></span>IP Ownership</div>
+    <div class="ticker-item"><span class="tdot"></span>Compensation</div>
+    <div class="ticker-item"><span class="tdot"></span>Non-Competition</div>
+    <div class="ticker-item"><span class="tdot"></span>Departure Terms</div>
+    <div class="ticker-item"><span class="tdot"></span>Dispute Resolution</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="problem light-zone">
+  <div style="position:relative;" class="reveal">
+    <div class="problem-big">65%</div>
+    <div class="problem-big-over">
+      <div class="problem-big-num">65%</div>
+      <div class="problem-big-label">of startups hit serious cofounder conflict</div>
+    </div>
+  </div>
+  <div class="problem-right">
+    <div class="problem-overline reveal">The hard truth</div>
+    <h2 class="problem-heading reveal d1">Most cofounder relationships don't fail because the idea was bad. They fail because the <em>terms were never written down.</em></h2>
+    <p class="problem-body reveal d2">Cherrytree gives you the structure to have the important conversations before the hard moments force them. One question, one section at a time.</p>
+  </div>
+</div>
+
+<!-- COUNTERS -->
+<div class="counter-band">
+  <div class="counter-item reveal">
+    <div class="counter-num"><span class="count-up" data-target="65">0</span><span class="counter-suffix">%</span></div>
+    <div class="counter-label">of startups experience significant cofounder conflict</div>
+  </div>
+  <div class="counter-item reveal d1">
+    <div class="counter-num"><span class="count-up" data-target="23">0</span><span class="counter-suffix">%</span></div>
+    <div class="counter-label">of startup failures tied directly to team issues</div>
+  </div>
+  <div class="counter-item reveal d2">
+    <div class="counter-num"><span class="count-up" data-target="10">0</span><span class="counter-suffix">×</span></div>
+    <div class="counter-label">more likely to align when terms are set early</div>
+  </div>
+  <div class="counter-item reveal d3">
+    <div class="counter-num">$<span class="count-up" data-target="0">0</span></div>
+    <div class="counter-label">to get started. No lawyer required.</div>
+  </div>
+</div>
+
+<!-- TILT CARDS -->
+<div class="tilt-section light-zone" id="features">
+  <div class="tilt-header">
+    <div class="tilt-overline reveal">How it works</div>
+    <h2 class="tilt-heading reveal d1">Three steps to a <em>real</em> agreement.</h2>
+  </div>
+  <div class="tilt-grid">
+    <div class="tilt-card js-tilt reveal">
+      <div class="tc-num">01</div>
+      <div class="tc-accent"></div>
+      <div class="tc-title">Answer the questions</div>
+      <p class="tc-desc">Cherrytree guides you through every section in plain English. Each question has context so you can answer with confidence — not just fill in blanks.</p>
+    </div>
+    <div class="tilt-card js-tilt reveal d1">
+      <div class="tc-num">02</div>
+      <div class="tc-accent"></div>
+      <div class="tc-title">Align your team</div>
+      <p class="tc-desc">Share your progress and compare answers. The conversation is the point — Cherrytree gives you the structure to have it before stress makes it harder.</p>
+    </div>
+    <div class="tilt-card js-tilt reveal d2">
+      <div class="tc-num">03</div>
+      <div class="tc-accent"></div>
+      <div class="tc-title">Get your agreement</div>
+      <p class="tc-desc">Your responses compile into a full cofounder agreement. Revisit and update any time as your company grows and the stakes get real.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLLING TEXT -->
+<div class="scroll-text-section light-zone">
+  <div class="scroll-text">
+    Like a prenup — but for your startup <span>✦</span>
+    Like a prenup — but for your startup <span>✦</span>
+    Like a prenup — but for your startup <span>✦</span>
+    Like a prenup — but for your startup <span>✦</span>
+  </div>
+</div>
+
+<!-- FEATURE SPLIT -->
+<div class="feature-split" id="sections">
+  <div class="fs-left">
+    <div class="fs-overline reveal">What's covered</div>
+    <h2 class="fs-heading reveal d1">Ten sections. Every angle. <em>Nothing left unsaid.</em></h2>
+    <p class="fs-body reveal d2">From your company name to what happens if things fall apart — Cherrytree covers every section your founding team needs to address.</p>
+    <div class="fs-list reveal d3">
+      <div class="fs-item">
+        <div class="fs-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4B7263" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Equity split and vesting
+      </div>
+      <div class="fs-item">
+        <div class="fs-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4B7263" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Decision-making rights
+      </div>
+      <div class="fs-item">
+        <div class="fs-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4B7263" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        IP ownership and assignment
+      </div>
+      <div class="fs-item">
+        <div class="fs-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#4B7263" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        Departure and termination terms
+      </div>
+    </div>
+  </div>
+  <div class="fs-right">
+    <div class="fs-section-card reveal"><span class="fsc-dot done"></span><span class="fsc-name">Formation &amp; Purpose</span><span class="fsc-badge">Done</span></div>
+    <div class="fs-section-card reveal d1"><span class="fsc-dot done"></span><span class="fsc-name">Cofounder Info</span><span class="fsc-badge">Done</span></div>
+    <div class="fs-section-card reveal d2"><span class="fsc-dot active"></span><span class="fsc-name">Vesting Schedule</span><span class="fsc-badge" style="color:#1a1a1a;background:#e3dfd8;">In progress</span></div>
+    <div class="fs-section-card reveal d3"><span class="fsc-dot pend"></span><span class="fsc-name">Decision-Making</span><span class="fsc-badge" style="color:#aaa;background:#f1eee9;">Upcoming</span></div>
+    <div class="fs-section-card reveal"><span class="fsc-dot empty"></span><span class="fsc-name">IP &amp; Ownership</span><span class="fsc-badge" style="color:#aaa;background:#f1eee9;">Upcoming</span></div>
+    <div class="fs-section-card reveal d1"><span class="fsc-dot empty"></span><span class="fsc-name">Compensation</span><span class="fsc-badge" style="color:#aaa;background:#f1eee9;">Upcoming</span></div>
+    <div class="fs-section-card reveal d2"><span class="fsc-dot empty"></span><span class="fsc-name">Performance &amp; Departure</span><span class="fsc-badge" style="color:#aaa;background:#f1eee9;">Upcoming</span></div>
+    <div class="fs-section-card reveal d3"><span class="fsc-dot empty"></span><span class="fsc-name">Non-Competition</span><span class="fsc-badge" style="color:#aaa;background:#f1eee9;">Upcoming</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-left">
+    <div class="cta-overline reveal">Get started</div>
+    <h2 class="cta-heading reveal d1">Don't wait for things to get <em>complicated.</em></h2>
+    <p class="cta-sub reveal d2">Start your cofounder agreement today. Free, clear, and built for actual founders who want to get it right from day one.</p>
+  </div>
+  <div class="cta-right">
+    <div class="cta-glow"></div>
+    <a class="btn-big reveal" href="../product/survey.html">Start for free →</a>
+    <span class="cta-note reveal d1">No account required. Takes about 15 minutes.</span>
+  </div>
+</div>
+
+<footer>
+  <a class="footer-logo" href="marketing2.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="footer-logo-name">Cherrytree</span>
+  </a>
+  <span class="footer-copy">© 2025 Cherrytree. Made for founders.</span>
+  <ul class="footer-links">
+    <li><a href="../product/survey.html">Start agreement</a></li>
+    <li><a href="../product/dashboard.html">Dashboard</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Cursor orb
+  const orb = document.getElementById('cursorOrb');
+  document.addEventListener('mousemove', e => {
+    orb.style.left = e.clientX + 'px';
+    orb.style.top  = e.clientY + 'px';
+  }, { passive: true });
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+
+  // Reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // 3D tilt cards
+  document.querySelectorAll('.js-tilt').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r  = card.getBoundingClientRect();
+      const x  = e.clientX - r.left, y = e.clientY - r.top;
+      const cx = r.width / 2, cy = r.height / 2;
+      const rx = ((y - cy) / cy) * -7;
+      const ry = ((x - cx) / cx) * 7;
+      card.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  });
+
+  // Count-up
+  function countUp(el, target, duration) {
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.round(progress * target);
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target.querySelector('.count-up');
+        if (el && !el.dataset.counted) {
+          el.dataset.counted = '1';
+          countUp(el, parseInt(el.dataset.target), 1600);
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter-item').forEach(el => counterObserver.observe(el));
+</script>
+</body>
+</html>

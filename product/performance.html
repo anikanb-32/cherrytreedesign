@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Cofounder Performance &amp; Departure</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <link rel="stylesheet" href="../surveystyles.css" />
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
@@ -23,7 +23,7 @@
     <ul class="nav-list">
       <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
-      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../equity-calculator/eqc1.html">Equity Allocation</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
@@ -65,12 +65,12 @@
 
     <!-- Card 1: Obligations breach -->
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. These are the escalating consequences if a cofounder doesn't meet their commitments.</div></div></div>
       <div class="card-row">
         <div class="card-question">What happens if a cofounder fails to meet their agreed-upon obligations?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Select all that apply. These measures are intended for serious, ongoing failures to meet material obligations, not for minor issues or temporary setbacks.</div>
         <div class="card-checkbox-group">
           <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Formal warning and performance plan" /><span class="checkbox-box"></span>Formal warning and performance plan</label>
           <label class="card-checkbox-option"><input type="checkbox" name="perf-obligations-breach" value="Temporary suspension of voting rights" /><span class="checkbox-box"></span>Temporary suspension of voting rights</label>
@@ -83,24 +83,25 @@
 
     <!-- Card 2: Cure period -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A cure period gives the underperforming cofounder a fair chance to correct the issue before further action is taken. 30 days is a common default.</div></div></div>
       <div class="card-row">
         <div class="card-question">How many days does a cofounder have to fix the issue after receiving written notice before termination can occur?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">This period allows cofounders to address issues in good faith before more serious
+action is taken.</div>
         <input class="card-input" type="text" inputmode="numeric" placeholder="Enter number of days" data-key="perf-cure-period" />
       </div></div>
     </div>
 
     <!-- Card 3: With cause -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. Termination "with cause" typically means forfeiture of unvested equity and other consequences.</div></div></div>
       <div class="card-row">
         <div class="card-question">Which of the following constitutes termination "with cause"?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Select all that apply. Basically, what kind of bad behavior gets you booted.</div>
         <div class="card-checkbox-group">
           <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Fraud, embezzlement, or theft" /><span class="checkbox-box"></span>Fraud, embezzlement, or theft</label>
           <label class="card-checkbox-option"><input type="checkbox" name="perf-with-cause" value="Breach of fiduciary duty" /><span class="checkbox-box"></span>Breach of fiduciary duty</label>
@@ -114,7 +115,6 @@
 
     <!-- Card 4: Voluntary departure notice -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A notice period gives the remaining cofounders time to redistribute responsibilities before the departure takes effect.</div></div></div>
       <div class="card-row">
         <div class="card-question">How many days notice must a cofounder give if they choose to voluntarily leave?</div>
         <span class="card-answer-preview"></span>
@@ -124,9 +124,7 @@
       </div></div>
     </div>
 
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: Non-Competition</span>
-      <a class="next-section-btn" href="noncompete.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="noncompete.html">Continue</a>
     </div>
   </main>
 
@@ -222,6 +220,6 @@
 
     restoreFormData();
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>

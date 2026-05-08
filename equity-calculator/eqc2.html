@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Equity Allocation</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
+  <style>
+    .eq2-progress-wrap { display:flex; align-items:center; gap:12px; margin-bottom:36px; }
+    .eq2-progress-track { flex:1; height:2px; background:#e8e4dc; border-radius:2px; overflow:hidden; }
+    .eq2-progress-fill { height:100%; background:#2d2a22; border-radius:2px; transition:width 0.35s ease; width:0%; }
+    .eq2-counter { font-size:11px; color:#bbb; white-space:nowrap; font-variant-numeric:tabular-nums; min-width:80px; text-align:right; }
+
+    #eq2-container { min-height:380px; transition:opacity 0.18s ease, transform 0.18s ease; }
+
+    .eq2-phase-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#bbb; margin-bottom:12px; }
+    .eq2-question {
+      font-size:26px; font-weight:700; color:#2d2a22; line-height:1.3;
+      margin-bottom:28px; font-family:Georgia,'Times New Roman',serif;
+    }
+    .eq2-question em { font-style:italic; color:#5a7a5c; }
+    .eq2-sub { font-size:13px; color:#888; line-height:1.65; margin-bottom:24px; max-width:480px; }
+
+    /* Importance options */
+    .eq2-opts { display:flex; flex-direction:column; gap:7px; max-width:440px; }
+    .eq2-opt {
+      padding:13px 16px; border:1.5px solid #e8e4dc; border-radius:8px;
+      background:#fff; font-size:13px; font-weight:500; color:#3a3630;
+      cursor:pointer; text-align:left; display:flex; align-items:center;
+      justify-content:space-between; transition:all 0.12s; font-family:inherit;
+    }
+    .eq2-opt:hover { border-color:#2d2a22; background:#faf9f6; }
+    .eq2-opt.selected { border-color:#5a7a5c; background:#f0f6f0; }
+    .eq2-opt-key { font-size:10px; color:#ddd; font-weight:400; }
+    .eq2-opt.selected .eq2-opt-key { color:#5a7a5c; font-weight:700; content:'✓'; }
+
+    /* Scoring */
+    .eq2-score-block { margin-bottom:22px; }
+    .eq2-cf-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#aaa; margin-bottom:7px; }
+    .eq2-cf-label.you { color:#5a7a5c; }
+    .eq2-cf-label.you::after { content:' (you)'; font-weight:400; text-transform:none; letter-spacing:0; }
+    .eq2-segs { display:flex; gap:3px; flex-wrap:wrap; }
+    .eq2-seg {
+      width:34px; height:34px; border-radius:6px; border:1.5px solid #e8e4dc;
+      background:#fff; font-size:13px; font-weight:500; color:#aaa;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all 0.1s; font-family:inherit;
+    }
+    .eq2-seg:hover { border-color:#2d2a22; color:#2d2a22; }
+    .eq2-seg.sel { background:#2d2a22; border-color:#2d2a22; color:#fff; }
+
+    /* Compare */
+    .eq2-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:9px; }
+    .eq2-bar-name { flex:0 0 130px; font-size:13px; color:#3a3630; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .eq2-bar-track { flex:1; height:10px; background:#f0ede6; border-radius:5px; overflow:hidden; }
+    .eq2-bar-fill { height:100%; background:#2d2a22; border-radius:5px; transition:width 0.5s ease; }
+    .eq2-bar-pct { flex:0 0 44px; text-align:right; font-size:13px; font-weight:700; color:#2d2a22; }
+    .eq2-delta-box { padding:12px 14px; background:#fdf8ee; border:1px solid #e8d898; border-radius:8px; margin:16px 0; }
+    .eq2-delta-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#8a6800; margin-bottom:8px; }
+    .eq2-delta-row { display:flex; justify-content:space-between; font-size:12px; color:#6a5000; padding:4px 0; border-bottom:1px solid #f0e0a0; }
+    .eq2-delta-row:last-child { border-bottom:none; }
+
+    /* Final */
+    .eq2-entry { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f0ede6; }
+    .eq2-remove { background:none; border:none; color:#c0a0a0; cursor:pointer; font-size:12px; font-family:inherit; padding:4px; }
+    .eq2-remove:hover { color:#b97070; }
+    .eq2-total { font-size:13px; font-weight:700; color:#2d2a22; padding:10px 0 4px; }
+    .eq2-total.err { color:#b97070; }
+    .eq2-total-err { font-size:11px; color:#b97070; display:none; }
+    .eq2-legal-toggle { font-size:11px; color:#bbb; background:none; border:none; cursor:pointer; padding:0; margin-top:12px; display:block; font-family:inherit; }
+    .eq2-legal-toggle:hover { color:#888; }
+    .eq2-legal-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.24s; }
+    .eq2-legal-body.open { grid-template-rows:1fr; }
+    .eq2-legal-inner { overflow:hidden; font-size:11px; color:#bbb; line-height:1.65; font-style:italic; padding-top:6px; }
+    .eq2-sign {
+      margin-top:18px; padding:14px 16px; border:1.5px solid #e0ddd6;
+      border-radius:10px; background:#faf9f6; display:flex; align-items:center;
+      gap:10px; cursor:pointer; transition:border-color 0.15s, background 0.15s;
+    }
+    .eq2-sign:hover { border-color:#c8c4bc; background:#f3f1eb; }
+    .eq2-sign.signed { border-color:#5a7a5c; background:#f0f6f0; }
+    .eq2-sign-box {
+      width:18px; height:18px; border-radius:4px; border:1.5px solid #d0cdc6;
+      background:#fff; display:flex; align-items:center; justify-content:center;
+      font-size:11px; color:transparent; flex-shrink:0; transition:all 0.15s;
+    }
+    .eq2-sign.signed .eq2-sign-box { background:#5a7a5c; border-color:#5a7a5c; color:#fff; }
+
+    /* Buttons */
+    .eq2-btn-primary {
+      padding:12px 24px; background:#2d2a22; color:#fff; border:none;
+      border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit;
+    }
+    .eq2-btn-primary:hover { background:#1a1810; }
+    .eq2-btn-ghost {
+      padding:12px 18px; background:transparent; color:#888;
+      border:1.5px solid #e0ddd6; border-radius:8px; font-size:13px;
+      cursor:pointer; font-family:inherit;
+    }
+    .eq2-btn-ghost:hover { background:#faf9f6; }
+    .eq2-btn-green {
+      padding:10px 20px; background:#5a7a5c; color:#fff; border:none;
+      border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;
+    }
+    .eq2-btn-green:hover { background:#496448; }
+    .eq2-btns { display:flex; gap:10px; flex-wrap:wrap; }
+
+    /* Nav */
+    .eq2-nav { display:flex; align-items:center; gap:14px; margin-top:28px; }
+    .eq2-back { padding:8px 14px; border:1.5px solid #e8e4dc; border-radius:7px; background:transparent; font-size:12px; color:#aaa; cursor:pointer; font-family:inherit; }
+    .eq2-back:hover { color:#3a3630; background:#faf9f6; }
+    .eq2-hint { font-size:11px; color:#ddd; }
+
+    /* Transition card stat */
+    .eq2-stat { display:inline-block; padding:8px 14px; background:#f0f6f0; border-radius:7px; font-size:15px; font-weight:700; color:#2d2a22; margin-bottom:18px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo"><img src="../cherries.png" alt="Cherrytree" /></div>
+    <div class="company-name">Company</div>
+    <div class="progress-label">30% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+    <div class="sections-remaining">7 sections remaining</div>
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="../product/survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="../product/cofounder.html">Cofounder Info</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/vesting.html">Vesting Schedule</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/decision.html">Decision-Making</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/general.html">General Provisions</a></li>
+    </ul>
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item" id="sidebar-cofounder-list">—</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="../product/cofounder.html">← Back to Cofounder Info</a>
+        <span class="saved-label" id="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Equity Allocation</h1>
+
+    <div class="eq2-progress-wrap">
+      <div class="eq2-progress-track"><div class="eq2-progress-fill" id="eq2-fill"></div></div>
+      <span class="eq2-counter" id="eq2-counter"></span>
+    </div>
+
+    <div id="eq2-container"></div>
+
+    <div class="eq2-nav" id="eq2-nav">
+      <button class="eq2-back" id="eq2-back" style="display:none;">↑ Back</button>
+      <span class="eq2-hint" id="eq2-hint"></span>
+    </div>
+
+    <div class="next-section-bar">
+      <a class="next-section-btn" href="../product/vesting.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const BUCKETS = [
+      { label:'Input', cats:[
+        {key:'cash',label:'Cash Invested'}, {key:'time',label:'Time Commitment'},
+        {key:'ip',label:'Existing Work & IP'}, {key:'tools',label:'Equipment & Tools'},
+      ]},
+      { label:'Execution', cats:[
+        {key:'leadership',label:'Leadership & Management'}, {key:'eng',label:'Engineering'},
+        {key:'sales',label:'Sales'}, {key:'product',label:'Product'},
+        {key:'fundraising',label:'Fundraising'}, {key:'recruiting',label:'Recruiting'},
+        {key:'ops',label:'Operations'},
+      ]},
+      { label:'Intangibles', cats:[
+        {key:'domain',label:'Domain Expertise'}, {key:'network',label:'Network Value'},
+        {key:'irreplace',label:'Irreplaceability'}, {key:'scalability',label:'Role Scalability'},
+        {key:'oppcost',label:'Opportunity Cost'}, {key:'risk',label:'Risk Tolerance'},
+        {key:'idea',label:'Idea Origination'},
+      ]}
+    ];
+    const ALL_CATS = BUCKETS.flatMap(b => b.cats);
+    const BUCKET_MAP = {};
+    BUCKETS.forEach(b => b.cats.forEach(c => BUCKET_MAP[c.key] = b.label));
+
+    const IMP_OPTS = [
+      {label:'Not relevant',   val:0},
+      {label:'Minor factor',   val:25},
+      {label:'It matters',     val:50},
+      {label:'Very important', val:75},
+      {label:'Critical',       val:100},
+    ];
+
+    let importance={}, myScores={}, finalEntries=[], signed=false, cofounders=[];
+    let currentIdx=0, cardQueue=[], isAnimating=false;
+
+    function loadData() {
+      importance   = JSON.parse(localStorage.getItem('ct_eq_importance')||'{}');
+      myScores     = JSON.parse(localStorage.getItem('ct_eq_my_scores') ||'{}');
+      finalEntries = JSON.parse(localStorage.getItem('ct_eq_final')     ||'[]');
+      signed       = localStorage.getItem('ct_eq_signed')==='1';
+      let raw = JSON.parse(localStorage.getItem('ct_cofounders')||'[]');
+      cofounders = raw.map(c => typeof c==='string' ? {name:c} : c);
+      if (!cofounders.length) cofounders=[{name:'Cofounder A'}];
+      const s = document.getElementById('sidebar-cofounder-list');
+      if (s) s.textContent = cofounders.map(c=>c.name).join(', ')||'—';
+    }
+
+    function save() {
+      localStorage.setItem('ct_eq_importance', JSON.stringify(importance));
+      localStorage.setItem('ct_eq_my_scores',  JSON.stringify(myScores));
+      localStorage.setItem('ct_eq_final',       JSON.stringify(finalEntries));
+      const lbl = document.getElementById('saved-label');
+      if (lbl) { lbl.textContent='Saved'; clearTimeout(lbl._t); lbl._t=setTimeout(()=>lbl.textContent='Saved 2 min ago',2000); }
+    }
+
+    function buildQueue() {
+      const q = [{type:'intro'}];
+      ALL_CATS.forEach((cat,i) => q.push({type:'importance',cat,catIdx:i}));
+      q.push({type:'score-intro'});
+      ALL_CATS.forEach(cat => q.push({type:'scoring',cat}));
+      q.push({type:'compare'});
+      q.push({type:'final'});
+      return q;
+    }
+
+    function skip(card) {
+      if (card.type==='score-intro') return !ALL_CATS.some(c=>(importance[c.key]||0)>0);
+      if (card.type==='scoring')     return (importance[card.cat.key]||0)===0;
+      if (card.type==='compare')     return !ALL_CATS.some(c=>(importance[c.key]||0)>0);
+      return false;
+    }
+
+    function visible() { return cardQueue.filter(c=>!skip(c)); }
+
+    function goTo(idx, dir) {
+      if (isAnimating) return;
+      let t = idx;
+      const fwd = dir!=='back';
+      if (fwd) { while (t<cardQueue.length && skip(cardQueue[t])) t++; }
+      else      { while (t>=0              && skip(cardQueue[t])) t--; }
+      if (t<0||t>=cardQueue.length) return;
+
+      isAnimating = true;
+      const c = document.getElementById('eq2-container');
+      c.style.opacity='0';
+      c.style.transform = fwd ? 'translateY(-14px)' : 'translateY(14px)';
+
+      setTimeout(()=>{
+        currentIdx = t;
+        c.innerHTML = render(cardQueue[t]);
+        wire(cardQueue[t]);
+        c.style.transition='none';
+        c.style.opacity='0';
+        c.style.transform = fwd ? 'translateY(18px)' : 'translateY(-18px)';
+        updateProgress();
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          c.style.transition='opacity 0.26s ease, transform 0.26s ease';
+          c.style.opacity='1';
+          c.style.transform='translateY(0)';
+          setTimeout(()=>isAnimating=false, 280);
+        }));
+      }, 180);
+    }
+
+    function next() { goTo(currentIdx+1,'forward'); }
+    function back() { goTo(currentIdx-1,'back'); }
+
+    function updateProgress() {
+      const vis = visible();
+      const card = cardQueue[currentIdx];
+      const vIdx = vis.indexOf(card);
+      const pct  = vis.length>1 ? (vIdx/(vis.length-1))*100 : 100;
+
+      const fill = document.getElementById('eq2-fill');
+      const ctr  = document.getElementById('eq2-counter');
+      const bk   = document.getElementById('eq2-back');
+      const hint = document.getElementById('eq2-hint');
+
+      if (fill) fill.style.width = pct+'%';
+      if (ctr) {
+        if (card.type==='importance') ctr.textContent=`Priority ${card.catIdx+1} of ${ALL_CATS.length}`;
+        else if (card.type==='scoring') {
+          const act=ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+          ctr.textContent=`Scoring ${act.indexOf(card.cat)+1} of ${act.length}`;
+        } else ctr.textContent='';
+      }
+      if (bk) bk.style.display = currentIdx>0 ? 'block':'none';
+      if (hint) hint.textContent = card.type==='importance' ? 'select an option to continue' : card.type==='scoring' ? 'press Enter ↵ when done' : '';
+    }
+
+    // ── Renderers ──
+    function render(card) {
+      switch(card.type) {
+        case 'intro':       return rIntro();
+        case 'importance':  return rImportance(card);
+        case 'score-intro': return rScoreIntro();
+        case 'scoring':     return rScoring(card);
+        case 'compare':     return rCompare();
+        case 'final':       return rFinal();
+      }
+    }
+
+    function rIntro() {
+      return `
+        <div class="eq2-phase-label">Equity Allocation</div>
+        <div class="eq2-question">Let's find your equity split.</div>
+        <p class="eq2-sub">You'll rate 18 factors across inputs, execution, and intangibles — the things that actually drive equity. Takes about 5 minutes.</p>
+        <div class="eq2-btns">
+          <button class="eq2-btn-primary" id="btn-start">Start →</button>
+          <button class="eq2-btn-ghost" id="btn-skip">Skip — I already know my split</button>
+        </div>`;
+    }
+
+    function rImportance(card) {
+      const cur = importance[card.cat.key];
+      return `
+        <div class="eq2-phase-label">${BUCKET_MAP[card.cat.key]} · Set Priorities</div>
+        <div class="eq2-question">How important is <em>${card.cat.label}</em> in determining equity?</div>
+        <div class="eq2-opts">
+          ${IMP_OPTS.map((o,i)=>`
+            <button class="eq2-opt${cur===o.val?' selected':''}" data-val="${o.val}">
+              ${o.label}
+              <span class="eq2-opt-key">${cur===o.val?'✓':(i+1)}</span>
+            </button>`).join('')}
+        </div>`;
+    }
+
+    function rScoreIntro() {
+      const n = ALL_CATS.filter(c=>(importance[c.key]||0)>0).length;
+      return `
+        <div class="eq2-phase-label">Score Your Team</div>
+        <div class="eq2-question">Good. Now rate each person.</div>
+        <div class="eq2-stat">${n} factor${n!==1?'s':''} to score</div>
+        <p class="eq2-sub">Rate every cofounder — including yourself — 0 to 10 on each factor you marked as important. 0 = none, 10 = led it completely.</p>
+        <button class="eq2-btn-primary" id="btn-start-scoring">Start scoring →</button>`;
+    }
+
+    function rScoring(card) {
+      return `
+        <div class="eq2-phase-label">${BUCKET_MAP[card.cat.key]} · Scoring — Importance ${importance[card.cat.key]}</div>
+        <div class="eq2-question"><em>${card.cat.label}</em></div>
+        ${cofounders.map((cf,ci)=>`
+          <div class="eq2-score-block">
+            <div class="eq2-cf-label${ci===0?' you':''}">${cf.name}</div>
+            <div class="eq2-segs">
+              ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>{
+                const cur=(myScores[ci]||{})[card.cat.key];
+                return `<button class="eq2-seg${cur===n?' sel':''}" data-ci="${ci}" data-cat="${card.cat.key}" data-n="${n}">${n}</button>`;
+              }).join('')}
+            </div>
+          </div>`).join('')}`;
+    }
+
+    function calcSplit() {
+      const act = ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+      const w = cofounders.map((_,ci)=>act.reduce((s,cat)=>s+(importance[cat.key]||0)*((myScores[ci]||{})[cat.key]||0),0));
+      const tot = w.reduce((a,b)=>a+b,0);
+      return w.map(x=>tot>0?(x/tot*100):(100/cofounders.length));
+    }
+
+    function rCompare() {
+      const pcts = calcSplit();
+      const act  = ALL_CATS.filter(c=>(importance[c.key]||0)>0);
+      const deltas = act.map(cat=>{
+        const scores=cofounders.map((_,ci)=>(myScores[ci]||{})[cat.key]||0);
+        return {cat,d:Math.max(...scores)-Math.min(...scores)};
+      }).filter(x=>x.d>0).sort((a,b)=>b.d-a.d).slice(0,3);
+
+      return `
+        <div class="eq2-phase-label">Compare</div>
+        <div class="eq2-question">Here's what the calculator suggests.</div>
+        ${cofounders.map((cf,i)=>`
+          <div class="eq2-bar-row">
+            <span class="eq2-bar-name">${cf.name}</span>
+            <div class="eq2-bar-track"><div class="eq2-bar-fill" style="width:${pcts[i].toFixed(2)}%"></div></div>
+            <span class="eq2-bar-pct">${pcts[i].toFixed(1)}%</span>
+          </div>`).join('')}
+        ${deltas.length?`
+          <div class="eq2-delta-box">
+            <div class="eq2-delta-title">Talk About These</div>
+            ${deltas.map(d=>`<div class="eq2-delta-row"><span>${d.cat.label}</span><span style="font-weight:700">Δ ${d.d}</span></div>`).join('')}
+          </div>`:''}
+        <div class="eq2-btns">
+          <button class="eq2-btn-green" id="btn-use">Use this split →</button>
+          <button class="eq2-btn-ghost" id="btn-skip-compare">Enter manually</button>
+        </div>`;
+    }
+
+    function rFinal() {
+      if (!finalEntries.length) finalEntries = cofounders.map(cf=>({name:cf.name,equity:''}));
+      const tot  = finalEntries.reduce((s,e)=>s+(parseFloat(e.equity)||0),0);
+      const hasAny = finalEntries.some(e=>e.equity!=='');
+      const isOff  = hasAny && Math.abs(tot-100)>0.01;
+      return `
+        <div class="eq2-phase-label">Final Allocation</div>
+        <div class="eq2-question">Agree on the final numbers.</div>
+        <p class="eq2-sub">Once you've agreed, enter it here. This is the number that goes in your agreement.</p>
+        <div id="eq2-final-list">
+          ${finalEntries.map((e,i)=>`
+            <div class="eq2-entry">
+              <input class="card-input" type="text" placeholder="Cofounder name"
+                value="${e.name||''}" data-fi="${i}" data-f="name" style="flex:1;" />
+              <input class="card-input" type="number" min="0" max="100" step="0.1" placeholder="%"
+                value="${e.equity||''}" data-fi="${i}" data-f="equity" style="flex:0 0 80px;" />
+              <button class="eq2-remove" data-r="${i}">Remove</button>
+            </div>`).join('')}
+        </div>
+        <div class="eq2-total${isOff?' err':''}" id="eq2-tot">Total: ${tot.toFixed(2)}%</div>
+        <div class="eq2-total-err" id="eq2-tot-err" style="${isOff?'display:block':''}">Must equal 100%</div>
+        <button class="eq2-btn-ghost" id="eq2-add" style="margin-top:10px;">+ Add cofounder</button>
+        <button class="eq2-legal-toggle" id="eq2-legal-tog">▸ Legal note</button>
+        <div class="eq2-legal-body" id="eq2-legal-body">
+          <div class="eq2-legal-inner">This calculator is for planning purposes only and does not grant, issue, or transfer any equity. Equity is valid only when formalized through proper corporate action and legally binding agreements.</div>
+        </div>
+        <div class="eq2-sign${signed?' signed':''}" id="eq2-sign">
+          <div class="eq2-sign-box">${signed?'✓':''}</div>
+          <span style="font-size:13px;color:#3a3630;">I acknowledge and accept this allocation — <strong>${cofounders[0]?.name||'Cofounder'}</strong></span>
+        </div>`;
+    }
+
+    // ── Wire interactions ──
+    function wire(card) {
+      const c = document.getElementById('eq2-container');
+      if (!c) return;
+
+      if (card.type==='intro') {
+        c.querySelector('#btn-start')?.addEventListener('click', next);
+        c.querySelector('#btn-skip')?.addEventListener('click',()=>goTo(cardQueue.findIndex(c=>c.type==='final'),'forward'));
+      }
+
+      if (card.type==='importance') {
+        c.querySelectorAll('.eq2-opt').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            importance[card.cat.key] = parseInt(btn.dataset.val);
+            save();
+            c.querySelectorAll('.eq2-opt').forEach(b=>{
+              b.classList.remove('selected');
+              b.querySelector('.eq2-opt-key').textContent = IMP_OPTS.findIndex(o=>o.val===parseInt(b.dataset.val))+1;
+            });
+            btn.classList.add('selected');
+            btn.querySelector('.eq2-opt-key').textContent='✓';
+            setTimeout(next, 260);
+          });
+        });
+      }
+
+      if (card.type==='score-intro') c.querySelector('#btn-start-scoring')?.addEventListener('click', next);
+
+      if (card.type==='scoring') {
+        c.querySelectorAll('.eq2-seg').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            const ci=parseInt(btn.dataset.ci), key=btn.dataset.cat, n=parseInt(btn.dataset.n);
+            if (!myScores[ci]) myScores[ci]={};
+            myScores[ci][key]=n; save();
+            c.querySelectorAll(`.eq2-seg[data-ci="${ci}"][data-cat="${key}"]`)
+              .forEach(b=>b.classList.toggle('sel', parseInt(b.dataset.n)===n));
+          });
+        });
+      }
+
+      if (card.type==='compare') {
+        c.querySelector('#btn-use')?.addEventListener('click',()=>{
+          const pcts=calcSplit();
+          finalEntries=cofounders.map((cf,i)=>({name:cf.name,equity:pcts[i].toFixed(1)}));
+          save(); goTo(cardQueue.findIndex(c=>c.type==='final'),'forward');
+        });
+        c.querySelector('#btn-skip-compare')?.addEventListener('click',()=>goTo(cardQueue.findIndex(c=>c.type==='final'),'forward'));
+      }
+
+      if (card.type==='final') {
+        const syncTotal=()=>{
+          const tot=finalEntries.reduce((s,e)=>s+(parseFloat(e.equity)||0),0);
+          const hasAny=finalEntries.some(e=>e.equity!=='');
+          const off=hasAny&&Math.abs(tot-100)>0.01;
+          const t=c.querySelector('#eq2-tot'), e=c.querySelector('#eq2-tot-err');
+          if(t){t.textContent=`Total: ${tot.toFixed(2)}%`; t.classList.toggle('err',off);}
+          if(e) e.style.display=off?'block':'none';
+        };
+        c.querySelectorAll('[data-fi]').forEach(inp=>{
+          inp.addEventListener('input',()=>{
+            finalEntries[parseInt(inp.dataset.fi)][inp.dataset.f]=inp.value;
+            save(); syncTotal();
+          });
+        });
+        c.querySelectorAll('[data-r]').forEach(btn=>{
+          btn.addEventListener('click',()=>{
+            finalEntries.splice(parseInt(btn.dataset.r),1); save();
+            c.innerHTML=rFinal(); wire(card);
+          });
+        });
+        c.querySelector('#eq2-add')?.addEventListener('click',()=>{
+          finalEntries.push({name:'',equity:''}); save();
+          c.innerHTML=rFinal(); wire(card);
+        });
+        c.querySelector('#eq2-legal-tog')?.addEventListener('click', function(){
+          const b=c.querySelector('#eq2-legal-body');
+          const open=b.classList.toggle('open');
+          this.textContent=(open?'▾':'▸')+' Legal note';
+        });
+        c.querySelector('#eq2-sign')?.addEventListener('click',()=>{
+          signed=!signed; localStorage.setItem('ct_eq_signed',signed?'1':'0');
+          const row=c.querySelector('#eq2-sign');
+          row.classList.toggle('signed',signed);
+          row.querySelector('.eq2-sign-box').textContent=signed?'✓':'';
+        });
+      }
+    }
+
+    // Keyboard
+    document.addEventListener('keydown', e=>{
+      if (isAnimating) return;
+      const card=cardQueue[currentIdx];
+      if (!card) return;
+      if (e.key==='Enter' && !['intro','importance','score-intro','compare','final'].includes(card.type)) next();
+      if ((e.key==='ArrowLeft'||e.key==='Backspace') && e.target.tagName!=='INPUT') back();
+      if (card.type==='importance') {
+        const n=parseInt(e.key);
+        if (n>=1&&n<=5) document.querySelector(`.eq2-opt:nth-child(${n})`)?.click();
+      }
+    });
+
+    document.getElementById('eq2-back').addEventListener('click', back);
+
+    loadData();
+    cardQueue = buildQueue();
+    const container = document.getElementById('eq2-container');
+    container.innerHTML = render(cardQueue[0]);
+    wire(cardQueue[0]);
+    updateProgress();
+  </script>
+  <script src="../sidebar.js"></script>
+</body>
+</html>

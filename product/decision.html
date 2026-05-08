@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Decision-Making &amp; Voting</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <link rel="stylesheet" href="../surveystyles.css" />
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
@@ -23,7 +23,7 @@
     <ul class="nav-list">
       <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
-      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../equity-calculator/eqc1.html">Equity Allocation</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
       <li class="active"><span class="nav-dot active"></span><a href="decision.html">Decision-Making</a></li>
       <li><span class="nav-dot notstarted"></span><a href="ip.html">IP &amp; Ownership</a></li>
@@ -65,12 +65,12 @@
 
     <!-- Card 1: Decisions requiring discussion -->
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Select all that apply. These are decisions that no single cofounder can make unilaterally.</div></div></div>
       <div class="card-row">
         <div class="card-question">What type of decisions require a discussion between all cofounders?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Select all that apply. Which choices should never happen unless everyone's on board. Not office snacks.</div>
         <div class="card-checkbox-group">
           <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Accepting advisors" /><span class="checkbox-box"></span>Accepting advisors</label>
           <label class="card-checkbox-option"><input type="checkbox" name="dec-discussion" value="Accepting investors" /><span class="checkbox-box"></span>Accepting investors</label>
@@ -87,7 +87,6 @@
 
     <!-- Card 2: Voting power -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This determines whether a cofounder with more equity gets proportionally more say in decisions.</div></div></div>
       <div class="card-row">
         <div class="card-question">Should equity ownership reflect voting power?</div>
         <span class="card-answer-preview"></span>
@@ -104,12 +103,12 @@
 
     <!-- Card 3: Deadlock resolution -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Deadlocks can paralyze a company. A predetermined resolution method prevents permanent stalemates.</div></div></div>
       <div class="card-row">
         <div class="card-question">If cofounders are deadlocked, how should the tie be resolved?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Decide how to break a stalemate before it becomes a staring contest nobody wins.</div>
         <div class="card-radio-group">
           <label class="card-radio-option"><input type="radio" name="dec-deadlock" value="External advisor / board member" /><span class="radio-circle"></span>Consult agreed external advisor / board member</label>
           <label class="card-radio-option"><input type="radio" name="dec-deadlock" value="Mediation" /><span class="radio-circle"></span>Mediation with a neutral third party</label>
@@ -120,12 +119,12 @@
 
     <!-- Card 4: Shotgun clause -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">A shotgun clause lets one cofounder offer to buy the other out. The receiving party must either accept or buy the offering party out at the same price — creating a fair, self-enforcing mechanism.</div></div></div>
       <div class="card-row">
         <div class="card-question">Do you want to include a shotgun clause if cofounders cannot resolve deadlocks?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">You can essentially offer to buy each other out. You're incentivized to make a reasonable offer because you might be bought out.</div>
         <div class="card-radio-group">
           <label class="card-radio-option"><input type="radio" name="dec-shotgun" value="Yes" /><span class="radio-circle"></span>Yes</label>
           <label class="card-radio-option"><input type="radio" name="dec-shotgun" value="No" /><span class="radio-circle"></span>No</label>
@@ -133,9 +132,7 @@
       </div></div>
     </div>
 
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: IP &amp; Ownership</span>
-      <a class="next-section-btn" href="ip.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="ip.html">Continue</a>
     </div>
   </main>
 
@@ -227,6 +224,6 @@
 
     restoreFormData();
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>

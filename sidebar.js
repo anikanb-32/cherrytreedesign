@@ -3,7 +3,7 @@
   const SECTIONS = [
     { prefix: 'ct_survey_',    doneKey: 'ct_survey_done'    }, // Formation & Purpose
     { prefix: 'ct_cofounders', doneKey: 'ct_cofounder_done' }, // Cofounder Info
-    { prefix: null,            doneKey: null                 }, // Equity Allocation (not yet built)
+    { prefix: 'ct_eq_',        doneKey: 'ct_eq_done'         }, // Equity Allocation
     { prefix: 'ct_vest_',      doneKey: 'ct_vest_done'      }, // Vesting Schedule
     { prefix: 'ct_dec_',       doneKey: 'ct_dec_done'       }, // Decision-Making
     { prefix: 'ct_ip_',        doneKey: 'ct_ip_done'        }, // IP & Ownership
@@ -14,6 +14,7 @@
   ];
 
   const PAGE_DONE_KEYS = {
+    'eqc1.html':         'ct_eq_done',
     'survey.html':       'ct_survey_done',
     'cofounder.html':    'ct_cofounder_done',
     'vesting.html':      'ct_vest_done',

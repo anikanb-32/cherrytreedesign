@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Vesting Schedule</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <link rel="stylesheet" href="../surveystyles.css" />
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
@@ -23,7 +23,7 @@
     <ul class="nav-list">
       <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
-      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../equity-calculator/eqc1.html">Equity Allocation</a></li>
       <li class="active"><span class="nav-dot active"></span><a href="vesting.html">Vesting Schedule</a></li>
       <li><span class="nav-dot notstarted"></span><a href="decision.html">Decision-Making</a></li>
       <li><span class="nav-dot notstarted"></span><a href="ip.html">IP &amp; Ownership</a></li>
@@ -66,24 +66,25 @@
 
     <!-- Card 1: Start date -->
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Vesting typically starts on the company's incorporation date or the date this agreement is signed.</div></div></div>
       <div class="card-row">
         <div class="card-question">What date should the vesting start?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">This can start today or retroactively when the work began.</div>
         <input class="card-input" type="date" data-key="vest-start-date" />
       </div></div>
     </div>
 
     <!-- Card 2: Schedule -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">The standard is 4 years with a 1-year cliff — you earn nothing in year one, then 25% at the cliff, then monthly after that.</div></div></div>
       <div class="card-row">
         <div class="card-question">What vesting schedule will you use?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">You earn no equity until the "cliff" is hit.
+Then, once the cliff is reached, you immediately vest the first portion of your equity, and the rest continues to vest gradually over the remaining period.</div>
         <div class="card-radio-group">
           <label class="card-radio-option"><input type="radio" name="vest-schedule" value="4 years with 1-year cliff" /><span class="radio-circle"></span>4 years with 1-year cliff</label>
           <label class="card-radio-option"><input type="radio" name="vest-schedule" value="3 years with 1-year cliff" /><span class="radio-circle"></span>3 years with 1-year cliff</label>
@@ -95,24 +96,24 @@
 
     <!-- Card 3: Cliff percentage -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">The standard is 25% for 4 years with a 1-year cliff.</div></div></div>
       <div class="card-row">
         <div class="card-question">What percent of equity will be vested once the cliff is complete?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">If you leave before the cliff, you get nothing.</div>
         <input class="card-input" type="text" inputmode="numeric" placeholder="25%" data-key="vest-cliff-pct" />
       </div></div>
     </div>
 
     <!-- Card 4: Acceleration -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Single-trigger acceleration means unvested shares vest immediately if a cofounder is terminated without cause following an acquisition.</div></div></div>
       <div class="card-row">
         <div class="card-question">If the company is acquired and a cofounder is terminated without cause, should their unvested shares accelerate?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">Acceleration decides if unvested shares vest early. Single-trigger happens when the company is acquired. Double-trigger only kicks in if the company is acquired and you're terminated without cause.</div>
         <div class="card-radio-group">
           <label class="card-radio-option"><input type="radio" name="vest-accelerate" value="Yes" /><span class="radio-circle"></span>Yes</label>
           <label class="card-radio-option"><input type="radio" name="vest-accelerate" value="No" /><span class="radio-circle"></span>No</label>
@@ -122,7 +123,6 @@
 
     <!-- Card 5: Sell notice -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This gives the board and other shareholders time to respond or exercise any right of first refusal before shares change hands.</div></div></div>
       <div class="card-row">
         <div class="card-question">If a cofounder wants to sell their shares, how many days notice do they need to provide the Board and shareholders?</div>
         <span class="card-answer-preview"></span>
@@ -134,7 +134,6 @@
 
     <!-- Card 6: Buyback days -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This window gives the company time to arrange financing for the repurchase. 90 days is a common default.</div></div></div>
       <div class="card-row">
         <div class="card-question">If a cofounder resigns, how many days does the company have to buy back their shares?</div>
         <span class="card-answer-preview"></span>
@@ -146,7 +145,6 @@
 
     <!-- Card 7: Ack incapacitation forfeiture -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This clause protects the company from equity remaining with someone unable to contribute.</div></div></div>
       <div class="card-row">
         <div class="card-question">Acknowledge unvested share forfeiture on incapacitation</div>
         <span class="card-answer-preview"></span>
@@ -161,7 +159,6 @@
 
     <!-- Card 8: Incap vested option -->
     <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This ensures clarity on what happens to already-earned equity in difficult circumstances.</div></div></div>
       <div class="card-row">
         <div class="card-question">If a cofounder becomes incapacitated, what happens to their vested shares?</div>
         <span class="card-answer-preview"></span>
@@ -179,9 +176,7 @@
       <strong>Note:</strong> If you receive unvested shares, you can file an 83(b) election within 30 days of incorporation. This lets you pay taxes on the current (usually low) value of your shares instead of their future value as they vest. Doing so can save you thousands (if not more) if the company grows, but the election is irreversible. Consult a tax advisor.
     </div>
 
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: Decision-Making</span>
-      <a class="next-section-btn" href="decision.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="decision.html">Continue</a>
     </div>
   </main>
 
@@ -289,6 +284,6 @@
 
     restoreFormData();
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>

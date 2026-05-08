@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Cofounder Information</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">25% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+    <div class="sections-remaining">4 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done">
+        <span class="nav-dot done"></span>
+        <a href="survey.html">Formation &amp; Purpose</a>
+      </li>
+      <li class="active">
+        <span class="nav-dot active"></span>
+        <a href="#">Cofounder Info</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="../equity-calculator/eqc1.html">Equity Allocation</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="vesting.html">Vesting Schedule</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="decision.html">Decision-Making</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="ip.html">IP &amp; Ownership</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="compensation.html">Compensation</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="performance.html">Performance</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="noncompete.html">Non-Competition</a>
+      </li>
+      <li>
+        <span class="nav-dot notstarted"></span>
+        <a href="general.html">General Provisions</a>
+      </li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item" id="sidebar-cofounder-list">—</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="dashboard.html">← Back to Dashboard</a>
+        <span class="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Cofounder Information</h1>
+    <p class="page-desc">Whether it's just the two of you or if there's a dozen of you, this is the crew that decided to go for it. Names, roles, contact info, sure. But it's also a snapshot of the team before the world knows your name. Someday, this will be the "garage team" story you tell in interviews.</p>
+
+    <div class="cf-card">
+      <div class="cf-card-header">
+        <span class="cf-card-title">Cofounders</span>
+        <button class="cf-add-btn" id="cf-add-btn">
+          Add <span class="cf-add-icon">+</span>
+        </button>
+      </div>
+
+      <div class="cf-list" id="cf-list"></div>
+
+      <!-- Add new cofounder form -->
+      <div class="cf-form-wrap" id="cf-form-wrap">
+        <div class="cf-form-inner">
+          <div class="cf-form-divider"></div>
+          <div class="cf-form-fields">
+            <div class="cf-inline-form-grid">
+              <div>
+                <span class="cf-field-label">Full Name</span>
+                <input class="card-input" type="text" placeholder="First Last" id="cf-name" />
+              </div>
+              <div>
+                <span class="cf-field-label">Title</span>
+                <input class="card-input" type="text" placeholder="Chief Executive Officer" id="cf-title" />
+              </div>
+              <div>
+                <span class="cf-field-label">Email</span>
+                <input class="card-input" type="email" placeholder="firstlast@cherrytree.app" id="cf-email" />
+              </div>
+            </div>
+            <div class="cf-field">
+              <span class="cf-field-label" style="margin-top:20px;display:block;">Roles and Responsibilities</span>
+              <div class="cf-field-sublabel">Select all that apply.</div>
+              <div class="card-checkbox-group" id="cf-roles-add"></div>
+            </div>
+            <div class="cf-form-footer">
+              <button class="cf-cancel-btn" id="cf-cancel-btn" type="button">Cancel</button>
+              <button class="cf-submit-btn" id="cf-submit-btn" type="button">Add Cofounder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-section-bar" id="next-section-bar">
+      <a class="next-section-btn" href="vesting.html">Continue</a>
+    </div>
+  </main>
+
+  <script>
+    const CF_KEY   = 'ct_cofounders';
+    const formWrap = document.getElementById('cf-form-wrap');
+    const cfList   = document.getElementById('cf-list');
+    const addBtn   = document.getElementById('cf-add-btn');
+
+    const ROLES = [
+      'Community / content', 'Customer success / support', 'Engineering / development',
+      'Finance / operations', 'Fundraising', 'Hiring / culture', 'Legal / compliance',
+      'Marketing / growth', 'Product strategy', 'Sales / business development',
+      'UX / design', 'Other'
+    ];
+
+    let cofounders = [];
+
+    // Build checkbox HTML for a given name prefix and checked values
+    function rolesHTML(nameAttr, checked) {
+      return ROLES.map(role => `
+        <label class="card-checkbox-option">
+          <input type="checkbox" name="${nameAttr}" value="${role}" ${checked.includes(role) ? 'checked' : ''} />
+          <span class="checkbox-box"></span>${role}
+        </label>`).join('');
+    }
+
+    // Populate the add-form roles on first render
+    document.getElementById('cf-roles-add').innerHTML = rolesHTML('roles-add', []);
+
+    function saveCofounders() {
+      localStorage.setItem(CF_KEY, JSON.stringify(cofounders));
+      const el = document.getElementById('sidebar-cofounder-list');
+      if (el) el.textContent = cofounders.map(c => c.name).join(', ') || '—';
+    }
+
+    function renderList() {
+      cfList.innerHTML = '';
+      cofounders.forEach((cf, i) => {
+        const item = document.createElement('div');
+        item.className = 'cf-list-item';
+        item.innerHTML = `
+          <div class="cf-item-row">
+            <div class="cf-list-item-info">
+              <span class="cf-list-item-name">${cf.name}</span>
+              ${cf.title ? `<span class="cf-list-item-sub">${cf.title}</span>` : ''}
+            </div>
+            <button class="cf-edit-btn" data-i="${i}" type="button">Edit</button>
+          </div>
+          <div class="cf-item-form-wrap">
+            <div class="cf-item-form-inner">
+              <div class="cf-form-divider"></div>
+              <div class="cf-inline-form-grid">
+                <div>
+                  <span class="cf-field-label">Full Name</span>
+                  <input class="card-input" type="text" data-field="name" value="${cf.name}" placeholder="First Last" />
+                </div>
+                <div>
+                  <span class="cf-field-label">Title</span>
+                  <input class="card-input" type="text" data-field="title" value="${cf.title || ''}" placeholder="Chief Executive Officer" />
+                </div>
+                <div>
+                  <span class="cf-field-label">Email</span>
+                  <input class="card-input" type="email" data-field="email" value="${cf.email || ''}" placeholder="firstlast@cherrytree.app" />
+                </div>
+              </div>
+              <div class="cf-field">
+                <span class="cf-field-label" style="margin-top:20px;display:block;">Roles and Responsibilities</span>
+                <div class="cf-field-sublabel">Select all that apply.</div>
+                <div class="card-checkbox-group">${rolesHTML('roles-' + i, cf.roles || [])}</div>
+              </div>
+              <div class="cf-form-footer">
+                <button class="cf-remove-btn cf-inline-remove" data-i="${i}" type="button">Remove</button>
+                <button class="cf-cancel-btn cf-inline-cancel" type="button">Cancel</button>
+                <button class="cf-submit-btn cf-inline-save" data-i="${i}" type="button">Update Cofounder</button>
+              </div>
+            </div>
+          </div>
+        `;
+        cfList.appendChild(item);
+      });
+
+      cfList.querySelectorAll('.cf-edit-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const item = btn.closest('.cf-list-item');
+          const wrap = item.querySelector('.cf-item-form-wrap');
+          const isOpen = wrap.classList.contains('open');
+          cfList.querySelectorAll('.cf-item-form-wrap.open').forEach(w => w.classList.remove('open'));
+          if (!isOpen) {
+            wrap.classList.add('open');
+            setTimeout(() => item.querySelector('input[data-field="name"]').focus(), 380);
+          }
+        });
+      });
+
+      cfList.querySelectorAll('.cf-inline-remove').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const i = parseInt(btn.dataset.i);
+          cofounders.splice(i, 1);
+          saveCofounders();
+          renderList();
+        });
+      });
+
+      cfList.querySelectorAll('.cf-inline-cancel').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          btn.closest('.cf-item-form-wrap').classList.remove('open');
+        });
+      });
+
+      cfList.querySelectorAll('.cf-inline-save').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const i    = parseInt(btn.dataset.i);
+          const item = btn.closest('.cf-list-item');
+          const name  = item.querySelector('input[data-field="name"]').value.trim() || 'New Cofounder';
+          const title = item.querySelector('input[data-field="title"]').value.trim();
+          const email = item.querySelector('input[data-field="email"]').value.trim();
+          const roles = Array.from(item.querySelectorAll(`input[name="roles-${i}"]:checked`)).map(cb => cb.value);
+          cofounders[i] = { name, title, email, roles };
+          saveCofounders();
+          renderList();
+        });
+      });
+    }
+
+    function closeAddForm() {
+      formWrap.classList.remove('open');
+      document.getElementById('cf-name').value  = '';
+      document.getElementById('cf-title').value = '';
+      document.getElementById('cf-email').value = '';
+      document.querySelectorAll('input[name="roles-add"]').forEach(cb => cb.checked = false);
+    }
+
+    addBtn.addEventListener('click', () => {
+      if (formWrap.classList.contains('open')) {
+        closeAddForm();
+      } else {
+        cfList.querySelectorAll('.cf-item-form-wrap.open').forEach(w => w.classList.remove('open'));
+        formWrap.classList.add('open');
+        setTimeout(() => document.getElementById('cf-name').focus(), 400);
+      }
+    });
+
+    document.getElementById('cf-cancel-btn').addEventListener('click', closeAddForm);
+
+    document.getElementById('cf-submit-btn').addEventListener('click', () => {
+      const name  = document.getElementById('cf-name').value.trim()  || 'New Cofounder';
+      const title = document.getElementById('cf-title').value.trim();
+      const email = document.getElementById('cf-email').value.trim();
+      const roles = Array.from(document.querySelectorAll('input[name="roles-add"]:checked')).map(cb => cb.value);
+      cofounders.push({ name, title, email, roles });
+      saveCofounders();
+      renderList();
+      closeAddForm();
+    });
+
+    // Restore from localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem(CF_KEY) || 'null');
+      if (stored && stored.length) {
+        cofounders = stored.map(item =>
+          typeof item === 'string' ? { name: item, title: '', email: '', roles: [] } : item
+        );
+      } else {
+        cofounders = [{ name: 'Cofounder A', title: '', email: '', roles: [] }];
+        saveCofounders();
+      }
+    } catch(e) {
+      cofounders = [{ name: 'Cofounder A', title: '', email: '', roles: [] }];
+    }
+
+    renderList();
+    const sidebarEl = document.getElementById('sidebar-cofounder-list');
+    if (sidebarEl) sidebarEl.textContent = cofounders.map(c => c.name).join(', ') || '—';
+  </script>
+  <script src="../sidebar.js"></script>
+</body>
+</html>

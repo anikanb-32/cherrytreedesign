@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Equity Allocation</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
+  <style>
+    /* ── Step indicator ── */
+    .eq-step-indicator {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .eq-step-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+    .eq-step-dot::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: calc(50% + 13px);
+      right: calc(-50% + 13px);
+      height: 1px;
+      background: #e0ddd6;
+    }
+    .eq-step-dot:last-child::after { display: none; }
+    .eq-step-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid #d0cdc6;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      position: relative;
+      z-index: 1;
+    }
+    .eq-step-dot.active .eq-step-circle { background: #2d2a22; border-color: #2d2a22; color: #fff; }
+    .eq-step-dot.done .eq-step-circle { background: #5a7a5c; border-color: #5a7a5c; color: #fff; }
+    .eq-step-label {
+      font-size: 10px;
+      color: #aaa;
+      text-align: center;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .eq-step-dot.active .eq-step-label { color: #2d2a22; font-weight: 600; }
+    .eq-step-dot.done .eq-step-label { color: #5a7a5c; }
+
+    /* ── Panels ── */
+    .eq-panel { display: none; }
+    .eq-panel.active { display: block; }
+
+    /* ── Choice ── */
+    .eq-choice-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .eq-btn-use {
+      padding: 10px 20px;
+      background: #2d2a22;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .eq-btn-use:hover { background: #1a1810; }
+    .eq-btn-skip {
+      padding: 10px 20px;
+      background: transparent;
+      color: #5a5650;
+      border: 1.5px solid #e0ddd6;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .eq-btn-skip:hover { background: #faf9f6; }
+
+    /* ── Buckets (Step 1) ── */
+    .eq-bucket {
+      border: 1px solid #e8e4dc;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .eq-bucket-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 18px;
+      cursor: pointer;
+      background: #faf9f6;
+      user-select: none;
+    }
+    .eq-bucket-header:hover { background: #f3f1eb; }
+    .eq-bucket-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2d2a22;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .eq-bucket-meta { font-size: 12px; color: #aaa; margin-left: 8px; }
+    .eq-bucket-chevron { font-size: 11px; color: #aaa; transition: transform 0.22s; }
+    .eq-bucket.open .eq-bucket-chevron { transform: rotate(180deg); }
+    .eq-bucket-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.26s ease; }
+    .eq-bucket.open .eq-bucket-body { grid-template-rows: 1fr; }
+    .eq-bucket-inner { overflow: hidden; }
+
+    .eq-category-row {
+      padding: 12px 18px;
+      border-top: 1px solid #f0ede6;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .eq-category-name { flex: 0 0 170px; font-size: 13px; color: #3a3630; }
+    .eq-slider-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .eq-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 3px;
+      border-radius: 2px;
+      background: #e0ddd6;
+      outline: none;
+      cursor: pointer;
+    }
+    .eq-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #2d2a22;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .eq-slider-val { flex: 0 0 28px; text-align: right; font-size: 12px; font-weight: 600; color: #2d2a22; }
+
+    /* ── Scoring (Step 2) ── */
+    .eq-privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #5a5650;
+      background: #f0ede6;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .eq-score-category {
+      border: 1px solid #e8e4dc;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .eq-score-cat-header {
+      padding: 12px 18px;
+      background: #faf9f6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .eq-score-cat-name { font-size: 13px; font-weight: 600; color: #2d2a22; }
+    .eq-score-cat-imp {
+      font-size: 11px;
+      color: #777;
+      background: #ede9e1;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .eq-score-row {
+      padding: 11px 18px;
+      border-top: 1px solid #f0ede6;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .eq-score-cf-name { flex: 0 0 130px; font-size: 12px; color: #5a5650; }
+    .eq-score-cf-name.is-you { font-weight: 600; color: #2d2a22; }
+    .eq-score-cf-name.is-you::after { content: ' (you)'; font-weight: 400; color: #aaa; }
+    .eq-seg-wrap { display: flex; gap: 2px; flex-wrap: wrap; }
+    .eq-seg-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      border: 1px solid #e0ddd6;
+      background: #fff;
+      font-size: 11px;
+      font-weight: 500;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+    .eq-seg-btn:hover { border-color: #aaa; color: #2d2a22; }
+    .eq-seg-btn.selected { background: #2d2a22; border-color: #2d2a22; color: #fff; }
+
+    /* ── Step 3: Comparison ── */
+    .eq-lock-state { text-align: center; padding: 36px 20px; }
+    .eq-lock-icon { font-size: 26px; margin-bottom: 10px; }
+    .eq-lock-title { font-size: 15px; font-weight: 600; color: #2d2a22; margin-bottom: 6px; }
+    .eq-lock-desc { font-size: 12px; color: #888; margin-bottom: 14px; line-height: 1.6; }
+    .eq-submit-status {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 16px;
+      background: #faf9f6;
+      border-radius: 8px;
+      border: 1px solid #e8e4dc;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .eq-status-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5a5650; }
+    .eq-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .eq-status-dot.submitted { background: #5a7a5c; }
+    .eq-status-dot.pending { background: #d8d4cc; }
+
+    .eq-suggested {
+      background: #f4f2ed;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    .eq-suggested-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .eq-suggested-row { display: flex; align-items: center; gap: 12px; margin-bottom: 7px; }
+    .eq-suggested-name { flex: 0 0 130px; font-size: 13px; color: #3a3630; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .eq-suggested-bar-track { flex: 1; height: 9px; background: #e0ddd6; border-radius: 5px; overflow: hidden; }
+    .eq-suggested-bar-fill { height: 100%; border-radius: 5px; background: #2d2a22; transition: width 0.5s ease; }
+    .eq-suggested-pct { flex: 0 0 44px; text-align: right; font-size: 13px; font-weight: 700; color: #2d2a22; }
+
+    .eq-delta-section {
+      padding: 14px 16px;
+      background: #fdf8ee;
+      border: 1px solid #e6d89a;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .eq-delta-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #8a6800;
+      margin-bottom: 10px;
+    }
+    .eq-delta-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #5a4800;
+      padding: 5px 0;
+      border-bottom: 1px solid #ede0a0;
+    }
+    .eq-delta-item:last-child { border-bottom: none; }
+    .eq-delta-gap { font-weight: 700; }
+
+    .eq-compare-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #aaa;
+      margin: 20px 0 12px;
+    }
+    .eq-compare-category { margin-bottom: 16px; }
+    .eq-compare-cat-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #2d2a22;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .eq-compare-delta {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .eq-compare-delta.big { background: #fde8c0; color: #8a5000; }
+    .eq-compare-delta.small { background: #e8f2e8; color: #3a6040; }
+    .eq-compare-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+    .eq-compare-bar-label { flex: 0 0 110px; font-size: 11px; color: #888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .eq-compare-bar-track { flex: 1; height: 7px; background: #f0ede6; border-radius: 4px; overflow: hidden; }
+    .eq-compare-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .eq-compare-bar-fill.you { background: #2d2a22; }
+    .eq-compare-bar-fill.other { background: #9bbf9d; }
+    .eq-compare-bar-val { flex: 0 0 20px; font-size: 11px; color: #888; text-align: right; }
+
+    /* ── Step nav ── */
+    .eq-step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; }
+    .eq-step-nav-right { display: flex; justify-content: flex-end; width: 100%; }
+    .eq-back-btn {
+      padding: 9px 16px;
+      background: transparent;
+      border: 1.5px solid #e0ddd6;
+      border-radius: 7px;
+      font-size: 12px;
+      color: #5a5650;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .eq-back-btn:hover { background: #faf9f6; }
+    .eq-next-btn {
+      padding: 9px 20px;
+      background: #2d2a22;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .eq-next-btn:hover { background: #1a1810; }
+
+    /* ── Final allocation ── */
+    .eq-final-section {
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 2px solid #e8e4dc;
+    }
+    .eq-final-title { font-size: 18px; font-weight: 700; color: #2d2a22; margin-bottom: 4px; }
+    .eq-final-desc { font-size: 13px; color: #888; margin-bottom: 18px; line-height: 1.5; }
+    .eq-entry-list { margin-bottom: 4px; }
+    .eq-entry-header {
+      display: flex;
+      gap: 12px;
+      padding: 0 0 8px;
+      border-bottom: 1px solid #e8e4dc;
+      margin-bottom: 2px;
+    }
+    .eq-entry-header span { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
+    .eq-entry-header span:first-child { flex: 1; }
+    .eq-entry-header span:nth-child(2) { flex: 0 0 80px; text-align: right; }
+    .eq-entry-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f4f2ed;
+    }
+    .eq-entry-name { flex: 1; }
+    .eq-entry-pct { flex: 0 0 80px; }
+    .eq-entry-remove {
+      background: none;
+      border: none;
+      color: #c0a0a0;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 6px;
+      font-family: inherit;
+    }
+    .eq-entry-remove:hover { color: #b97070; }
+    .eq-total-row {
+      padding: 12px 0 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d2a22;
+    }
+    .eq-total-row.error { color: #b97070; }
+    .eq-total-hint { font-size: 11px; color: #b97070; margin-top: 2px; display: none; }
+    .eq-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1.5px solid #e0ddd6;
+      background: #fff;
+      font-size: 12px;
+      color: #3a3630;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .eq-add-btn:hover { background: #faf9f6; }
+
+    /* Legal note */
+    .eq-legal-wrap { margin-top: 16px; }
+    .eq-legal-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #aaa;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      font-family: inherit;
+    }
+    .eq-legal-toggle:hover { color: #777; }
+    .eq-legal-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.24s ease; }
+    .eq-legal-body.open { grid-template-rows: 1fr; }
+    .eq-legal-inner {
+      overflow: hidden;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.65;
+      padding-top: 8px;
+      font-style: italic;
+    }
+
+    /* Sign row */
+    .eq-sign-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 18px;
+      border: 1.5px solid #e0ddd6;
+      border-radius: 10px;
+      background: #faf9f6;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .eq-sign-row:hover { border-color: #c8c4bc; background: #f3f1eb; }
+    .eq-sign-row.signed { border-color: #5a7a5c; background: #f0f6f0; }
+    .eq-sign-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 1.5px solid #d0cdc6;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .eq-sign-row.signed .eq-sign-check { background: #5a7a5c; border-color: #5a7a5c; color: #fff; }
+    .eq-sign-checkmark { display: none; font-size: 12px; color: #fff; }
+    .eq-sign-row.signed .eq-sign-checkmark { display: block; }
+    .eq-sign-label { font-size: 13px; color: #3a3630; line-height: 1.4; }
+    .eq-sign-name { font-weight: 600; }
+
+    /* Floating preview */
+    .eq-float-preview {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #2d2a22;
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+      z-index: 200;
+      min-width: 160px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+    .eq-float-preview.visible { opacity: 1; transform: translateY(0); }
+    .eq-float-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .eq-float-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .eq-float-row:last-child { margin-bottom: 0; }
+    .eq-float-name { font-size: 12px; color: #ccc; }
+    .eq-float-pct { font-size: 14px; font-weight: 700; color: #fff; }
+
+    /* Pull quote */
+    .eq-pullquote {
+      border-left: 3px solid #c8b89a;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+      background: #faf8f4;
+      border-radius: 0 8px 8px 0;
+    }
+    .eq-pullquote p { font-size: 12px; color: #888; line-height: 1.65; margin: 0 0 6px; }
+    .eq-pullquote p:last-child { margin-bottom: 0; }
+    .eq-pullquote strong { color: #5a5000; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../cherries.png" alt="Cherrytree" />
+    </div>
+
+    <div class="company-name">Company</div>
+    <div class="progress-label">30% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+    <div class="sections-remaining">7 sections remaining</div>
+
+    <div class="nav-section-label">Sections</div>
+    <ul class="nav-list">
+      <li class="done"><span class="nav-dot done"></span><a href="../product/survey.html">Formation &amp; Purpose</a></li>
+      <li class="done"><span class="nav-dot done"></span><a href="../product/cofounder.html">Cofounder Info</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/vesting.html">Vesting Schedule</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/decision.html">Decision-Making</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/noncompete.html">Non-Competition</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../product/general.html">General Provisions</a></li>
+    </ul>
+
+    <div class="collaborators">
+      <div class="collab-box">
+        <div class="collab-title">Current Cofounders</div>
+        <div class="collab-item" id="sidebar-cofounder-list">—</div>
+      </div>
+      <div class="collab-manage">Manage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <a class="back-link" href="../product/cofounder.html">← Back to Cofounder Info</a>
+        <span class="saved-label" id="saved-label">Saved 2 min ago</span>
+      </div>
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="page-title">Equity Allocation</h1>
+    <p class="page-desc">Equity is the most emotionally loaded decision you'll make as cofounders. The number matters less than the conversation that produced it. Use the calculator to surface your values first — then agree on a final split together.</p>
+
+    <div class="eq-pullquote">
+      <p>A few years ago, two Stanford friends launched a startup that hit YC within six months. But one cofounder felt they were doing more. They tried to renegotiate from 50/50 to 70/30. Trust collapsed. By Demo Day, they'd split — emotionally and legally.</p>
+      <p><strong>The #1 reason for cofounder breakups in recent YC batches: trying to revisit a settled split.</strong> Agree now, commit, move on.</p>
+    </div>
+
+    <!-- CALCULATOR CARD -->
+    <div class="question-card expanded" id="calc-card">
+      <div class="card-row">
+        <div class="card-question">Equity Calculator</div>
+        <span class="card-answer-preview" id="calc-preview-badge"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">An optional 3-step tool to help you find your split before you commit to one.</div>
+
+        <!-- Step indicator (hidden on choice panel) -->
+        <div class="eq-step-indicator" id="step-indicator" style="display:none;margin-top:20px;">
+          <div class="eq-step-dot" id="si-s1">
+            <div class="eq-step-circle">1</div>
+            <div class="eq-step-label">Importance</div>
+          </div>
+          <div class="eq-step-dot" id="si-s2">
+            <div class="eq-step-circle">2</div>
+            <div class="eq-step-label">Scoring</div>
+          </div>
+          <div class="eq-step-dot" id="si-s3">
+            <div class="eq-step-circle">3</div>
+            <div class="eq-step-label">Compare</div>
+          </div>
+        </div>
+
+        <!-- Panel: Choice -->
+        <div class="eq-panel active" id="panel-choice">
+          <div class="eq-choice-btns">
+            <button class="eq-btn-use" id="btn-use-calc">Use Calculator →</button>
+            <button class="eq-btn-skip" id="btn-skip-calc">Skip — I already know my split</button>
+          </div>
+        </div>
+
+        <!-- Panel: Step 1 — Importance -->
+        <div class="eq-panel" id="panel-s1">
+          <p style="font-size:13px;color:#777;margin:0 0 18px;line-height:1.55;">Rate how important each factor is to you — on a scale of 0 to 100. You're scoring categories, not people. Drag each slider or leave it at 0 to skip that category.</p>
+          <div id="s1-buckets"></div>
+          <div class="eq-step-nav">
+            <button class="eq-back-btn" id="s1-back">← Back</button>
+            <button class="eq-next-btn" id="s1-next">Next: Score Cofounders →</button>
+          </div>
+        </div>
+
+        <!-- Panel: Step 2 — Scoring -->
+        <div class="eq-panel" id="panel-s2">
+          <div class="eq-privacy-badge">🔒 Only you can see this until you submit</div>
+          <p style="font-size:13px;color:#777;margin:0 0 16px;line-height:1.55;">Score every cofounder (including yourself) 0–10 for each category you marked as important.</p>
+          <div id="s2-content"></div>
+          <div class="eq-step-nav">
+            <button class="eq-back-btn" id="s2-back">← Back</button>
+            <button class="eq-next-btn" id="s2-next">Submit &amp; Compare →</button>
+          </div>
+        </div>
+
+        <!-- Panel: Step 3 — Comparison -->
+        <div class="eq-panel" id="panel-s3">
+          <div id="s3-content"></div>
+          <div class="eq-step-nav">
+            <button class="eq-back-btn" id="s3-back">← Edit scores</button>
+            <button class="eq-next-btn" id="s3-to-final">Agree on a split →</button>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+
+    <!-- FINAL ALLOCATION -->
+    <div id="final-allocation">
+      <div class="question-card expanded" style="margin-top:12px;">
+        <div class="card-row">
+          <div class="card-question">Final Equity Allocation</div>
+        </div>
+        <div class="card-bottom"><div class="card-bottom-inner">
+          <div class="card-hint">This is the number that goes in your agreement. Once you agree, don't revisit it.</div>
+
+          <div class="eq-final-section">
+            <div class="eq-entry-header">
+              <span>Name</span>
+              <span>Equity %</span>
+              <span style="flex:0 0 40px;"></span>
+            </div>
+            <div class="eq-entry-list" id="eq-entry-list"></div>
+            <div class="eq-total-row" id="eq-total-row">Total Equity: 0.00%</div>
+            <div class="eq-total-hint" id="eq-total-hint">Total equity must equal 100% before proceeding.</div>
+            <button class="eq-add-btn" id="eq-add-btn">+ Add Cofounder</button>
+
+            <div class="eq-legal-wrap">
+              <button class="eq-legal-toggle" id="legal-toggle">▸ Legal note</button>
+              <div class="eq-legal-body" id="legal-body">
+                <div class="eq-legal-inner">
+                  This equity calculator is for informational and planning purposes only. It does not grant, issue, vest, or transfer any equity, securities, or ownership interest of any kind. No equity exists unless and until it is formally approved and issued through proper corporate action (e.g., board approval) and documented via legally binding agreements such as a stock purchase agreement, option grant, or equity incentive plan.
+                </div>
+              </div>
+            </div>
+
+            <div class="eq-sign-row" id="eq-sign-row">
+              <div class="eq-sign-check">
+                <span class="eq-sign-checkmark">✓</span>
+              </div>
+              <div class="eq-sign-label">
+                I acknowledge and accept this equity allocation — <span class="eq-sign-name" id="sign-name">Cofounder</span>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="next-section-bar">
+      <a class="next-section-btn" href="../product/vesting.html">Continue</a>
+    </div>
+  </main>
+
+  <!-- Floating equity preview -->
+  <div class="eq-float-preview" id="float-preview">
+    <div class="eq-float-label">Estimated Split</div>
+    <div id="float-rows"></div>
+  </div>
+
+  <script>
+    // ── Category data ──
+    const BUCKETS = [
+      {
+        label: 'Input',
+        cats: [
+          { key: 'cash',    label: 'Cash Invested'       },
+          { key: 'time',    label: 'Time Commitment'     },
+          { key: 'ip',      label: 'Existing Work & IP'  },
+          { key: 'tools',   label: 'Equipment & Tools'   },
+        ]
+      },
+      {
+        label: 'Execution',
+        cats: [
+          { key: 'leadership',  label: 'Leadership & Management' },
+          { key: 'eng',         label: 'Engineering'             },
+          { key: 'sales',       label: 'Sales'                   },
+          { key: 'product',     label: 'Product'                 },
+          { key: 'fundraising', label: 'Fundraising'             },
+          { key: 'recruiting',  label: 'Recruiting'              },
+          { key: 'ops',         label: 'Operations'              },
+        ]
+      },
+      {
+        label: 'Intangibles',
+        cats: [
+          { key: 'domain',      label: 'Domain Expertise'  },
+          { key: 'network',     label: 'Network Value'     },
+          { key: 'irreplace',   label: 'Irreplaceability'  },
+          { key: 'scalability', label: 'Role Scalability'  },
+          { key: 'oppcost',     label: 'Opportunity Cost'  },
+          { key: 'risk',        label: 'Risk Tolerance'    },
+          { key: 'idea',        label: 'Idea Origination'  },
+        ]
+      }
+    ];
+    const ALL_CATS = BUCKETS.flatMap(b => b.cats);
+
+    // ── State ──
+    let importance  = {};
+    let myScores    = {};
+    let submitted   = false;
+    let signed      = false;
+    let finalEntries = [];
+    let cofounders  = [];
+    let currentStep = 'choice';
+
+    // ── Load from localStorage ──
+    function loadData() {
+      importance    = JSON.parse(localStorage.getItem('ct_eq_importance') || '{}');
+      myScores      = JSON.parse(localStorage.getItem('ct_eq_my_scores')  || '{}');
+      submitted     = localStorage.getItem('ct_eq_submitted') === '1';
+      signed        = localStorage.getItem('ct_eq_signed')    === '1';
+      finalEntries  = JSON.parse(localStorage.getItem('ct_eq_final') || '[]');
+
+      let raw = JSON.parse(localStorage.getItem('ct_cofounders') || '[]');
+      cofounders = raw.map(c => typeof c === 'string' ? { name: c } : c);
+      if (!cofounders.length) cofounders = [{ name: 'Cofounder A' }];
+
+      const sidebarEl = document.getElementById('sidebar-cofounder-list');
+      if (sidebarEl) sidebarEl.textContent = cofounders.map(c => c.name).join(', ') || '—';
+
+      const signName = document.getElementById('sign-name');
+      if (signName) signName.textContent = cofounders[0]?.name || 'Cofounder';
+    }
+
+    function saveData() {
+      localStorage.setItem('ct_eq_importance', JSON.stringify(importance));
+      localStorage.setItem('ct_eq_my_scores',  JSON.stringify(myScores));
+      localStorage.setItem('ct_eq_final',       JSON.stringify(finalEntries));
+      const label = document.getElementById('saved-label');
+      if (label) {
+        label.textContent = 'Saved';
+        clearTimeout(label._t);
+        label._t = setTimeout(() => { label.textContent = 'Saved 2 min ago'; }, 2000);
+      }
+    }
+
+    // ── Step management ──
+    function showStep(step) {
+      currentStep = step;
+      document.querySelectorAll('.eq-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + step)?.classList.add('active');
+
+      const ind = document.getElementById('step-indicator');
+      if (step === 'choice') {
+        ind.style.display = 'none';
+      } else {
+        ind.style.display = 'flex';
+        const order = ['s1', 's2', 's3'];
+        const idx = order.indexOf(step);
+        ['si-s1', 'si-s2', 'si-s3'].forEach((id, i) => {
+          const dot = document.getElementById(id);
+          dot.classList.remove('active', 'done');
+          if (i < idx) dot.classList.add('done');
+          else if (i === idx) dot.classList.add('active');
+        });
+      }
+      updateFloatPreview();
+    }
+
+    // ── Step 1: Importance buckets ──
+    function renderStep1() {
+      const container = document.getElementById('s1-buckets');
+      container.innerHTML = '';
+      BUCKETS.forEach(bucket => {
+        const el = document.createElement('div');
+        el.className = 'eq-bucket';
+        el.innerHTML = `
+          <div class="eq-bucket-header">
+            <div>
+              <span class="eq-bucket-title">${bucket.label}</span>
+              <span class="eq-bucket-meta">· ${bucket.cats.length} categories</span>
+            </div>
+            <span class="eq-bucket-chevron">▾</span>
+          </div>
+          <div class="eq-bucket-body">
+            <div class="eq-bucket-inner">
+              ${bucket.cats.map(cat => `
+                <div class="eq-category-row">
+                  <span class="eq-category-name">${cat.label}</span>
+                  <div class="eq-slider-wrap">
+                    <input class="eq-slider" type="range" min="0" max="100"
+                      value="${importance[cat.key] || 0}" data-cat="${cat.key}" />
+                    <span class="eq-slider-val">${importance[cat.key] || 0}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        el.querySelector('.eq-bucket-header').addEventListener('click', () => el.classList.toggle('open'));
+        el.querySelectorAll('.eq-slider').forEach(slider => {
+          slider.addEventListener('input', () => {
+            const val = parseInt(slider.value);
+            importance[slider.dataset.cat] = val;
+            slider.nextElementSibling.textContent = val;
+            saveData();
+            updateFloatPreview();
+          });
+        });
+        container.appendChild(el);
+      });
+    }
+
+    // ── Step 2: Scoring ──
+    function renderStep2() {
+      const container = document.getElementById('s2-content');
+      container.innerHTML = '';
+      const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
+      if (!activeCats.length) {
+        container.innerHTML = '<p style="font-size:13px;color:#aaa;padding:8px 0;">Go back to Step 1 and rate at least one category to continue.</p>';
+        return;
+      }
+      activeCats.forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'eq-score-category';
+        card.innerHTML = `
+          <div class="eq-score-cat-header">
+            <span class="eq-score-cat-name">${cat.label}</span>
+            <span class="eq-score-cat-imp">Importance ${importance[cat.key]}</span>
+          </div>
+          ${cofounders.map((cf, ci) => `
+            <div class="eq-score-row">
+              <span class="eq-score-cf-name${ci === 0 ? ' is-you' : ''}">${cf.name}</span>
+              <div class="eq-seg-wrap">
+                ${[0,1,2,3,4,5,6,7,8,9,10].map(n => {
+                  const cur = (myScores[ci] || {})[cat.key];
+                  return `<button class="eq-seg-btn${cur === n ? ' selected' : ''}"
+                    data-ci="${ci}" data-cat="${cat.key}" data-val="${n}">${n}</button>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        `;
+        card.querySelectorAll('.eq-seg-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const ci  = parseInt(btn.dataset.ci);
+            const key = btn.dataset.cat;
+            const val = parseInt(btn.dataset.val);
+            if (!myScores[ci]) myScores[ci] = {};
+            myScores[ci][key] = val;
+            saveData();
+            updateFloatPreview();
+            card.querySelectorAll(`.eq-seg-btn[data-ci="${ci}"][data-cat="${key}"]`).forEach(b => {
+              b.classList.toggle('selected', parseInt(b.dataset.val) === val);
+            });
+          });
+        });
+        container.appendChild(card);
+      });
+    }
+
+    // ── Step 3: Comparison ──
+    function calcSuggestedSplit() {
+      const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
+      const weighted = cofounders.map((_, ci) =>
+        activeCats.reduce((s, cat) => s + (importance[cat.key] || 0) * ((myScores[ci] || {})[cat.key] || 0), 0)
+      );
+      const total = weighted.reduce((a, b) => a + b, 0);
+      return weighted.map(w => total > 0 ? (w / total * 100) : (100 / cofounders.length));
+    }
+
+    function renderStep3() {
+      const container = document.getElementById('s3-content');
+      container.innerHTML = '';
+
+      if (!submitted) {
+        container.innerHTML = `
+          <div class="eq-lock-state">
+            <div class="eq-lock-icon">🔒</div>
+            <div class="eq-lock-title">Comparison unlocks when everyone submits</div>
+            <div class="eq-lock-desc">Once all cofounders have scored their sheets, you'll see a side-by-side comparison here. Your answers stay private until then.</div>
+            <div class="eq-submit-status">
+              ${cofounders.map((cf, i) => `
+                <div class="eq-status-item">
+                  <span class="eq-status-dot ${i === 0 ? 'submitted' : 'pending'}"></span>
+                  ${cf.name}${i === 0 ? ' — submitted ✓' : ' — working…'}
+                </div>
+              `).join('')}
+            </div>
+            <button class="eq-btn-use" id="preview-anyway">Preview comparison →</button>
+          </div>
+        `;
+        document.getElementById('preview-anyway').addEventListener('click', () => {
+          submitted = true;
+          localStorage.setItem('ct_eq_submitted', '1');
+          renderStep3();
+        });
+        return;
+      }
+
+      const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
+      if (!activeCats.length) {
+        container.innerHTML = '<p style="font-size:13px;color:#aaa;">Go back to Step 1 and set importance for at least one category.</p>';
+        return;
+      }
+
+      const pcts = calcSuggestedSplit();
+
+      // Suggested split
+      const sugDiv = document.createElement('div');
+      sugDiv.className = 'eq-suggested';
+      sugDiv.innerHTML = `
+        <div class="eq-suggested-label">Calculator Suggestion</div>
+        ${cofounders.map((cf, i) => `
+          <div class="eq-suggested-row">
+            <span class="eq-suggested-name">${cf.name}</span>
+            <div class="eq-suggested-bar-track">
+              <div class="eq-suggested-bar-fill" style="width:${pcts[i].toFixed(2)}%"></div>
+            </div>
+            <span class="eq-suggested-pct">${pcts[i].toFixed(1)}%</span>
+          </div>
+        `).join('')}
+      `;
+      container.appendChild(sugDiv);
+
+      // Delta highlights (2+ cofounders only)
+      if (cofounders.length >= 2) {
+        const deltas = activeCats.map(cat => {
+          const scores = cofounders.map((_, ci) => (myScores[ci] || {})[cat.key] || 0);
+          return { cat, delta: Math.max(...scores) - Math.min(...scores), scores };
+        }).sort((a, b) => b.delta - a.delta).slice(0, 3).filter(d => d.delta > 0);
+
+        if (deltas.length) {
+          const deltaDiv = document.createElement('div');
+          deltaDiv.className = 'eq-delta-section';
+          deltaDiv.innerHTML = `
+            <div class="eq-delta-title">Biggest Differences — Talk About These</div>
+            ${deltas.map(d => `
+              <div class="eq-delta-item">
+                <span>${d.cat.label}</span>
+                <span class="eq-delta-gap">Δ ${d.delta} pts</span>
+              </div>
+            `).join('')}
+          `;
+          container.appendChild(deltaDiv);
+        }
+      }
+
+      // Per-category bars
+      const barsLabel = document.createElement('div');
+      barsLabel.className = 'eq-compare-section-label';
+      barsLabel.textContent = 'Category Breakdown';
+      container.appendChild(barsLabel);
+
+      activeCats.forEach(cat => {
+        const scores = cofounders.map((_, ci) => (myScores[ci] || {})[cat.key] || 0);
+        const delta  = Math.max(...scores) - Math.min(...scores);
+        const catDiv = document.createElement('div');
+        catDiv.className = 'eq-compare-category';
+        catDiv.innerHTML = `
+          <div class="eq-compare-cat-name">
+            ${cat.label}
+            <span class="eq-compare-delta ${delta >= 4 ? 'big' : 'small'}">Δ ${delta}</span>
+          </div>
+          ${cofounders.map((cf, i) => `
+            <div class="eq-compare-bar-row">
+              <span class="eq-compare-bar-label">${cf.name}</span>
+              <div class="eq-compare-bar-track">
+                <div class="eq-compare-bar-fill ${i === 0 ? 'you' : 'other'}" style="width:${scores[i] * 10}%"></div>
+              </div>
+              <span class="eq-compare-bar-val">${scores[i]}</span>
+            </div>
+          `).join('')}
+        `;
+        container.appendChild(catDiv);
+      });
+
+      // Use suggested split button
+      const fillBtn = document.createElement('button');
+      fillBtn.className = 'eq-btn-use';
+      fillBtn.style.marginTop = '20px';
+      fillBtn.textContent = 'Use this split below →';
+      fillBtn.addEventListener('click', () => {
+        finalEntries = cofounders.map((cf, i) => ({ name: cf.name, equity: pcts[i].toFixed(1) }));
+        saveData();
+        renderFinalEntries();
+        document.getElementById('final-allocation').scrollIntoView({ behavior: 'smooth' });
+      });
+      container.appendChild(fillBtn);
+    }
+
+    // ── Final allocation ──
+    function renderFinalEntries() {
+      const list = document.getElementById('eq-entry-list');
+      list.innerHTML = '';
+      if (!finalEntries.length) {
+        finalEntries = cofounders.map(cf => ({ name: cf.name, equity: '' }));
+      }
+      finalEntries.forEach((entry, i) => {
+        const row = document.createElement('div');
+        row.className = 'eq-entry-row';
+        row.innerHTML = `
+          <input class="card-input eq-entry-name" type="text" placeholder="Cofounder name"
+            value="${entry.name || ''}" data-i="${i}" data-field="name" />
+          <input class="card-input eq-entry-pct" type="number" placeholder="25%" min="0" max="100" step="0.1"
+            value="${entry.equity || ''}" data-i="${i}" data-field="equity" />
+          <button class="eq-entry-remove" data-i="${i}">Remove</button>
+        `;
+        row.querySelector('.eq-entry-name').addEventListener('input', e => {
+          finalEntries[i].name = e.target.value;
+          saveData();
+          updateTotal();
+        });
+        row.querySelector('.eq-entry-pct').addEventListener('input', e => {
+          finalEntries[i].equity = e.target.value;
+          saveData();
+          updateTotal();
+        });
+        row.querySelector('.eq-entry-remove').addEventListener('click', () => {
+          finalEntries.splice(i, 1);
+          saveData();
+          renderFinalEntries();
+        });
+        list.appendChild(row);
+      });
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const total = finalEntries.reduce((s, e) => s + (parseFloat(e.equity) || 0), 0);
+      const totalRow  = document.getElementById('eq-total-row');
+      const totalHint = document.getElementById('eq-total-hint');
+      totalRow.textContent = `Total Equity: ${total.toFixed(2)}%`;
+      const hasAny = finalEntries.some(e => e.equity !== '');
+      const isOff  = hasAny && Math.abs(total - 100) > 0.01;
+      totalRow.classList.toggle('error', isOff);
+      totalHint.style.display = isOff ? 'block' : 'none';
+    }
+
+    // ── Float preview ──
+    function updateFloatPreview() {
+      const preview = document.getElementById('float-preview');
+      if (currentStep !== 's1' && currentStep !== 's2') {
+        preview.classList.remove('visible');
+        return;
+      }
+      const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
+      const weighted = cofounders.map((_, ci) =>
+        activeCats.reduce((s, cat) => s + (importance[cat.key] || 0) * ((myScores[ci] || {})[cat.key] || 0), 0)
+      );
+      const total = weighted.reduce((a, b) => a + b, 0);
+      if (total === 0) { preview.classList.remove('visible'); return; }
+      const pcts = weighted.map(w => (w / total * 100));
+      document.getElementById('float-rows').innerHTML = cofounders.map((cf, i) => `
+        <div class="eq-float-row">
+          <span class="eq-float-name">${cf.name.split(' ').slice(0, 2).join(' ')}</span>
+          <span class="eq-float-pct">${pcts[i].toFixed(0)}%</span>
+        </div>
+      `).join('');
+      preview.classList.add('visible');
+    }
+
+    // ── Wire up everything ──
+    loadData();
+    renderStep1();
+
+    document.getElementById('btn-use-calc').addEventListener('click', () => {
+      showStep('s1');
+    });
+    document.getElementById('btn-skip-calc').addEventListener('click', () => {
+      document.getElementById('final-allocation').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('s1-back').addEventListener('click', () => showStep('choice'));
+    document.getElementById('s1-next').addEventListener('click', () => {
+      renderStep2();
+      showStep('s2');
+    });
+
+    document.getElementById('s2-back').addEventListener('click', () => showStep('s1'));
+    document.getElementById('s2-next').addEventListener('click', () => {
+      submitted = true;
+      localStorage.setItem('ct_eq_submitted', '1');
+      renderStep3();
+      showStep('s3');
+    });
+
+    document.getElementById('s3-back').addEventListener('click', () => {
+      renderStep2();
+      showStep('s2');
+    });
+    document.getElementById('s3-to-final').addEventListener('click', () => {
+      document.getElementById('final-allocation').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Legal toggle
+    document.getElementById('legal-toggle').addEventListener('click', function () {
+      const body = document.getElementById('legal-body');
+      const open = body.classList.toggle('open');
+      this.textContent = (open ? '▾' : '▸') + ' Legal note';
+    });
+
+    // Sign row
+    document.getElementById('eq-sign-row').addEventListener('click', () => {
+      signed = !signed;
+      localStorage.setItem('ct_eq_signed', signed ? '1' : '0');
+      document.getElementById('eq-sign-row').classList.toggle('signed', signed);
+    });
+    if (signed) document.getElementById('eq-sign-row').classList.add('signed');
+
+    // Add cofounder to final
+    document.getElementById('eq-add-btn').addEventListener('click', () => {
+      finalEntries.push({ name: '', equity: '' });
+      saveData();
+      renderFinalEntries();
+    });
+
+    // Init final entries & sidebar
+    renderFinalEntries();
+    if (submitted) {
+      renderStep3();
+    }
+  </script>
+  <script src="../sidebar.js"></script>
+</body>
+</html>

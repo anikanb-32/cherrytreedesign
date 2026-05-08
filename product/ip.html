@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cherrytree – Non-Competition</title>
-  <link rel="stylesheet" href="surveystyles.css" />
+  <title>Cherrytree – IP &amp; Ownership</title>
+  <link rel="stylesheet" href="../surveystyles.css" />
 </head>
 <body>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="cherries.png" alt="Cherrytree" />
+      <img src="../cherries.png" alt="Cherrytree" />
     </div>
 
     <div class="company-name">Company</div>
-    <div class="progress-label">70% Complete</div>
-    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:70%"></div></div>
-    <div class="sections-remaining">2 sections remaining</div>
+    <div class="progress-label">40% Complete</div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:40%"></div></div>
+    <div class="sections-remaining">5 sections remaining</div>
 
     <div class="nav-section-label">Sections</div>
     <ul class="nav-list">
       <li class="done"><span class="nav-dot done"></span><a href="survey.html">Formation &amp; Purpose</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="cofounder.html">Cofounder Info</a></li>
-      <li><span class="nav-dot notstarted"></span><a href="#">Equity Allocation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="../equity-calculator/eqc1.html">Equity Allocation</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="vesting.html">Vesting Schedule</a></li>
       <li class="done"><span class="nav-dot done"></span><a href="decision.html">Decision-Making</a></li>
-      <li class="done"><span class="nav-dot done"></span><a href="ip.html">IP &amp; Ownership</a></li>
-      <li class="done"><span class="nav-dot done"></span><a href="compensation.html">Compensation</a></li>
-      <li class="done"><span class="nav-dot done"></span><a href="performance.html">Performance</a></li>
-      <li class="active"><span class="nav-dot active"></span><a href="noncompete.html">Non-Competition</a></li>
+      <li class="active"><span class="nav-dot active"></span><a href="ip.html">IP &amp; Ownership</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="compensation.html">Compensation</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="performance.html">Performance</a></li>
+      <li><span class="nav-dot notstarted"></span><a href="noncompete.html">Non-Competition</a></li>
       <li><span class="nav-dot notstarted"></span><a href="general.html">General Provisions</a></li>
     </ul>
 
@@ -46,7 +46,7 @@
   <main class="main">
     <div class="top-bar">
       <div class="top-left">
-        <a class="back-link" href="performance.html">← Back to Performance</a>
+        <a class="back-link" href="decision.html">← Back to Decision-Making</a>
         <span class="saved-label">Saved 2 min ago</span>
       </div>
       <div class="avatar">
@@ -57,70 +57,51 @@
       </div>
     </div>
 
-    <h1 class="page-title">Confidentiality, Non-Competition &amp; Non-Solicitation</h1>
-    <p class="page-desc">You know how when you go to a bar with your friend, you have an unspoken agreement to not hit on the same person? Confidentiality, Non-Competition and Non-Solicitation kind of work the same way. They take the unspoken worries off the table so nothing turns awkward later. Make sure everyone knows what's off limits.</p>
+    <h1 class="page-title">IP &amp; Ownership of Work</h1>
+    <div class="page-desc">
+      <p>In 2013, Reggie Brown sued his Snapchat cofounders, Evan Spiegel and Bobby Murphy. He claimed they stole his idea: an app where messages vanish after being sent. Brown said he not only conceived the concept but also shook hands with Spiegel to serve as CMO. He claimed credit for the original name "Picaboo," the ghost logo, and even a draft patent for the disappearing-message technology.</p>
+      <p>Not long after they started, the partnership unraveled. Brown alleged he was locked out of company accounts and cut off all communication. One day a cofounder, the next day erased entirely. After a long legal battle, Snapchat settled, paying Brown $157 million.</p>
+      <p>Without being specific about IP, even college buddies can turn on each other.</p>
+    </div>
 
-    <!-- Card 1: Confidentiality ack -->
+    <!-- Card 1: Prior assets -->
     <div class="question-card expanded">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">This clause is the foundation of trust in any founding team — what's said in the room stays in the room.</div></div></div>
       <div class="card-row">
-        <div class="card-question">Acknowledge confidentiality obligations</div>
+        <div class="card-question">Has any cofounder created code, designs, or other assets before joining the company that might be used in the business?</div>
         <span class="card-answer-preview"></span>
       </div>
       <div class="card-bottom"><div class="card-bottom-inner">
-        <p class="card-ack-text">I acknowledge that each Cofounder agrees to hold all Confidential Information in strict confidence and not to disclose any Confidential Information to any third party without the Company's prior written consent.</p>
+        <div class="card-hint">Nail down ownership now, or risk ugly debates later over who really owns what once the company takes off.</div>
+        <div class="card-radio-group">
+          <label class="card-radio-option"><input type="radio" name="ip-prior-assets" value="Yes" /><span class="radio-circle"></span>Yes</label>
+          <label class="card-radio-option"><input type="radio" name="ip-prior-assets" value="No" /><span class="radio-circle"></span>No</label>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Card 2: IP assignment acknowledgment -->
+    <div class="question-card">
+      <div class="card-row">
+        <div class="card-question">Acknowledge IP assignment to the company</div>
+        <span class="card-answer-preview"></span>
+      </div>
+      <div class="card-bottom"><div class="card-bottom-inner">
+        <div class="card-hint">This assignment clause is standard in cofounder agreements and ensures the company owns what its founders build.</div>
+        <p class="card-ack-text">I acknowledge that all inventions, discoveries, designs, developments, improvements, processes, works of authorship, trade secrets, and other intellectual property conceived, created, developed, or reduced to practice by the Cofounder, either alone or with others, in the course of their work for the Company or using the Company's resources, shall be the sole and exclusive property of the Company.</p>
         <div class="card-checkbox-group">
-          <label class="card-checkbox-option"><input type="checkbox" name="nc-ack-conf" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
+          <label class="card-checkbox-option"><input type="checkbox" name="ip-ack-assignment" value="Acknowledged" /><span class="checkbox-box"></span>Anika Bhagavatula <span class="card-ack-role">(Admin)</span></label>
         </div>
       </div></div>
     </div>
 
-    <!-- Card 2: Non-competition duration -->
-    <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Note: non-competition clauses are unenforceable in some states (like California). Check the laws where your company is registered.</div></div></div>
-      <div class="card-row">
-        <div class="card-question">How long should the non-competition obligation last after a cofounder leaves?</div>
-        <span class="card-answer-preview"></span>
-      </div>
-      <div class="card-bottom"><div class="card-bottom-inner">
-        <div class="card-radio-group">
-          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="6 months" /><span class="radio-circle"></span>6 months</label>
-          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="1 year" /><span class="radio-circle"></span>1 year</label>
-          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="2 years" /><span class="radio-circle"></span>2 years</label>
-          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="No non-competition clause" /><span class="radio-circle"></span>No non-competition clause</label>
-          <label class="card-radio-option"><input type="radio" name="nc-noncompete" value="Other" /><span class="radio-circle"></span>Other</label>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- Card 3: Non-solicitation duration -->
-    <div class="question-card">
-      <div class="card-top"><div class="card-top-inner"><div class="card-hint">Non-solicitation prevents a departing cofounder from poaching the company's employees or clients after leaving.</div></div></div>
-      <div class="card-row">
-        <div class="card-question">How long should the non-solicitation obligation last after a cofounder leaves?</div>
-        <span class="card-answer-preview"></span>
-      </div>
-      <div class="card-bottom"><div class="card-bottom-inner">
-        <div class="card-radio-group">
-          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="6 months" /><span class="radio-circle"></span>6 months</label>
-          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="1 year" /><span class="radio-circle"></span>1 year</label>
-          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="2 years" /><span class="radio-circle"></span>2 years</label>
-          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="No non-solicitation clause" /><span class="radio-circle"></span>No non-solicitation clause</label>
-          <label class="card-radio-option"><input type="radio" name="nc-nonsolicitation" value="Other" /><span class="radio-circle"></span>Other</label>
-        </div>
-      </div></div>
-    </div>
-
-    <div class="next-section-bar" id="next-section-bar">
-      <span class="next-section-label">Up next: General Provisions</span>
-      <a class="next-section-btn" href="general.html">Continue</a>
+    <div class="next-section-bar" id="next-section-bar">      <a class="next-section-btn" href="compensation.html">Continue</a>
     </div>
   </main>
 
   <script>
-    const SK = 'ct_nc_';
-    const RADIO_NAMES = ['nc-noncompete', 'nc-nonsolicitation'];
-    const CB_NAMES    = ['nc-ack-conf'];
+    const SK = 'ct_ip_';
+    const RADIO_NAMES = ['ip-prior-assets'];
+    const CB_NAMES    = ['ip-ack-assignment'];
 
     function saveFormData() {
       RADIO_NAMES.forEach(name => {
@@ -205,6 +186,6 @@
 
     restoreFormData();
   </script>
-  <script src="sidebar.js"></script>
+  <script src="../sidebar.js"></script>
 </body>
 </html>
