@@ -1,6 +1,12 @@
-**Design Prototype**
-<br>
-link: <a>https://anikanb-32.github.io/cherrytreedesign/survey.html</a>
+
+
+# To View Survey Mockup: 
+
+## Latest Survey 
+link: <a>https://anikanb-32.github.io/cherrytreedesign/product/survey.html</a>
+
+## Dashboard 
+link: <a>https://anikanb-32.github.io/cherrytreedesign/product/dashboard.html</a>
 
 # To View Equity Calculator Mockups: 
 
@@ -21,7 +27,6 @@ link: <a>https://anikanb-32.github.io/cherrytreedesign/marketing/marketing2.html
 ## Version 3 
 link: <a>https://anikanb-32.github.io/cherrytreedesign/marketing/marketing3.html</a>
 
-## Version 4 
-link: <a>https://anikanb-32.github.io/cherrytreedesign/marketing/marketing4.html</a>
+
 
 
