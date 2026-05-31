@@ -15,6 +15,7 @@
 
   const PAGE_DONE_KEYS = {
     'eqc1.html':         'ct_eq_done',
+    'final-eqc.html':   'ct_eq_done',
     'survey.html':       'ct_survey_done',
     'cofounder.html':    'ct_cofounder_done',
     'vesting.html':      'ct_vest_done',
