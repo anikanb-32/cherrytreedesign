@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cherrytree – Equity Allocation</title>
-  <!-- final-eqc: working copy for production modifications -->
+  <!-- final-eqc3: circle-button scoring variant -->
   <link rel="stylesheet" href="../surveystyles.css" />
   <style>
     /* ── Modal ── */
@@ -344,6 +344,77 @@
     .eq-sign-label { font-size: 13px; color: #3a3630; line-height: 1.4; }
     .eq-sign-name  { font-weight: 600; }
 
+    /* ── Quiz (combined importance + scoring per card) ── */
+    .eq-quiz-bar-wrap {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .eq-quiz-bar-track {
+      flex: 1; height: 3px; background: #e8e4dc; border-radius: 2px; overflow: hidden;
+    }
+    .eq-quiz-bar-fill {
+      height: 100%; background: #2d2a22; border-radius: 2px; transition: width 0.3s ease;
+    }
+    .eq-quiz-counter {
+      flex: 0 0 auto; font-size: 11px; color: #aaa; font-weight: 500; white-space: nowrap;
+    }
+    .eq-quiz-cat-name {
+      font-size: 20px; font-weight: 700; color: #2d2a22; margin-bottom: 4px;
+    }
+    .eq-quiz-cat-group {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+      color: #bbb; margin-bottom: 24px;
+    }
+    .eq-quiz-group { margin-bottom: 24px; }
+    .eq-quiz-group-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #aaa; margin-bottom: 12px;
+    }
+    .eq-quiz-cf-row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .eq-quiz-cf-name { flex: 0 0 120px; font-size: 12px; color: #5a5650; }
+    .eq-quiz-cf-name.is-you { font-weight: 600; color: #2d2a22; }
+    .eq-quiz-cf-name.is-you::after { content: ' (you)'; font-weight: 400; color: #aaa; }
+    .eq-quiz-scores-section { transition: opacity 0.2s; }
+    .eq-quiz-scores-section.muted { opacity: 0.28; pointer-events: none; }
+    .eq-circle-wrap { display: flex; gap: 5px; flex-wrap: wrap; }
+    .eq-circle-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1.5px solid #d8d4cc; background: #fff;
+      font-size: 11px; font-weight: 500; color: #888;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s; font-family: inherit; flex-shrink: 0;
+    }
+    .eq-circle-btn:hover { border-color: #aaa; color: #2d2a22; }
+    .eq-circle-btn.selected { background: #2d2a22; border-color: #2d2a22; color: #fff; }
+
+    /* ── Sections nav ── */
+    .eq-sections-bar { margin-bottom: 20px; }
+    .eq-sections-toggle {
+      font-size: 11px; color: #bbb; background: none; border: none;
+      cursor: pointer; padding: 0; font-family: inherit; letter-spacing: 0.01em;
+    }
+    .eq-sections-toggle:hover { color: #5a5650; }
+    .eq-sections-dropdown {
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows 0.22s ease;
+    }
+    .eq-sections-dropdown.open { grid-template-rows: 1fr; }
+    .eq-sections-inner { overflow: hidden; padding-top: 10px; }
+    .eq-sections-group { margin-bottom: 12px; }
+    .eq-sections-group:last-child { margin-bottom: 0; }
+    .eq-sections-group-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #ccc; margin-bottom: 6px;
+    }
+    .eq-sections-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .eq-section-chip {
+      font-size: 11px; color: #5a5650; background: #f4f2ed;
+      border: 1px solid #e8e4dc; border-radius: 20px;
+      padding: 3px 10px; cursor: pointer; font-family: inherit;
+      transition: all 0.12s; line-height: 1.4;
+    }
+    .eq-section-chip:hover { background: #ede9e1; color: #2d2a22; }
+    .eq-section-chip.current { background: #2d2a22; color: #fff; border-color: #2d2a22; }
+
     /* Floating preview */
     .eq-float-preview {
       position: fixed; bottom: 24px; right: 24px; background: #2d2a22; color: #fff;
@@ -481,47 +552,39 @@
         <button class="eq-modal-close" id="eq-modal-close">×</button>
       </div>
 
+      <!-- Sections nav -->
+      <div class="eq-sections-bar" id="eq-sections-bar" style="display:none;">
+        <button class="eq-sections-toggle" id="sections-toggle">All sections ▾</button>
+        <div class="eq-sections-dropdown" id="sections-dropdown">
+          <div class="eq-sections-inner" id="sections-inner"></div>
+        </div>
+      </div>
+
       <!-- Step indicator -->
       <div class="eq-step-indicator" id="step-indicator">
-        <div class="eq-step-dot" id="si-s1">
+        <div class="eq-step-dot" id="si-quiz">
           <div class="eq-step-circle">1</div>
-          <div class="eq-step-label">Importance</div>
-        </div>
-        <div class="eq-step-dot" id="si-s2">
-          <div class="eq-step-circle">2</div>
-          <div class="eq-step-label">Scoring</div>
+          <div class="eq-step-label">Rate</div>
         </div>
         <div class="eq-step-dot" id="si-s3">
-          <div class="eq-step-circle">3</div>
+          <div class="eq-step-circle">2</div>
           <div class="eq-step-label">Compare</div>
         </div>
       </div>
 
-      <!-- Panel: Step 1 — Importance -->
-      <div class="eq-panel active" id="panel-s1">
-        <p style="font-size:13px;color:#777;margin:0 0 18px;line-height:1.55;">Rate how important each factor is, 0 to 10. You're scoring categories, not people. Leave at 0 to skip.</p>
-        <div id="s1-buckets"></div>
-        <div class="eq-step-nav">
-          <button class="eq-back-btn" id="s1-back">Cancel</button>
-          <button class="eq-next-btn" id="s1-next">Next: Score Cofounders →</button>
-        </div>
-      </div>
-
-      <!-- Panel: Step 2 — Scoring -->
-      <div class="eq-panel" id="panel-s2">
-        <div class="eq-privacy-badge">
+      <!-- Panel: Quiz — rate importance + score cofounders per category -->
+      <div class="eq-panel active" id="panel-quiz">
+        <div class="eq-privacy-badge" style="margin-bottom:18px;">
           <svg width="11" height="13" viewBox="0 0 11 13" fill="none" style="flex-shrink:0;margin-right:1px;">
             <rect x="1" y="5.5" width="9" height="7" rx="1.5" stroke="#5a5650" stroke-width="1.3"/>
             <path d="M3 5.5V3.5a2.5 2.5 0 0 1 5 0v2" stroke="#5a5650" stroke-width="1.3" stroke-linecap="round"/>
           </svg>
           Only you can see this until you submit
         </div>
-        <p style="font-size:13px;color:#777;margin:0 0 6px;line-height:1.55;">Score every cofounder (including yourself) 0–10 for each category you marked as important.</p>
-        <p style="font-size:12px;color:#aaa;margin:0 0 16px;line-height:1.65;">Think holistically. Consider past contributions (work done, capital risked, ideas brought) alongside expected future involvement (time, ownership of a function, long-term commitment). 0 means little to no contribution; a 10 means they're the primary driver in that area.</p>
-        <div id="s2-content"></div>
+        <div id="quiz-card"></div>
         <div class="eq-step-nav">
-          <button class="eq-back-btn" id="s2-back">← Back</button>
-          <button class="eq-next-btn" id="s2-next">Submit &amp; Compare →</button>
+          <button class="eq-back-btn" id="quiz-back">Cancel</button>
+          <button class="eq-next-btn" id="quiz-next">Next →</button>
         </div>
       </div>
 
@@ -574,13 +637,19 @@
     ];
     const ALL_CATS = BUCKETS.flatMap(b => b.cats);
 
+    function getBucketLabel(key) {
+      for (const b of BUCKETS) { if (b.cats.some(c => c.key === key)) return b.label; }
+      return '';
+    }
+
     let importance   = {};
     let myScores     = {};
     let submitted    = false;
     let signed       = false;
     let finalEntries = [];
     let cofounders   = [];
-    let currentStep  = 's1';
+    let currentStep  = 'quiz';
+    let quizIndex    = 0;
 
     function loadData() {
       importance   = JSON.parse(localStorage.getItem('ct_eq_importance') || '{}');
@@ -613,7 +682,9 @@
     function openModal() {
       document.getElementById('eq-modal-backdrop').classList.add('open');
       document.body.style.overflow = 'hidden';
-      showStep('s1');
+      quizIndex = 0;
+      renderQuizCard(0);
+      showStep('quiz');
     }
 
     function closeModal() {
@@ -625,14 +696,16 @@
     // ── Step management ──
     function showStep(step) {
       currentStep = step;
-      const order = ['s1', 's2', 's3'];
+      const order = ['quiz', 's3'];
       const idx   = order.indexOf(step);
-      ['si-s1', 'si-s2', 'si-s3'].forEach((id, i) => {
+      ['si-quiz', 'si-s3'].forEach((id, i) => {
         const dot = document.getElementById(id);
         dot.classList.remove('active', 'done');
         if (i < idx) dot.classList.add('done');
         else if (i === idx) dot.classList.add('active');
       });
+      document.getElementById('eq-sections-bar').style.display = step === 'quiz' ? 'block' : 'none';
+      if (step !== 'quiz') closeSectionsDropdown();
       document.querySelectorAll('.eq-panel').forEach(p => { p.classList.remove('active'); p.style.cssText = ''; });
       const next = document.getElementById('panel-' + step);
       next.classList.add('active');
@@ -647,91 +720,116 @@
       updateFloatPreview();
     }
 
-    // ── Step 1: Importance ──
-    function renderStep1() {
-      const container = document.getElementById('s1-buckets');
-      container.innerHTML = '';
-      BUCKETS.forEach(bucket => {
-        const el = document.createElement('div');
-        el.className = 'eq-bucket';
-        el.innerHTML = `
-          <div class="eq-bucket-header">
-            <div>
-              <span class="eq-bucket-title">${bucket.label}</span>
-              <span class="eq-bucket-meta"> ${bucket.cats.length} categories</span>
-            </div>
-            <span class="eq-bucket-chevron">▾</span>
-          </div>
-          <div class="eq-bucket-body"><div class="eq-bucket-inner">
-            ${bucket.cats.map(cat => `
-              <div class="eq-category-row">
-                <span class="eq-category-name">${cat.label}</span>
-                <div class="eq-slider-wrap">
-                  <input class="eq-slider" type="range" min="0" max="10"
-                    value="0" data-cat="${cat.key}" />
-                  <span class="eq-slider-val">0</span>
-                </div>
-              </div>
-            `).join('')}
-          </div></div>
-        `;
-        el.querySelector('.eq-bucket-header').addEventListener('click', () => el.classList.toggle('open'));
-        el.querySelectorAll('.eq-slider').forEach(slider => {
-          slider.addEventListener('input', () => {
-            const val = parseInt(slider.value);
-            importance[slider.dataset.cat] = val;
-            slider.nextElementSibling.textContent = val;
-            saveData();
-            updateFloatPreview();
-          });
-        });
-        container.appendChild(el);
-      });
-    }
+    // ── Quiz card ──
+    function renderQuizCard(index) {
+      const cat   = ALL_CATS[index];
+      const total = ALL_CATS.length;
+      const imp   = importance[cat.key] || 0;
 
-    // ── Step 2: Scoring ──
-    function renderStep2() {
-      const container = document.getElementById('s2-content');
-      container.innerHTML = '';
-      const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
-      if (!activeCats.length) {
-        container.innerHTML = '<p style="font-size:13px;color:#aaa;padding:8px 0;">Go back to Step 1 and rate at least one category to continue.</p>';
-        return;
-      }
-      activeCats.forEach(cat => {
-        const card = document.createElement('div');
-        card.className = 'eq-score-category';
-        card.innerHTML = `
-          <div class="eq-score-cat-header">
-            <span class="eq-score-cat-name">${cat.label}</span>
-            <span class="eq-score-cat-imp">Importance ${importance[cat.key]}</span>
+      document.getElementById('quiz-back').textContent = index === 0 ? 'Cancel' : '← Back';
+      document.getElementById('quiz-next').textContent = index === total - 1 ? 'See Results →' : 'Next →';
+
+      document.getElementById('quiz-card').innerHTML = `
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px;">
+          <div class="eq-quiz-cat-name" style="margin-bottom:0;">${cat.label}</div>
+          <span style="font-size:12px;color:#bbb;font-weight:500;">${index + 1} / ${total}</span>
+        </div>
+        <div class="eq-quiz-cat-group">${getBucketLabel(cat.key)}</div>
+
+        <div class="eq-quiz-group">
+          <div class="eq-quiz-group-label">How important is this?</div>
+          <div class="eq-slider-wrap">
+            <input class="eq-slider" type="range" min="0" max="10" value="0"
+              id="quiz-imp-slider" data-cat="${cat.key}" />
+            <span class="eq-slider-val" id="quiz-imp-val">0</span>
           </div>
+        </div>
+
+        <div class="eq-quiz-group eq-quiz-scores-section muted" id="quiz-scores-group">
+          <div class="eq-quiz-group-label">Score each cofounder</div>
+          <p style="font-size:11px;color:#bbb;margin:0 0 12px;line-height:1.6;">Think about past contributions and expected future involvement — 0 = little to none, 10 = primary driver.</p>
           ${cofounders.map((cf, ci) => `
-            <div class="eq-score-row">
-              <span class="eq-score-cf-name${ci === 0 ? ' is-you' : ''}">${cf.name}</span>
-              <div class="eq-slider-wrap">
-                <input class="eq-slider" type="range" min="0" max="10"
-                  value="0"
-                  data-ci="${ci}" data-cat="${cat.key}" />
-                <span class="eq-slider-val">0</span>
+            <div class="eq-quiz-cf-row" style="flex-wrap:wrap;gap:8px;">
+              <span class="eq-quiz-cf-name${ci === 0 ? ' is-you' : ''}" style="flex:0 0 100%;">${cf.name}</span>
+              <div class="eq-circle-wrap" id="quiz-cf-wrap-${ci}">
+                ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+                  <button class="eq-circle-btn" data-ci="${ci}" data-cat="${cat.key}" data-val="${n}">${n}</button>
+                `).join('')}
               </div>
             </div>
           `).join('')}
-        `;
-        card.querySelectorAll('.eq-slider').forEach(slider => {
-          slider.addEventListener('input', () => {
-            const ci = parseInt(slider.dataset.ci), key = slider.dataset.cat, val = parseInt(slider.value);
+        </div>
+      `;
+
+      // Importance slider
+      const impSlider = document.getElementById('quiz-imp-slider');
+      impSlider.addEventListener('input', () => {
+        const val = parseInt(impSlider.value);
+        importance[cat.key] = val;
+        document.getElementById('quiz-imp-val').textContent = val;
+        document.getElementById('quiz-scores-group').classList.toggle('muted', val === 0);
+        saveData(); updateFloatPreview();
+      });
+
+      // Cofounder circle buttons
+      cofounders.forEach((_, ci) => {
+        const wrap = document.getElementById(`quiz-cf-wrap-${ci}`);
+        if (!wrap) return;
+        wrap.querySelectorAll('.eq-circle-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const val = parseInt(btn.dataset.val);
             if (!myScores[ci]) myScores[ci] = {};
-            myScores[ci][key] = val;
-            slider.nextElementSibling.textContent = val;
+            myScores[ci][cat.key] = val;
+            wrap.querySelectorAll('.eq-circle-btn').forEach(b =>
+              b.classList.toggle('selected', parseInt(b.dataset.val) === val)
+            );
             saveData(); updateFloatPreview();
           });
         });
-        container.appendChild(card);
       });
     }
 
-    // ── Step 3: Comparison ──
+    // ── Sections nav ──
+    function renderSectionsInner() {
+      const inner = document.getElementById('sections-inner');
+      inner.innerHTML = BUCKETS.map(b => `
+        <div class="eq-sections-group">
+          <div class="eq-sections-group-label">${b.label}</div>
+          <div class="eq-sections-chips">
+            ${b.cats.map(cat => {
+              const idx = ALL_CATS.findIndex(c => c.key === cat.key);
+              return `<button class="eq-section-chip${idx === quizIndex ? ' current' : ''}" data-idx="${idx}">${cat.label}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+      inner.querySelectorAll('.eq-section-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          quizIndex = parseInt(chip.dataset.idx);
+          renderQuizCard(quizIndex);
+          closeSectionsDropdown();
+        });
+      });
+    }
+
+    function closeSectionsDropdown() {
+      document.getElementById('sections-dropdown').classList.remove('open');
+      document.getElementById('sections-toggle').textContent = 'All sections ▾';
+    }
+
+    function advanceQuiz(dir) {
+      const next = quizIndex + dir;
+      if (next < 0) { closeModal(); return; }
+      if (next >= ALL_CATS.length) {
+        submitted = true;
+        localStorage.setItem('ct_eq_submitted', '1');
+        renderStep3(); showStep('s3'); return;
+      }
+      quizIndex = next;
+      renderQuizCard(quizIndex);
+    }
+
+    // ── Compare ──
     function calcSuggestedSplit() {
       const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
       const weighted = cofounders.map((_, ci) =>
@@ -770,7 +868,7 @@
       }
       const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
       if (!activeCats.length) {
-        container.innerHTML = '<p style="font-size:13px;color:#aaa;">Go back to Step 1 and set importance for at least one category.</p>';
+        container.innerHTML = '<p style="font-size:13px;color:#aaa;">Rate at least one category as important to see results.</p>';
         return;
       }
       const pcts = calcSuggestedSplit();
@@ -818,9 +916,7 @@
       fillBtn.textContent = 'Use this split →';
       fillBtn.addEventListener('click', () => {
         finalEntries = cofounders.map((cf, i) => ({ name: cf.name, equity: pcts[i].toFixed(1) }));
-        saveData();
-        renderFinalEntries();
-        closeModal();
+        saveData(); renderFinalEntries(); closeModal();
         document.getElementById('final-allocation').scrollIntoView({ behavior: 'smooth' });
       });
       const slot = document.getElementById('s3-use-split-slot');
@@ -885,14 +981,19 @@
     }
 
     function updateFloatPreview() {
-      const preview = document.getElementById('float-preview');
+      const preview  = document.getElementById('float-preview');
       const backdrop = document.getElementById('eq-modal-backdrop');
-      if (!backdrop.classList.contains('open') || (currentStep !== 's1' && currentStep !== 's2')) {
+      if (!backdrop.classList.contains('open') || currentStep !== 'quiz') {
         preview.classList.remove('visible'); return;
       }
       const activeCats = ALL_CATS.filter(c => (importance[c.key] || 0) > 0);
+      if (!activeCats.length) { preview.classList.remove('visible'); return; }
+      // Use score if entered, fall back to 1 (equal weight) so preview appears as soon as importance is set
       const weighted = cofounders.map((_, ci) =>
-        activeCats.reduce((s, cat) => s + (importance[cat.key] || 0) * ((myScores[ci] || {})[cat.key] || 0), 0)
+        activeCats.reduce((s, cat) => {
+          const score = (myScores[ci] || {})[cat.key];
+          return s + (importance[cat.key] || 0) * (score != null ? score : 1);
+        }, 0)
       );
       const total = weighted.reduce((a, b) => a + b, 0);
       if (total === 0) { preview.classList.remove('visible'); return; }
@@ -908,9 +1009,7 @@
 
     // ── Wire up ──
     loadData();
-    renderStep1();
     renderFinalEntries();
-    if (submitted) renderStep3();
 
     document.getElementById('btn-open-calc').addEventListener('click', openModal);
     document.getElementById('btn-skip-calc').addEventListener('click', () => {
@@ -922,20 +1021,28 @@
       if (e.target === document.getElementById('eq-modal-backdrop')) closeModal();
     });
 
-    // Step dot clicks
-    document.getElementById('si-s1').addEventListener('click', () => showStep('s1'));
-    document.getElementById('si-s2').addEventListener('click', () => { if (currentStep === 's3') { renderStep2(); showStep('s2'); } });
-    document.getElementById('si-s3').addEventListener('click', () => { if (currentStep !== 's3') { renderStep3(); showStep('s3'); } });
-
-    document.getElementById('s1-back').addEventListener('click', closeModal);
-    document.getElementById('s1-next').addEventListener('click', () => { renderStep2(); showStep('s2'); });
-    document.getElementById('s2-back').addEventListener('click', () => showStep('s1'));
-    document.getElementById('s2-next').addEventListener('click', () => {
-      submitted = true;
-      localStorage.setItem('ct_eq_submitted', '1');
-      renderStep3(); showStep('s3');
+    document.getElementById('sections-toggle').addEventListener('click', () => {
+      const dd = document.getElementById('sections-dropdown');
+      const open = dd.classList.toggle('open');
+      document.getElementById('sections-toggle').textContent = open ? 'All sections ▴' : 'All sections ▾';
+      if (open) renderSectionsInner();
     });
-    document.getElementById('s3-back').addEventListener('click', () => { renderStep2(); showStep('s2'); });
+
+    document.getElementById('si-quiz').addEventListener('click', () => {
+      if (currentStep === 's3') { renderQuizCard(quizIndex); showStep('quiz'); }
+    });
+    document.getElementById('si-s3').addEventListener('click', () => {
+      if (currentStep === 'quiz') { renderStep3(); showStep('s3'); }
+    });
+
+    document.getElementById('quiz-back').addEventListener('click', () => advanceQuiz(-1));
+    document.getElementById('quiz-next').addEventListener('click', () => advanceQuiz(1));
+
+    document.getElementById('s3-back').addEventListener('click', () => {
+      quizIndex = ALL_CATS.length - 1;
+      renderQuizCard(quizIndex);
+      showStep('quiz');
+    });
     document.getElementById('s3-to-final').addEventListener('click', () => {
       closeModal();
       document.getElementById('final-allocation').scrollIntoView({ behavior: 'smooth' });
@@ -958,7 +1065,6 @@
       finalEntries.push({ name: '', equity: '' }); saveData(); renderFinalEntries();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
     });
