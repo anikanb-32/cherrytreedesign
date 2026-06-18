@@ -74,7 +74,7 @@
       padding:6px 10px 6px 22px;
       background:rgba(246,243,238,0.86);
       backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-      border-radius:50px;
+      border-radius:16px;
       box-shadow:0 4px 24px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
       white-space:nowrap;
     }
@@ -83,7 +83,7 @@
     .nav-logo-text { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
     .nav-links { display:flex; gap:6px; list-style:none; align-items:center; justify-self:center; margin:0; }
     .nav-links > li { position:relative; }
-    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:50px; position:relative; }
+    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:8px; position:relative; }
     .nav-links > li > a::after { content:''; position:absolute; bottom:4px; left:11px; right:11px; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform 0.22s cubic-bezier(0.16,1,0.3,1); }
     .nav-links > li > a:hover { color:var(--ink); }
     .nav-links > li > a:hover::after { transform:scaleX(1); }
@@ -104,9 +104,9 @@
     .nav-dd-name { font-size:13px; font-weight:400; color:var(--ink); }
     .nav-dd-sub { font-size:11.5px; color:var(--faint); }
     .nav-right { display:flex; align-items:center; gap:6px; justify-self:end; }
-    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:50px; }
+    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:8px; }
     .nav-signin:hover { color:var(--ink); }
-    .nav-cta { background:var(--ink); color:#fff; border-radius:50px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
+    .nav-cta { background:var(--ink); color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
     .nav-cta:hover { background:#2d2a22; }
 
     /* ── HERO ── */
@@ -334,7 +334,9 @@
     }
     .step2-content { position: relative; z-index: 1; padding: 30px 28px; }
     .step2-card {
-      background: rgba(246,243,238,0.96);
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
       border-radius: 12px; padding: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     }
@@ -346,7 +348,6 @@
     .step2-q {
       border-radius: 8px; margin-bottom: 5px; overflow: hidden;
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.07);
       transition: background 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
     }
     .step2-q.answered { background: var(--bg-2); opacity: 0.75; }
@@ -390,6 +391,171 @@
       background: var(--ink); vertical-align: middle;
       margin-left: 1px; animation: cursorBlink 0.85s step-end infinite;
     }
+
+    /* ── fp-3: Equity Calculator (leaf.png) ── */
+    #fp-3 { padding: 0; position: relative; min-height: 380px; }
+    .s3-bg {
+      position: absolute; inset: 0;
+      background: url('images/leaf.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s3-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 100%);
+    }
+    .s3-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s3-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 16px 14px 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s3-progress-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+    .s3-category { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .s3-counter { font-size: 10.5px; color: var(--faint); }
+    .s3-section-lbl {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--faint); margin-bottom: 8px;
+    }
+    .s3-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .s3-slider-track {
+      flex: 1; height: 4px; background: var(--bg-3); border-radius: 2px; position: relative;
+    }
+    .s3-slider-fill {
+      position: absolute; left: 0; top: 0; height: 100%; background: var(--ink);
+      border-radius: 2px; width: 0%; transition: width 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s3-slider-thumb {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 14px; height: 14px; border-radius: 50%; background: var(--ink);
+      left: 0%; transition: left 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s3-slider-val { font-size: 12px; font-weight: 500; color: var(--ink); width: 18px; text-align: right; }
+    .s3-cf-row { margin-bottom: 10px; }
+    .s3-cf-name { font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 5px; }
+    .s3-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+    .s3-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid var(--bg-3); background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: var(--faint); cursor: default;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .s3-dot.selected { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+    /* ── fp-4: Expert Guidance (chalk.png) ── */
+    #fp-4 { padding: 0; position: relative; min-height: 380px; }
+    .s4-bg {
+      position: absolute; inset: 0;
+      background: url('images/chalk.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s4-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.58) 100%);
+    }
+    .s4-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s4-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s4-expert-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--bg-3);
+    }
+    .s4-avatar {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--green);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; flex-shrink: 0;
+    }
+    .s4-expert-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+    .s4-expert-role { font-size: 10.5px; color: var(--faint); }
+    .s4-online {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4caf6e; margin-left: auto; flex-shrink: 0;
+    }
+    .s4-messages { display: flex; flex-direction: column; align-items: stretch; gap: 7px; min-height: 72px; }
+    .s4-bubble {
+      background: var(--bg-2); border-radius: 10px 10px 10px 2px;
+      padding: 8px 11px; font-size: 11.5px; font-weight: 300; color: var(--ink); line-height: 1.5;
+      align-self: flex-start;
+      opacity: 0; transform: translateY(5px);
+      transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s4-bubble.sent {
+      background: var(--ink); color: #fff;
+      border-radius: 10px 10px 2px 10px;
+      align-self: flex-end;
+    }
+    .s4-bubble.show { opacity: 1; transform: translateY(0); }
+    .s4-typing {
+      display: flex; gap: 4px; align-items: center; padding: 9px 12px;
+      background: var(--bg-2); border-radius: 10px 10px 10px 2px;
+      width: fit-content; opacity: 0; transition: opacity 0.25s;
+    }
+    .s4-typing.show { opacity: 1; }
+    .s4-dot-anim {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--faint);
+      animation: s4pulse 1.2s ease-in-out infinite;
+    }
+    .s4-dot-anim:nth-child(2) { animation-delay: 0.15s; }
+    .s4-dot-anim:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes s4pulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+    /* ── fp-2: Final Review (paper.png) ── */
+    #fp-2 { padding: 0; position: relative; min-height: 380px; }
+    .s2r-bg {
+      position: absolute; inset: 0;
+      background: url('images/paper.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s2r-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 100%);
+    }
+    .s2r-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s2r-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s2r-card-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--faint); margin-bottom: 10px; padding: 0 2px;
+    }
+    .s2r-progress-track {
+      height: 3px; background: var(--bg-3); border-radius: 2px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .s2r-progress-fill {
+      height: 100%; background: var(--green); border-radius: 2px;
+      width: 0%; transition: width 2.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s2r-section {
+      display: flex; align-items: center; gap: 9px; padding: 6px 0;
+      font-size: 11.5px; font-weight: 300; color: var(--faint);
+      transition: color 0.4s;
+    }
+    .s2r-section.done { color: var(--ink); }
+    .s2r-check {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid var(--bg-3); display: flex; align-items: center;
+      justify-content: center; font-size: 7px; color: #fff;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .s2r-section.done .s2r-check { background: var(--green); border-color: var(--green); }
+    .s2r-footer {
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--bg-3);
+      font-size: 11px; font-weight: 500; color: var(--green);
+      opacity: 0; transition: opacity 0.5s;
+    }
+    .s2r-footer.show { opacity: 1; }
 
     /* Scroll-driven feat list */
     .feat-list { display:flex; flex-direction:column; }
@@ -587,17 +753,18 @@
       mask-image: radial-gradient(circle var(--frost-r) at calc(100% - 45px) 45px, black 96%, transparent 100%);
       -webkit-mask-image: radial-gradient(circle var(--frost-r) at calc(100% - 45px) 45px, black 96%, transparent 100%);
       --frost-r: 0px;
-      transition: --frost-r 0.65s cubic-bezier(0.34,1.56,0.64,1);
+      transition: --frost-r 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .carousel-slide:hover::before {
       --frost-r: 900px;
+      transition: --frost-r 0.55s cubic-bezier(0.34,1.56,0.64,1);
     }
     .cs-overlay {
       position:absolute; inset:0;
       background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
-      transition: opacity 0.65s cubic-bezier(0.34,1.56,0.64,1);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1);
     }
-    .carousel-slide:hover .cs-overlay { opacity: 0.3; }
+    .carousel-slide:hover .cs-overlay { opacity: 0.3; transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1); }
     .cs-icon-svg {
       position:absolute; top:24px; right:24px; width:42px; height:42px;
       background:rgba(255,255,255,0.15); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
@@ -671,7 +838,7 @@
     }
     .faq-list { display: flex; flex-direction: column; gap: 10px; }
     .faq-item {
-      background: #E8E3DA;
+      background: var(--bg-3);
       border-radius: 16px;
       position: relative;
       overflow: hidden;
@@ -928,9 +1095,17 @@
           <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Equity</div>
           <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:18px;">Equity Calculator</div>
           <div class="s3-card">
-            <div class="s3-card-label">Suggested Split</div>
-            <div id="s3-rows"></div>
-            <div class="s3-footer" id="s3-footer"></div>
+            <div class="s3-progress-row">
+              <span class="s3-category" id="s3-category">Cash Invested</span>
+              <span class="s3-counter" id="s3-counter">1 / 18</span>
+            </div>
+            <div class="s3-section-lbl">How important is this?</div>
+            <div class="s3-slider-row">
+              <div class="s3-slider-track"><div class="s3-slider-fill" id="s3-sfill"></div><div class="s3-slider-thumb" id="s3-sthumb"></div></div>
+              <span class="s3-slider-val" id="s3-sval">—</span>
+            </div>
+            <div class="s3-section-lbl" style="margin-top:10px;">Score each cofounder</div>
+            <div id="s3-cofounders"></div>
           </div>
         </div>
       </div>
@@ -946,7 +1121,6 @@
                 <div class="s4-expert-name">Tim</div>
                 <div class="s4-expert-role">Cofounder Coach</div>
               </div>
-              <div class="s4-online"></div>
             </div>
             <div class="s4-messages" id="s4-messages"></div>
           </div>
@@ -1072,62 +1246,6 @@
   </div>
 </section>
 
-<!-- ── PRICING ── -->
-<section class="pricing" id="pricing">
-  <div class="pricing-header">
-    <div class="overline rv">Pricing</div>
-    <h2 class="rv d1">Founder-friendly pricing.</h2>
-    <p class="rv d2" style="font-size:16px;font-weight:300;color:var(--muted);margin-top:14px;">Choose the plan that's right for your team.</p>
-  </div>
-  <div class="pricing-grid">
-    <div class="pricing-card rv">
-      <div class="pricing-tier">Bootstrapped</div>
-      <div class="pricing-price"><span>$</span>200</div>
-      <div class="pricing-period">One-time payment</div>
-      <div class="pricing-divider"></div>
-      <p class="pricing-desc">Ideal for early-stage or bootstrapped teams that need to move fast and start building now.</p>
-      <ul class="pricing-features">
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Expert-designed survey</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Comprehensive agreements</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Proprietary equity calculator</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Best practices and tips</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Up to 5 collaborators</li>
-      </ul>
-      <a class="pricing-cta outline" href="../product/survey.html">Get started</a>
-    </div>
-    <div class="pricing-card featured rv d1">
-      <div class="pricing-badge">Most popular</div>
-      <div class="pricing-tier">Scale</div>
-      <div class="pricing-price"><span>$</span>2,000</div>
-      <div class="pricing-period">One-time payment</div>
-      <div class="pricing-divider"></div>
-      <p class="pricing-desc">Built for funded teams that need deeper control, greater detail, and stronger foundations.</p>
-      <ul class="pricing-features">
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Bootstrapped</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Final attorney review</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized onboarding</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cofounder coaching</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priority support</li>
-      </ul>
-      <a class="pricing-cta filled" href="../product/survey.html">Get started</a>
-    </div>
-    <div class="pricing-card rv d2">
-      <div class="pricing-tier">Enterprise</div>
-      <div class="pricing-price" style="font-size:40px;letter-spacing:-1px;">Custom</div>
-      <div class="pricing-period">contact for volume pricing</div>
-      <div class="pricing-divider"></div>
-      <p class="pricing-desc">Running a fund or accelerator and want to deploy in bulk? We'll set you up.</p>
-      <ul class="pricing-features">
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Scale, for your cohort</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cohort dashboard and progress tracking</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Branded experience for your program</li>
-        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Dedicated account support</li>
-      </ul>
-      <a class="pricing-cta solid" href="#demo">Contact sales</a>
-    </div>
-  </div>
-</section>
-
 <!-- ── CAROUSEL ── -->
 <section class="carousel" id="who">
   <div class="carousel-header rv">
@@ -1210,6 +1328,62 @@
     </div>
   </div>
   <div class="carousel-dots" id="cs-dots"></div>
+</section>
+
+<!-- ── PRICING ── -->
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <div class="overline rv">Pricing</div>
+    <h2 class="rv d1">Founder-friendly pricing.</h2>
+    <p class="rv d2" style="font-size:16px;font-weight:300;color:var(--muted);margin-top:14px;">Choose the plan that's right for your team.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card rv">
+      <div class="pricing-tier">Bootstrapped</div>
+      <div class="pricing-price"><span>$</span>200</div>
+      <div class="pricing-period">One-time payment</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Ideal for early-stage or bootstrapped teams that need to move fast and start building now.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Expert-designed survey</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Comprehensive agreements</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Proprietary equity calculator</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Best practices and tips</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Up to 5 collaborators</li>
+      </ul>
+      <a class="pricing-cta outline" href="../product/survey.html">Get started</a>
+    </div>
+    <div class="pricing-card featured rv d1">
+      <div class="pricing-badge">Most popular</div>
+      <div class="pricing-tier">Scale</div>
+      <div class="pricing-price"><span>$</span>2,000</div>
+      <div class="pricing-period">One-time payment</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Built for funded teams that need deeper control, greater detail, and stronger foundations.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Bootstrapped</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Final attorney review</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized onboarding</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cofounder coaching</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priority support</li>
+      </ul>
+      <a class="pricing-cta filled" href="../product/survey.html">Get started</a>
+    </div>
+    <div class="pricing-card rv d2">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price" style="font-size:40px;letter-spacing:-1px;">Custom</div>
+      <div class="pricing-period">contact for volume pricing</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Running a fund or accelerator and want to deploy in bulk? We'll set you up.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Scale, for your cohort</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cohort dashboard and progress tracking</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Branded experience for your program</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Dedicated account support</li>
+      </ul>
+      <a class="pricing-cta solid" href="#demo">Contact sales</a>
+    </div>
+  </div>
 </section>
 
 <!-- ── DEMO ── -->
@@ -1702,11 +1876,198 @@
 
   // Start on load if step 1 is active, and restart when step 1 becomes active
   s1Start();
-  document.querySelectorAll('.feat-item').forEach(item => {
-    item.addEventListener('click', () => {
-      if (document.getElementById('fp-0').classList.contains('active')) s1Start();
+
+  // ── fp-3: Equity Calculator (leaf.png) ──
+  const s3Steps = [
+    { cat: 'Cash Invested',      counter: '1 / 18', importance: 5, scores: [8, 3] },
+    { cat: 'Time Commitment',    counter: '2 / 18', importance: 8, scores: [9, 7] },
+    { cat: 'Idea Origination',   counter: '3 / 18', importance: 6, scores: [7, 10] },
+  ];
+  const s3CofoundrNames = ['Cofounder A (you)', 'Cofounder B'];
+  let s3Timer = null, s3StepIdx = 0;
+  function s3IsActive() { return document.getElementById('fp-3')?.classList.contains('active'); }
+
+  function s3BuildStep(step) {
+    document.getElementById('s3-category').textContent = step.cat;
+    document.getElementById('s3-counter').textContent = step.counter;
+    const sfill = document.getElementById('s3-sfill');
+    const sthumb = document.getElementById('s3-sthumb');
+    const sval = document.getElementById('s3-sval');
+    if (sfill) { sfill.style.transition = 'none'; sfill.style.width = '0%'; }
+    if (sthumb) { sthumb.style.transition = 'none'; sthumb.style.left = '0%'; }
+    if (sval) sval.textContent = '—';
+    const cfs = document.getElementById('s3-cofounders');
+    if (!cfs) return;
+    cfs.innerHTML = '';
+    s3CofoundrNames.forEach((name, ci) => {
+      const row = document.createElement('div');
+      row.className = 's3-cf-row';
+      const dots = Array.from({length: 10}, (_, di) =>
+        `<div class="s3-dot" id="s3-d-${ci}-${di+1}">${di+1}</div>`
+      ).join('');
+      row.innerHTML = `<div class="s3-cf-name">${name}</div><div class="s3-dots">${dots}</div>`;
+      cfs.appendChild(row);
+    });
+  }
+
+  function s3AnimateStep(step) {
+    if (!s3IsActive()) return;
+    // Animate slider
+    s3Timer = setTimeout(() => {
+      const pct = (step.importance / 10) * 100;
+      const sfill = document.getElementById('s3-sfill');
+      const sthumb = document.getElementById('s3-sthumb');
+      const sval = document.getElementById('s3-sval');
+      if (sfill) { sfill.style.transition = 'width 0.7s cubic-bezier(0.16,1,0.3,1)'; sfill.style.width = pct + '%'; }
+      if (sthumb) { sthumb.style.transition = 'left 0.7s cubic-bezier(0.16,1,0.3,1)'; sthumb.style.left = pct + '%'; }
+      if (sval) sval.textContent = step.importance;
+    }, 120);
+    // Animate scores per cofounder
+    step.scores.forEach((score, ci) => {
+      s3Timer = setTimeout(() => {
+        if (!s3IsActive()) return;
+        const dot = document.getElementById(`s3-d-${ci}-${score}`);
+        if (dot) dot.classList.add('selected');
+      }, 700 + ci * 420);
+    });
+    // Advance to next step
+    const totalDelay = 700 + step.scores.length * 420 + 800;
+    s3Timer = setTimeout(() => {
+      if (!s3IsActive()) return;
+      s3StepIdx = (s3StepIdx + 1) % s3Steps.length;
+      const next = s3Steps[s3StepIdx];
+      s3BuildStep(next);
+      s3AnimateStep(next);
+    }, totalDelay);
+  }
+
+  function s3Run() {
+    if (!s3IsActive()) return;
+    s3StepIdx = 0;
+    s3BuildStep(s3Steps[0]);
+    s3AnimateStep(s3Steps[0]);
+  }
+
+  // ── fp-4: Expert Guidance (chalk.png) ──
+  const s4Msgs = [
+    { text: "Hey Tim, what do you recommend for our vesting schedule.", sent: true },
+    { text: "Happy to help!", sent: false },
+    { text: "I'd recommend 4-year vest with a 1-year cliff for both founders.", sent: false },
+  ];
+  let s4Timer = null;
+  function s4IsActive() { return document.getElementById('fp-4')?.classList.contains('active'); }
+  function s4ClearMessages() {
+    const el = document.getElementById('s4-messages');
+    if (el) el.innerHTML = '';
+  }
+  function s4ShowMsg(idx) {
+    if (!s4IsActive()) return;
+    if (idx >= s4Msgs.length) {
+      s4Timer = setTimeout(() => { if (s4IsActive()) { s4ClearMessages(); s4ShowMsg(0); } }, 2000);
+      return;
+    }
+    const msgs = document.getElementById('s4-messages');
+    if (!msgs) return;
+    const msg = s4Msgs[idx];
+
+    if (msg.sent) {
+      // Sent messages appear directly on the right, no typing indicator
+      const bubble = document.createElement('div');
+      bubble.className = 's4-bubble sent';
+      bubble.textContent = msg.text;
+      msgs.appendChild(bubble);
+      s4Timer = setTimeout(() => bubble.classList.add('show'), 30);
+      s4Timer = setTimeout(() => s4ShowMsg(idx + 1), 1200);
+    } else {
+      // Received messages show typing indicator first
+      const typing = document.createElement('div');
+      typing.className = 's4-typing';
+      typing.innerHTML = `<div class="s4-dot-anim"></div><div class="s4-dot-anim"></div><div class="s4-dot-anim"></div>`;
+      msgs.appendChild(typing);
+      s4Timer = setTimeout(() => typing.classList.add('show'), 30);
+      s4Timer = setTimeout(() => {
+        if (!s4IsActive()) return;
+        typing.classList.remove('show');
+        s4Timer = setTimeout(() => {
+          if (!s4IsActive()) return;
+          typing.remove();
+          const bubble = document.createElement('div');
+          bubble.className = 's4-bubble';
+          bubble.textContent = msg.text;
+          msgs.appendChild(bubble);
+          s4Timer = setTimeout(() => bubble.classList.add('show'), 30);
+          s4Timer = setTimeout(() => s4ShowMsg(idx + 1), 1900);
+        }, 280);
+      }, 1300);
+    }
+  }
+  function s4Run() {
+    if (!s4IsActive()) return;
+    s4ClearMessages();
+    s4ShowMsg(0);
+  }
+
+  // ── fp-2: Final Review (paper.png) ──
+  const s2rSecs = ['Formation & Purpose', 'Cofounder Info', 'Equity Allocation', 'Vesting Schedule', 'Decision-Making'];
+  let s2rTimer = null;
+  function s2rIsActive() { return document.getElementById('fp-2')?.classList.contains('active'); }
+  function s2rBuildDOM() {
+    const el = document.getElementById('s2r-sections');
+    const progress = document.getElementById('s2r-progress');
+    const footer = document.getElementById('s2r-footer');
+    if (!el) return;
+    el.innerHTML = '';
+    s2rSecs.forEach((name, i) => {
+      const div = document.createElement('div');
+      div.className = 's2r-section';
+      div.id = `s2r-sec-${i}`;
+      div.innerHTML = `<span class="s2r-check" id="s2r-chk-${i}"></span>${name}`;
+      el.appendChild(div);
+    });
+    if (progress) { progress.style.transition = 'none'; progress.style.width = '0%'; }
+    if (footer) { footer.className = 's2r-footer'; footer.textContent = ''; }
+  }
+  function s2rRun() {
+    if (!s2rIsActive()) return;
+    s2rBuildDOM();
+    s2rTimer = setTimeout(() => {
+      if (!s2rIsActive()) return;
+      const progress = document.getElementById('s2r-progress');
+      if (progress) { progress.style.transition = 'width 2.2s cubic-bezier(0.16,1,0.3,1)'; progress.style.width = '100%'; }
+      s2rSecs.forEach((_, i) => {
+        s2rTimer = setTimeout(() => {
+          if (!s2rIsActive()) return;
+          const sec = document.getElementById(`s2r-sec-${i}`);
+          const chk = document.getElementById(`s2r-chk-${i}`);
+          if (sec) sec.classList.add('done');
+          if (chk) chk.textContent = '✓';
+        }, 280 + i * 350);
+      });
+      const totalMs = 280 + s2rSecs.length * 350 + 400;
+      s2rTimer = setTimeout(() => {
+        if (!s2rIsActive()) return;
+        const footer = document.getElementById('s2r-footer');
+        if (footer) { footer.textContent = '✓ Ready for signatures'; footer.classList.add('show'); }
+        s2rTimer = setTimeout(() => { if (s2rIsActive()) s2rRun(); }, 2200);
+      }, totalMs);
+    }, 120);
+  }
+
+  // ── Panel activation observer — starts animations on scroll AND click ──
+  const panelActivationObserver = new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+      const el = m.target;
+      if (!el.classList.contains('active')) return;
+      const id = el.id;
+      if (id === 'fp-1') { s2Running = false; s2Start(); }
+      if (id === 'fp-3') { if (s3Timer) clearTimeout(s3Timer); s3Run(); }
+      if (id === 'fp-4') { if (s4Timer) clearTimeout(s4Timer); s4Run(); }
+      if (id === 'fp-2') { if (s2rTimer) clearTimeout(s2rTimer); s2rRun(); }
     });
   });
+  document.querySelectorAll('#fp-1, #fp-2, #fp-3, #fp-4').forEach(p =>
+    panelActivationObserver.observe(p, { attributes: true, attributeFilter: ['class'] })
+  );
 </script>
 </body>
 </html>
