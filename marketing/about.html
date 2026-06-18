@@ -76,13 +76,29 @@
     }
     .about-hero h1 em { font-style:italic; }
 
-    .about-sections { padding: 0 52px 140px; }
+    .about-sections { padding: 0 52px 140px; display: flex; flex-direction: column; gap: 12px; }
     .about-section {
       display:grid; grid-template-columns:240px 1fr; gap:80px;
-      padding: 80px 0;
+      padding: 64px 56px;
+      background: var(--bg-3);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
       opacity: 0; transform: translateY(32px);
       transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
     }
+    .about-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 120px; height: 120px;
+      background: var(--bg);
+      border-radius: 0 100% 0 0;
+      transform-origin: bottom left;
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    .about-section:hover::after { transform: scale(0); }
     .about-section.visible { opacity: 1; transform: translateY(0); }
     .about-section-left {
       padding-top: 4px;
