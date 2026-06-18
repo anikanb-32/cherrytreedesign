@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About – Cherrytree</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F6F3EE; --bg-2: #F0EDE8; --bg-3: #E3DFD8;
+      --ink: #1a1a1a; --muted: #6b6560; --faint: #aaa49c;
+      --green: #4B7263; --green-lt: #6a9e8a; --green-bg: #eaf1ee;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+    .grain-svg { position:fixed; inset:0; width:100vw; height:100vh; z-index:9999; pointer-events:none; opacity:0.038; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:16px; left:50%; transform:translateX(-50%);
+      z-index:200; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+      width:calc(100% - 80px); max-width:940px;
+      padding:6px 10px 6px 22px;
+      background:rgba(246,243,238,0.86);
+      backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+      border-radius:50px;
+      box-shadow:0 4px 24px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+      white-space:nowrap;
+    }
+    .nav-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+    .nav-logo img { width:24px; height:24px; object-fit:contain; }
+    .nav-logo-text { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
+    .nav-links { display:flex; gap:6px; list-style:none; align-items:center; justify-self:center; margin:0; }
+    .nav-links > li { position:relative; }
+    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:50px; position:relative; }
+    .nav-links > li > a::after { content:''; position:absolute; bottom:4px; left:11px; right:11px; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform 0.22s cubic-bezier(0.16,1,0.3,1); }
+    .nav-links > li > a:hover { color:var(--ink); }
+    .nav-links > li > a:hover::after { transform:scaleX(1); }
+    .nav-chevron { font-size:9px; opacity:0.55; transition:transform 0.2s; display:inline-block; }
+    .has-dropdown:hover .nav-chevron { transform:rotate(180deg); }
+    .nav-dropdown {
+      position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(-6px);
+      background:#fff; border-radius:12px;
+      box-shadow:0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+      padding:10px; min-width:220px;
+      display:flex; flex-direction:column; gap:2px;
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition:opacity 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.18s cubic-bezier(0.16,1,0.3,1), visibility 0.18s;
+    }
+    .has-dropdown:hover .nav-dropdown { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+    .nav-dd-item { display:flex; flex-direction:column; align-items:flex-start; gap:3px; padding:11px 16px; text-decoration:none; border-radius:8px; transition:background 0.12s; }
+    .nav-dd-item:hover { background:var(--bg-2); }
+    .nav-dd-name { font-size:13px; font-weight:400; color:var(--ink); }
+    .nav-dd-sub { font-size:11.5px; color:var(--faint); }
+    .nav-right { display:flex; align-items:center; gap:6px; justify-self:end; }
+    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:50px; }
+    .nav-signin:hover { color:var(--ink); }
+    .nav-cta { background:var(--ink); color:#fff; border-radius:50px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
+    .nav-cta:hover { background:#2d2a22; }
+
+    /* ── PAGE ── */
+    .about-hero {
+      padding: 180px 52px 120px;
+      text-align: center;
+    }
+    .about-hero h1 {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(44px, 6.5vw, 88px);
+      font-weight:400; letter-spacing:-2.5px; line-height:1.08;
+      animation:fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+    }
+    .about-hero h1 em { font-style:italic; }
+
+    .about-sections { padding: 0 52px 140px; }
+    .about-section {
+      display:grid; grid-template-columns:240px 1fr; gap:80px;
+      padding: 80px 0;
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .about-section.visible { opacity: 1; transform: translateY(0); }
+    .about-section-left {
+      padding-top: 4px;
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .about-section:hover .about-section-left { transform: translateX(10px); }
+    .about-section-overline { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--faint); margin-bottom:14px; }
+    .about-section-title { font-family:'Instrument Serif',serif; font-size:clamp(32px,3.5vw,46px); font-weight:400; letter-spacing:-1px; line-height:1.1; color:var(--ink); }
+    .about-section-right { padding-top: 6px; }
+    .about-section-right p { font-size:15px; font-weight:300; color:var(--muted); line-height:1.78; margin-bottom:18px; }
+    .about-section-right p:last-child { margin-bottom:0; }
+    .about-section-right em { font-style:italic; color:var(--ink); }
+    .about-job-title { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); margin-bottom:16px; }
+    .about-apply { font-size:14px; font-weight:300; color:var(--muted); font-style:italic; margin-top:20px; }
+    .about-apply a { color:var(--green); text-decoration:none; }
+    .about-apply a:hover { text-decoration:underline; }
+
+    /* ── FOOTER ── */
+    footer { background:var(--bg-3); padding:60px 52px 48px; }
+    .footer-top { display:flex; justify-content:space-between; align-items:flex-start; }
+    .footer-brand { display:flex; flex-direction:column; gap:0; }
+    .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; margin-bottom:10px; }
+    .footer-logo img { width:22px; height:22px; object-fit:contain; }
+    .footer-logo-name { font-family:'Instrument Serif',serif; font-size:16px; color:var(--ink); }
+    .footer-copy { font-size:12px; font-weight:300; color:var(--faint); }
+    .footer-cols { display:flex; gap:56px; }
+    .footer-col-head { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--faint); margin-bottom:16px; }
+    .footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-links a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:var(--ink); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="marketing4.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="nav-logo-text">Cherrytree</span>
+  </a>
+  <ul class="nav-links">
+    <li class="has-dropdown">
+      <a href="#">Products <span class="nav-chevron">▾</span></a>
+      <div class="nav-dropdown">
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Equity Calculator</span>
+          <span class="nav-dd-sub">Fair splits, instantly</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Contract Creator</span>
+          <span class="nav-dd-sub">Custom cofounder agreements</span>
+        </a>
+      </div>
+    </li>
+    <li class="has-dropdown">
+      <a href="#">Resources <span class="nav-chevron">▾</span></a>
+      <div class="nav-dropdown">
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Coaching</span>
+          <span class="nav-dd-sub">1-on-1 cofounder guidance</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Newsletter</span>
+          <span class="nav-dd-sub">Founder insights, weekly</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Attorney</span>
+          <span class="nav-dd-sub">Legal review on demand</span>
+        </a>
+      </div>
+    </li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-signin" href="#">Sign in</a>
+    <a class="nav-cta" href="../product/survey.html">Get started</a>
+  </div>
+</nav>
+
+<div class="about-hero">
+  <h1>Big ideas grow<br><em>with the right company.</em></h1>
+</div>
+
+<div class="about-sections">
+  <div class="about-section">
+    <div class="about-section-left">
+      <div class="about-section-overline">Note from our CEO</div>
+      <div class="about-section-title">The Backstory</div>
+    </div>
+    <div class="about-section-right">
+      <p>Hey, I'm Tim. I started Cherrytree after learning firsthand how challenging yet rewarding it is to build something with cofounders. Since then, I've taught over a thousand entrepreneurship students, written a book on cofounder dynamics, and teamed up with seasoned coaches, attorneys, and AI experts. We've now worked with hundreds of teams just like yours across a dozen industries.</p>
+      <p>Our mission is simple: <em>to create cofounder magic.</em></p>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <div class="about-section-left">
+      <div class="about-section-overline">We're hiring</div>
+      <div class="about-section-title">Work With Us</div>
+    </div>
+    <div class="about-section-right">
+      <div class="about-job-title">Student Internship (part-time)</div>
+      <p>We're looking for an intern who's genuinely excited about startups and building things from the ground up. You'll work closely with our CEO & Founder, getting hands-on experience across the business from research and growth strategies to operations, project coordination, and fundraising. This is a remote role, but bonus points if you're in SF or Berkeley.</p>
+      <p class="about-apply"><em><a href="#">Apply here.</a></em></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="footer-logo" href="marketing4.html">
+        <img src="../cherries.png" alt="Cherrytree" />
+        <span class="footer-logo-name">Cherrytree</span>
+      </a>
+      <span class="footer-copy">© 2026 Cherrytree, LLC</span>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-head">Product</div>
+        <ul class="footer-links">
+          <li><a href="#">Contract Creator</a></li>
+          <li><a href="#">Equity Calculator</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Coaching</a></li>
+          <li><a href="#">Attorney</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.about-section').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.12) + 's';
+    observer.observe(el);
+  });
+</script>
+
+<svg class="grain-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+</body>
+</html>
