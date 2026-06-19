@@ -103,7 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
   if (createCard) {
     createCard.addEventListener('click', () => {
       createCard.style.transform = 'scale(0.98)';
-      setTimeout(() => { createCard.style.transform = ''; }, 150);
+      setTimeout(() => {
+        createCard.style.transform = '';
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+          position: fixed; inset: 0;
+          background: #F6F3EE;
+          z-index: 9999; pointer-events: none;
+          opacity: 0; transition: opacity 0.35s ease;
+        `;
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          overlay.style.opacity = '1';
+          sessionStorage.setItem('pageTransition', 'fromDashboard');
+          setTimeout(() => { window.location.href = 'survey.html'; }, 380);
+        }));
+      }, 150);
     });
   }
 

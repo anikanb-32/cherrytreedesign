@@ -28,7 +28,7 @@
       padding:6px 10px 6px 22px;
       background:rgba(246,243,238,0.86);
       backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-      border-radius:50px;
+      border-radius:16px;
       box-shadow:0 4px 24px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
       white-space:nowrap;
     }
@@ -37,7 +37,7 @@
     .nav-logo-text { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); }
     .nav-links { display:flex; gap:6px; list-style:none; align-items:center; justify-self:center; margin:0; }
     .nav-links > li { position:relative; }
-    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:50px; position:relative; }
+    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:16px; position:relative; }
     .nav-links > li > a::after { content:''; position:absolute; bottom:4px; left:11px; right:11px; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform 0.22s cubic-bezier(0.16,1,0.3,1); }
     .nav-links > li > a:hover { color:var(--ink); }
     .nav-links > li > a:hover::after { transform:scaleX(1); }
@@ -58,9 +58,9 @@
     .nav-dd-name { font-size:13px; font-weight:400; color:var(--ink); }
     .nav-dd-sub { font-size:11.5px; color:var(--faint); }
     .nav-right { display:flex; align-items:center; gap:6px; justify-self:end; }
-    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:50px; }
+    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:16px; }
     .nav-signin:hover { color:var(--ink); }
-    .nav-cta { background:var(--ink); color:#fff; border-radius:50px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
+    .nav-cta { background:var(--ink); color:#fff; border-radius:16px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
     .nav-cta:hover { background:#2d2a22; }
 
     /* ── PAGE ── */
@@ -173,8 +173,8 @@
     <li><a href="about.html">About</a></li>
   </ul>
   <div class="nav-right">
-    <a class="nav-signin" href="#">Sign in</a>
-    <a class="nav-cta" href="../product/survey.html">Get started</a>
+    <a class="nav-signin" href="../product/signin.html">Sign in</a>
+    <a class="nav-cta" href="../product/signup.html">Get started</a>
   </div>
 </nav>
 
