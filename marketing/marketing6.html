@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cherrytree – Build your cofounder agreement</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F6F3EE;
+      --bg-2:     #F0EDE8;
+      --bg-3:     #E3DFD8;
+      --ink:      #1a1a1a;
+      --muted:    #6b6560;
+      --faint:    #aaa49c;
+      --green:    #4B7263;
+      --green-lt: #6a9e8a;
+      --green-bg: #eaf1ee;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      transition: background-color 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    .grain-svg {
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 9999; pointer-events: none;
+      opacity: 0.038;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes slideLineUp { from{transform:translateY(105%);}to{transform:translateY(0);} }
+    @keyframes fadeUp    { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn    { from{opacity:0;}to{opacity:1;} }
+    @keyframes scaleIn   { from{opacity:0;transform:scale(0.94);}to{opacity:1;transform:scale(1);} }
+    @keyframes slideLeft { from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);} }
+    @keyframes pulse     { 0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.1);} }
+    @keyframes lineGrow  { from{transform:scaleX(0);}to{transform:scaleX(1);} }
+    @keyframes orb1      { 0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-20px) scale(1.05);} }
+    @keyframes orb2      { 0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-20px,25px) scale(0.95);} }
+
+    /* Scroll reveal system */
+    .rv         { opacity:0; transform:translateY(28px) scale(0.99); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .rv.in      { opacity:1; transform:translateY(0) scale(1); }
+    .rv-l       { opacity:0; transform:translateX(-32px); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .rv-l.in    { opacity:1; transform:translateX(0); }
+    .rv-r       { opacity:0; transform:translateX(32px); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .rv-r.in    { opacity:1; transform:translateX(0); }
+    .rv-scale   { opacity:0; transform:scale(0.92); transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .rv-scale.in{ opacity:1; transform:scale(1); }
+    .d1{transition-delay:0.08s;} .d2{transition-delay:0.16s;} .d3{transition-delay:0.24s;} .d4{transition-delay:0.32s;} .d5{transition-delay:0.40s;}
+
+    /* Clip-reveal for headlines */
+    .clip-wrap  { overflow:hidden; }
+    .clip-inner { display:block; }
+    .clip-wrap.in .clip-inner { animation:clipUp 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+    .clip-wrap.d1.in .clip-inner { animation-delay:0.1s; }
+    .clip-wrap.d2.in .clip-inner { animation-delay:0.2s; }
+    .clip-wrap.d3.in .clip-inner { animation-delay:0.3s; }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:16px; left:50%; transform:translateX(-50%);
+      z-index:200; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+      width:calc(100% - 80px); max-width:940px;
+      padding:6px 10px 6px 22px;
+      background:rgba(246,243,238,0.86);
+      backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+      border-radius:16px;
+      box-shadow:0 4px 24px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+      white-space:nowrap;
+    }
+    .nav-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+    .nav-logo img { width:24px; height:24px; object-fit:contain; }
+    .nav-logo-text { font-family:'Instrument Serif',serif; font-size:17px; color:var(--ink); letter-spacing:0.04em; }
+    .nav-links { display:flex; gap:6px; list-style:none; align-items:center; justify-self:center; margin:0; }
+    .nav-links > li { position:relative; }
+    .nav-links > li > a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; letter-spacing:0.01em; padding:6px 11px; display:flex; align-items:center; gap:4px; border-radius:8px; position:relative; }
+    .nav-links > li > a::after { content:''; position:absolute; bottom:4px; left:11px; right:11px; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform 0.22s cubic-bezier(0.16,1,0.3,1); }
+    .nav-links > li > a:hover { color:var(--ink); }
+    .nav-links > li > a:hover::after { transform:scaleX(1); }
+    .nav-chevron { font-size:9px; opacity:0.55; transition:transform 0.2s; display:inline-block; }
+    .has-dropdown:hover .nav-chevron { transform:rotate(180deg); }
+    .nav-dropdown {
+      position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(-6px);
+      background:#fff; border-radius:12px;
+      box-shadow:0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+      padding:10px; min-width:220px;
+      display:flex; flex-direction:column; gap:2px;
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition:opacity 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.18s cubic-bezier(0.16,1,0.3,1), visibility 0.18s;
+    }
+    .has-dropdown:hover .nav-dropdown { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+    .nav-dd-item { display:flex; flex-direction:column; align-items:flex-start; gap:3px; padding:11px 16px; text-decoration:none; border-radius:8px; transition:background 0.12s; }
+    .nav-dd-item:hover { background:var(--bg-2); }
+    .nav-dd-name { font-size:13px; font-weight:400; color:var(--ink); }
+    .nav-dd-sub { font-size:11.5px; color:var(--faint); }
+    .nav-right { display:flex; align-items:center; gap:6px; justify-self:end; }
+    .nav-signin { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; padding:7px 12px; border-radius:8px; }
+    .nav-signin:hover { color:var(--ink); }
+    .nav-cta { background:var(--ink); color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:400; text-decoration:none; transition:background 0.15s; }
+    .nav-cta:hover { background:#2d2a22; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      padding: 160px 52px 100px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      position: relative; overflow: hidden;
+      background: transparent;
+    }
+    .hero-orb {
+      position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none;
+    }
+    .hero-orb-1 {
+      width:500px; height:500px; top:-100px; left:-100px;
+      background:radial-gradient(circle, rgba(75,114,99,0.12) 0%, transparent 70%);
+      animation:orb1 12s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width:400px; height:400px; bottom:-80px; right:-80px;
+      background:radial-gradient(circle, rgba(75,114,99,0.09) 0%, transparent 70%);
+      animation:orb2 16s ease-in-out infinite;
+    }
+    .hero-orb-3 {
+      width:300px; height:300px; top:50%; left:50%; transform:translate(-50%,-50%);
+      background:radial-gradient(circle, rgba(75,114,99,0.05) 0%, transparent 70%);
+      animation:orb1 20s ease-in-out infinite reverse;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 400; letter-spacing: 0.03em;
+      color: var(--muted); margin-bottom: 36px;
+      opacity: 0; animation: fadeIn 0.7s ease 0.3s forwards;
+    }
+    .hero-eyebrow-mark {
+      width: 24px; height: 1.5px; background: var(--green);
+      border-radius: 1px; flex-shrink: 0;
+    }
+    .hero-headline {
+      font-family:'Instrument Serif',serif;
+      font-size:clamp(48px, 7vw, 96px);
+      font-weight:400; letter-spacing:-0.5px; line-height:1.08;
+      margin-bottom:28px; max-width:900px;
+    }
+    .hero-headline em { font-style:italic; color:var(--green); }
+    .hero-cursor { display:inline-block; width:2.5px; height:1.1em; background:var(--green); margin-left:3px; vertical-align:middle; border-radius:1px; animation:cursorBlink 0.85s step-end infinite; }
+    @keyframes cursorBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    .hero-headline .line { display:block; overflow:hidden; padding-bottom:0.08em; margin-bottom:-0.08em; }
+    .hero-headline .line .inner { display:block; }
+    .hero-sub {
+      font-size:15px; font-weight:300; color:var(--muted);
+      max-width:620px; line-height:1.72; margin-bottom:48px;
+    }
+    .hero-actions {
+      display:flex; align-items:center; gap:16px; margin-bottom:80px;
+    }
+    .btn-primary {
+      background:var(--ink); color:#fff; border-radius:7px;
+      padding:13px 28px; font-size:14px; font-weight:400;
+      font-family:'Outfit',sans-serif; text-decoration:none;
+      transition:background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary:hover { background:#2d2a22; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+    .btn-ghost {
+      color:var(--muted); font-size:14px; font-weight:300;
+      text-decoration:none; transition:color 0.15s; display:inline-flex; align-items:center; gap:5px;
+    }
+    .btn-ghost:hover { color:var(--ink); }
+
+    /* Product mockup */
+    .hero-strip {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0; top: 46%;
+      background: var(--bg-3);
+      border-radius: 32px 32px 0 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .hero-strip::before {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 300px; height: 300px;
+      background: var(--bg);
+      border-radius: 50%;
+      transition: transform 0.65s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .hero-strip:hover::before {
+      transform: translate(-28px, -28px);
+    }
+    .hero-visual {
+      position: relative; z-index: 1;
+      width:100%; max-width:900px;
+      background:#fff; border-radius:16px;
+      box-shadow:0 40px 100px rgba(0,0,0,0.14), 0 8px 24px rgba(0,0,0,0.07);
+      overflow:hidden;
+    }
+    .hv-bar {
+      background:var(--bg-2); padding:13px 20px;
+      display:flex; align-items:center; gap:7px;
+    }
+    .hv-dot { width:10px; height:10px; border-radius:50%; }
+    .hv-dot.r{background:#ff5f57;} .hv-dot.y{background:#febc2e;} .hv-dot.g{background:#28c840;}
+    .hv-url {
+      flex:1; margin:0 14px; background:var(--bg-3); border-radius:5px;
+      padding:5px 12px; font-size:11px; color:var(--faint); text-align:center;
+    }
+    .hv-body { display:grid; grid-template-columns:210px 1fr; height:440px; }
+    .hv-sidebar { background:var(--bg-2); padding:22px 16px; }
+    .hv-logo { display:flex; align-items:center; gap:7px; margin-bottom:24px; }
+    .hv-logo-mark { width:18px; height:18px; background:var(--green); border-radius:4px; }
+    .hv-logo-name { font-family:'Instrument Serif',serif; font-size:14px; color:var(--ink); letter-spacing:0.04em; }
+    .hv-prog-lbl { font-size:9px; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:var(--faint); margin-bottom:5px; }
+    .hv-prog-bar { height:3px; background:var(--bg-3); border-radius:2px; margin-bottom:22px; overflow:hidden; }
+    .hv-prog-fill { height:100%; width:30%; background:var(--green); border-radius:2px; transition:width 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .hv-nav-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:6px; margin-bottom:3px; font-size:11px; font-weight:300; color:var(--muted); transition:background 0.25s, color 0.25s; }
+    .hv-nav-item.active { background:var(--bg-3); color:var(--ink); font-weight:400; }
+    .hv-nav-dot { width:6px; height:6px; border-radius:50%; background:var(--bg-3); flex-shrink:0; transition:background 0.3s; }
+    .hv-nav-dot.done{background:var(--green);} .hv-nav-dot.act{background:var(--ink);}
+    .hv-main { background:#fff; position:relative; overflow:hidden; }
+    .hv-screen {
+      position:absolute; inset:0; padding:32px 36px;
+      opacity:0; transform:translateX(22px);
+      transition:opacity 0.38s cubic-bezier(0.16,1,0.3,1), transform 0.38s cubic-bezier(0.16,1,0.3,1);
+      pointer-events:none;
+    }
+    .hv-screen.active { opacity:1; transform:translateX(0); pointer-events:auto; }
+    .hv-screen.exit { opacity:0; transform:translateX(-22px); }
+    .hv-sec-lbl { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--faint); margin-bottom:10px; }
+    .hv-q-title { font-family:'Instrument Serif',serif; font-size:22px; color:var(--ink); margin-bottom:6px; line-height:1.2; letter-spacing:0.03em; }
+    .hv-q-hint { font-size:12px; font-weight:300; color:var(--muted); margin-bottom:22px; line-height:1.65; max-width:420px; }
+    .hv-input-field {
+      width:100%; padding:10px 14px; margin-bottom:20px;
+      background:var(--bg); border:1.5px solid var(--bg-3); border-radius:8px;
+      font-family:'Outfit',sans-serif; font-size:13px; font-weight:300; color:var(--ink);
+      display:flex; align-items:center; min-height:44px; transition:border-color 0.2s;
+    }
+    .hv-input-field.focused { border-color:var(--ink); }
+    .hv-inp-cursor {
+      display:inline-block; width:1.5px; height:14px; background:var(--ink);
+      margin-left:1px; vertical-align:middle;
+      animation:hvBlink 0.85s step-end infinite;
+    }
+    .hv-inp-cursor.off { opacity:0; animation:none; }
+    @keyframes hvBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    .hv-options { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+    .hv-opt {
+      padding:9px 16px; border-radius:8px;
+      border:1.5px solid var(--bg-3); background:var(--bg);
+      font-size:12px; font-weight:300; color:var(--muted);
+      transition:all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hv-opt.selected { border-color:var(--ink); background:var(--ink); color:#fff; }
+    .hv-continue {
+      padding:10px 22px; background:var(--ink); color:#fff; border:none;
+      border-radius:8px; font-family:'Outfit',sans-serif; font-size:13px; font-weight:400;
+      cursor:default; transition:transform 0.12s, background 0.12s; display:inline-block;
+    }
+    .hv-continue.clicking { transform:scale(0.93); background:#333; }
+    .hv-two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+    .hv-field-group { display:flex; flex-direction:column; gap:4px; }
+    .hv-field-lbl { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); }
+    .hv-field-val { background:var(--bg); border:1.5px solid var(--bg-3); border-radius:7px; padding:9px 12px; font-size:12px; color:var(--ink); font-weight:300; min-height:38px; display:flex; align-items:center; }
+
+    /* ── LOGO WALL ── */
+    .logowall {
+      padding: 48px 52px 72px;
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
+    }
+    .logowall-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--faint);
+    }
+    .logowall-track-wrap {
+      width: 100%; overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    }
+    .logowall-track {
+      display: flex; align-items: center; gap: 56px;
+      width: max-content;
+      animation: logoScroll 28s linear infinite;
+    }
+    .logowall-track:hover { animation-play-state: paused; }
+    @keyframes logoScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .lw-logo {
+      display: flex; align-items: center; gap: 8px;
+      opacity: 0.38; transition: opacity 0.22s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .lw-logo:hover { opacity: 0.7; }
+    .lw-mark {
+      width: 22px; height: 22px; border-radius: 5px;
+      background: var(--ink); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lw-mark svg { width: 12px; height: 12px; fill: #fff; }
+    .lw-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .lw-divider {
+      width: 1px; height: 20px; background: var(--bg-3); flex-shrink: 0;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      background: transparent;
+      padding: 140px 52px;
+    }
+    .feat-header { margin-bottom:72px; }
+    .feat-header .overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:14px; }
+    .feat-header h2 { font-family:'Instrument Serif',serif; font-size:clamp(32px,4.5vw,58px); font-weight:400; letter-spacing:0.02em; line-height:1.05; }
+    .feat-header h2 em { font-style:italic; color:var(--green); }
+    .feat-body { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+    .feat-visual {
+      position:sticky; top:calc(50vh - 220px);
+      background:#fff; border-radius:14px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+      overflow:hidden;
+      transition:box-shadow 0.3s;
+    }
+    .feat-panel { display:none; padding:36px; }
+    .feat-panel.active { display:block; animation:fadeIn 0.5s ease; }
+    .feat-panel-tag { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--green); margin-bottom:16px; }
+    .feat-panel-title { font-family:'Instrument Serif',serif; font-size:22px; color:var(--ink); margin-bottom:10px; letter-spacing:0.04em; }
+    .feat-panel-body { font-size:13.5px; font-weight:300; color:var(--muted); line-height:1.7; margin-bottom:20px; }
+    .feat-panel-mock {
+      background:var(--bg-2); border-radius:10px; padding:20px;
+      border:1px solid rgba(0,0,0,0.06);
+    }
+    .feat-panel-mock-row {
+      display:flex; align-items:center; gap:10px; padding:10px 12px;
+      background:#fff; border-radius:7px; border:1px solid rgba(0,0,0,0.05);
+      margin-bottom:8px; font-size:12px; color:var(--ink); font-weight:300;
+    }
+    .feat-panel-mock-row:last-child{margin-bottom:0;}
+    .feat-mock-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .feat-mock-dot.g{background:var(--green);} .feat-mock-dot.a{background:var(--ink);} .feat-mock-dot.f{background:var(--faint);}
+    .feat-mock-badge { margin-left:auto; font-size:10px; background:var(--green-bg); color:var(--green); padding:2px 8px; border-radius:20px; flex-shrink:0; }
+
+    /* ── Step 1 ambient panel ── */
+    #fp-0 { padding: 0; position: relative; min-height: 380px; }
+    .step1-bg {
+      position: absolute; inset: 0;
+      background: url('images/ambient.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .step1-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.60) 100%);
+    }
+    .step1-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .step1-card {
+      background: rgba(255,255,255,0.13);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 12px; padding: 14px;
+    }
+    .step1-card-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      margin-bottom: 10px; padding: 0 2px;
+    }
+    .step1-row {
+      display: flex; align-items: center; gap: 9px;
+      background: rgba(255,255,255,0.09); border-radius: 7px;
+      padding: 8px 12px; margin-bottom: 6px;
+      font-size: 12px; color: #fff; font-weight: 300;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .step1-row-new {
+      opacity: 0; transform: translateY(-5px);
+      transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .step1-row-new.visible { opacity: 1; transform: translateY(0); }
+    .step1-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .step1-dot.green { background: var(--green); }
+    .step1-dot.light { background: rgba(255,255,255,0.65); }
+    .step1-row-email { flex: 1; }
+    .step1-badge-s {
+      font-size: 9px; font-weight: 500; padding: 2px 7px;
+      border-radius: 20px; flex-shrink: 0; letter-spacing: 0.01em;
+    }
+    .step1-badge-s.owner { background: rgba(75,114,99,0.45); color: rgba(255,255,255,0.85); }
+    .step1-badge-s.added { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.65); }
+    .step1-input-area { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+    .step1-input {
+      flex: 1; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22); border-radius: 7px;
+      padding: 8px 12px; font-size: 12px; color: rgba(255,255,255,0.85);
+      font-weight: 300; min-height: 34px; display: flex; align-items: center;
+    }
+    .step1-icursor {
+      display: inline-block; width: 1.5px; height: 13px;
+      background: rgba(255,255,255,0.7); vertical-align: middle;
+      margin-left: 1px; animation: cursorBlink 0.85s step-end infinite;
+    }
+    .step1-btn {
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.22); border-radius: 7px;
+      padding: 7px 14px; font-size: 11px; font-weight: 400;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      transition: background 0.15s; white-space: nowrap; flex-shrink: 0;
+    }
+    .step1-btn.pressed { background: rgba(255,255,255,0.32); }
+
+    /* ── Step 2 wall panel ── */
+    #fp-1 { padding: 0; position: relative; min-height: 380px; }
+    .step2-bg {
+      position: absolute; inset: 0;
+      background: url('images/wall.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .step2-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.58) 100%);
+    }
+    .step2-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .step2-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .step2-card-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--faint);
+      margin-bottom: 10px; padding: 0 2px;
+    }
+    .step2-q {
+      border-radius: 8px; margin-bottom: 5px; overflow: hidden;
+      background: #fff;
+      transition: background 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s;
+    }
+    .step2-q.answered { background: var(--bg-2); opacity: 0.75; }
+    .step2-q-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; gap: 10px;
+    }
+    .step2-q-text {
+      font-size: 11.5px; font-weight: 400; color: var(--ink); line-height: 1.4; flex: 1;
+      transition: color 0.3s, font-size 0.3s;
+    }
+    .step2-q.answered .step2-q-text { color: var(--faint); font-size: 10.5px; }
+    .step2-q-answer {
+      font-size: 11px; font-weight: 400; color: var(--green);
+      flex-shrink: 0; opacity: 0; transition: opacity 0.3s 0.1s;
+    }
+    .step2-q.answered .step2-q-answer { opacity: 1; }
+    .step2-q-check {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; color: #fff; opacity: 0;
+      transition: opacity 0.3s 0.1s;
+    }
+    .step2-q.answered .step2-q-check { opacity: 1; }
+    .step2-q-body {
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows 0.42s cubic-bezier(0.16,1,0.3,1);
+    }
+    .step2-q.active .step2-q-body { grid-template-rows: 1fr; }
+    .step2-q-body-inner { overflow: hidden; padding: 0 12px; }
+    .step2-q.active .step2-q-body-inner { padding-bottom: 10px; }
+    .step2-input {
+      width: 100%; background: var(--bg);
+      border: 1px solid rgba(0,0,0,0.12); border-radius: 6px;
+      padding: 7px 10px; font-size: 12px; color: var(--ink);
+      font-weight: 300; display: flex; align-items: center; min-height: 32px;
+    }
+    .step2-icursor {
+      display: inline-block; width: 1.5px; height: 12px;
+      background: var(--ink); vertical-align: middle;
+      margin-left: 1px; animation: cursorBlink 0.85s step-end infinite;
+    }
+
+    /* ── fp-3: Equity Calculator (leaf.png) ── */
+    #fp-3 { padding: 0; position: relative; min-height: 380px; }
+    .s3-bg {
+      position: absolute; inset: 0;
+      background: url('images/leaf.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s3-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 100%);
+    }
+    .s3-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s3-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 16px 14px 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s3-progress-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+    .s3-category { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .s3-counter { font-size: 10.5px; color: var(--faint); }
+    .s3-section-lbl {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--faint); margin-bottom: 8px;
+    }
+    .s3-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .s3-slider-track {
+      flex: 1; height: 4px; background: var(--bg-3); border-radius: 2px; position: relative;
+    }
+    .s3-slider-fill {
+      position: absolute; left: 0; top: 0; height: 100%; background: var(--ink);
+      border-radius: 2px; width: 0%; transition: width 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s3-slider-thumb {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 14px; height: 14px; border-radius: 50%; background: var(--ink);
+      left: 0%; transition: left 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s3-slider-val { font-size: 12px; font-weight: 500; color: var(--ink); width: 18px; text-align: right; }
+    .s3-cf-row { margin-bottom: 10px; }
+    .s3-cf-name { font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 5px; }
+    .s3-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+    .s3-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid var(--bg-3); background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: var(--faint); cursor: default;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .s3-dot.selected { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+    /* ── fp-4: Expert Guidance (chalk.png) ── */
+    #fp-4 { padding: 0; position: relative; min-height: 380px; }
+    .s4-bg {
+      position: absolute; inset: 0;
+      background: url('images/chalk.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s4-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.58) 100%);
+    }
+    .s4-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s4-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s4-expert-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--bg-3);
+    }
+    .s4-avatar {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--green);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; flex-shrink: 0;
+    }
+    .s4-expert-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+    .s4-expert-role { font-size: 10.5px; color: var(--faint); }
+    .s4-online {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4caf6e; margin-left: auto; flex-shrink: 0;
+    }
+    .s4-messages { display: flex; flex-direction: column; align-items: stretch; gap: 7px; min-height: 72px; }
+    .s4-bubble {
+      background: var(--bg-2); border-radius: 10px 10px 10px 2px;
+      padding: 8px 11px; font-size: 11.5px; font-weight: 300; color: var(--ink); line-height: 1.5;
+      align-self: flex-start;
+      opacity: 0; transform: translateY(5px);
+      transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s4-bubble.sent {
+      background: var(--ink); color: #fff;
+      border-radius: 10px 10px 2px 10px;
+      align-self: flex-end;
+    }
+    .s4-bubble.show { opacity: 1; transform: translateY(0); }
+    .s4-typing {
+      display: flex; gap: 4px; align-items: center; padding: 9px 12px;
+      background: var(--bg-2); border-radius: 10px 10px 10px 2px;
+      width: fit-content; opacity: 0; transition: opacity 0.25s;
+    }
+    .s4-typing.show { opacity: 1; }
+    .s4-dot-anim {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--faint);
+      animation: s4pulse 1.2s ease-in-out infinite;
+    }
+    .s4-dot-anim:nth-child(2) { animation-delay: 0.15s; }
+    .s4-dot-anim:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes s4pulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+    /* ── fp-2: Final Review (paper.png) ── */
+    #fp-2 { padding: 0; position: relative; min-height: 380px; }
+    .s2r-bg {
+      position: absolute; inset: 0;
+      background: url('images/paper.png') center / cover no-repeat;
+      border-radius: 14px;
+    }
+    .s2r-bg::after {
+      content: ''; position: absolute; inset: 0; border-radius: 14px;
+      background: linear-gradient(150deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 100%);
+    }
+    .s2r-content { position: relative; z-index: 1; padding: 30px 28px; }
+    .s2r-card {
+      background: rgba(246,243,238,0.88);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 12px; padding: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .s2r-card-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--faint); margin-bottom: 10px; padding: 0 2px;
+    }
+    .s2r-progress-track {
+      height: 3px; background: var(--bg-3); border-radius: 2px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .s2r-progress-fill {
+      height: 100%; background: var(--green); border-radius: 2px;
+      width: 0%; transition: width 2.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .s2r-section {
+      display: flex; align-items: center; gap: 9px; padding: 6px 0;
+      font-size: 11.5px; font-weight: 300; color: var(--faint);
+      transition: color 0.4s;
+    }
+    .s2r-section.done { color: var(--ink); }
+    .s2r-check {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid var(--bg-3); display: flex; align-items: center;
+      justify-content: center; font-size: 7px; color: #fff;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .s2r-section.done .s2r-check { background: var(--green); border-color: var(--green); }
+    .s2r-footer {
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--bg-3);
+      font-size: 11px; font-weight: 500; color: var(--green);
+      opacity: 0; transition: opacity 0.5s;
+    }
+    .s2r-footer.show { opacity: 1; }
+
+    /* Scroll-driven feat list */
+    .feat-list { display:flex; flex-direction:column; }
+    .feat-item {
+      padding: 64px 0;
+      min-height: 48vh;
+      display: flex; flex-direction: column; justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      opacity: 0.28;
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .feat-item:first-child { border-top: 1px solid rgba(0,0,0,0.06); }
+    .feat-item.active { opacity: 1; }
+    .feat-item-num {
+      font-family:'Instrument Serif',serif; font-size:20px; font-style:italic;
+      color:var(--green); margin-bottom:10px; letter-spacing:0.02em;
+    }
+    .feat-item-title {
+      font-family:'Instrument Serif',serif; font-size:38px; font-weight:400;
+      color:var(--ink); letter-spacing:0.02em; line-height:1.1; margin-bottom:14px;
+    }
+    .feat-item-desc {
+      font-size:15px; font-weight:300; color:var(--muted); line-height:1.72;
+      max-width:380px;
+    }
+    .feat-item-line {
+      position:absolute; top:0; left:0; height:2px; width:0;
+      background:var(--green); transition:width 0s;
+    }
+    .feat-item.active .feat-item-line { width:100%; transition:width 5s linear; }
+    /* dark step text overrides */
+    body.feat-dark .feat-item-title { color: rgba(246,243,238,0.9); transition: color 0.9s ease; }
+    body.feat-dark .feat-item-desc  { color: rgba(246,243,238,0.45); transition: color 0.9s ease; }
+    body.feat-dark .feat-item-num   { color: #7ab89e; transition: color 0.9s ease; }
+    body.feat-dark .feat-item       { border-bottom-color: rgba(255,255,255,0.08); }
+    body.feat-dark .feat-item:first-child { border-top-color: rgba(255,255,255,0.08); }
+    body.feat-dark .feat-header h2  { color: rgba(246,243,238,0.9); transition: color 0.9s ease; }
+    .feat-item-title, .feat-item-desc, .feat-item-num, .feat-header h2 { transition: color 0.9s ease; }
+
+    /* ── STATS ── */
+    .stats {
+      background: transparent;
+      padding: 140px 52px;
+    }
+    .stats-inner { display:grid; grid-template-columns:1fr 1fr; gap:100px; align-items:start; }
+    .stats-left {}
+    .stats-overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:16px; }
+    .stats-headline { font-family:'Instrument Serif',serif; font-size:clamp(28px,3.5vw,46px); font-weight:400; letter-spacing:0.02em; line-height:1.1; margin-bottom:24px; color:var(--ink); }
+    .stats-headline em { font-style:italic; color:var(--green); }
+    .stats-sub { font-size:19px; font-weight:300; color:var(--ink); line-height:1.5; margin-bottom:20px; }
+    .stats-body { font-size:15px; font-weight:300; color:var(--muted); line-height:1.72; margin-bottom:16px; }
+    .stats-right { padding-top:8px; }
+    .stat-row { padding:32px 0; position:relative; overflow:hidden; }
+    .stat-row::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:rgba(0,0,0,0.1);
+    }
+    .stat-row::after {
+      content:''; position:absolute; top:0; left:0; height:1px; width:0;
+      background:var(--green); transform-origin:left;
+      transition:width 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .stat-row.line-in::after { width:100%; }
+    .stat-num-row { display:flex; align-items:center; gap:20px; }
+    .stat-num {
+      font-family:'Instrument Serif',serif; font-size:clamp(56px,6vw,80px);
+      font-weight:400; color:var(--ink); letter-spacing:0.02em; line-height:1;
+      flex-shrink:0;
+    }
+    .stat-suffix { font-size:0.45em; color:var(--green); letter-spacing:0px; }
+    .stat-label { font-size:13px; font-weight:300; color:var(--muted); line-height:1.5; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: transparent;
+      padding: 140px 52px;
+    }
+    .testi-header { margin-bottom:60px; }
+    .testi-header .overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:14px; }
+    .testi-header h2 { font-family:'Instrument Serif',serif; font-size:clamp(30px,4vw,52px); font-weight:400; letter-spacing:0.02em; line-height:1.1; }
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .testi-card {
+      background:#fff; border-radius:14px; padding:34px 30px;
+      box-shadow:0 2px 12px rgba(0,0,0,0.05);
+      display:flex; flex-direction:column; gap:22px;
+      transition:transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+    }
+    .testi-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,0.1); }
+    .testi-stars { color:var(--green); font-size:13px; letter-spacing:3px; }
+    .testi-quote { font-size:15px; font-weight:300; color:var(--ink); line-height:1.72; flex:1; font-style:italic; }
+    .testi-author { display:flex; align-items:center; gap:12px; }
+    .testi-avatar {
+      width:38px; height:38px; border-radius:50%; background:var(--bg-3);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Instrument Serif',serif; font-size:16px; color:var(--muted); flex-shrink:0; letter-spacing:0.03em;
+    }
+    .testi-name { font-size:13px; font-weight:500; color:var(--ink); }
+    .testi-role { font-size:11.5px; font-weight:300; color:var(--faint); margin-top:1px; }
+
+    /* ── PRICING ── */
+    .pricing {
+      background: transparent;
+      padding: 140px 52px;
+    }
+    .pricing-header { margin-bottom:64px; }
+    .pricing-header .overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:14px; }
+    .pricing-header h2 { font-family:'Instrument Serif',serif; font-size:clamp(30px,4vw,52px); font-weight:400; letter-spacing:0.02em; line-height:1.1; }
+    .pricing-header h2 em { font-style:italic; color:var(--green); }
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start; }
+    /* Non-featured cards: dark */
+    .pricing-card {
+      background:var(--ink); border-radius:16px; padding:38px 34px;
+      display:flex; flex-direction:column;
+      transition:transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+    }
+    .pricing-card:hover { transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.22); }
+    /* Featured card: white, slightly elevated */
+    .pricing-card.featured {
+      background:#fff; transform:scale(1.03);
+      box-shadow:0 24px 70px rgba(0,0,0,0.12);
+    }
+    .pricing-card.featured:hover { transform:scale(1.03) translateY(-5px); box-shadow:0 32px 80px rgba(0,0,0,0.16); }
+    .pricing-badge {
+      display:inline-block; align-self:flex-start;
+      background:var(--green-bg); color:var(--green);
+      font-size:10px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+      padding:3px 10px; border-radius:20px; margin-bottom:20px;
+    }
+    .pricing-card:not(.featured) .pricing-badge { background:rgba(106,158,138,0.15); color:var(--green-lt); }
+    .pricing-tier { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.3); margin-bottom:16px; }
+    .pricing-card.featured .pricing-tier { color:var(--faint); }
+    .pricing-price { font-family:'Instrument Serif',serif; font-size:58px; font-weight:400; letter-spacing:-0.5px; line-height:1; color:#fff; margin-bottom:4px; }
+    .pricing-card.featured .pricing-price { color:var(--ink); }
+    .pricing-price span { font-size:22px; letter-spacing:0px; }
+    .pricing-period { font-size:12px; font-weight:300; color:rgba(255,255,255,0.3); margin-bottom:28px; }
+    .pricing-card.featured .pricing-period { color:var(--faint); }
+    .pricing-divider { height:1px; background:rgba(255,255,255,0.1); margin-bottom:28px; }
+    .pricing-card.featured .pricing-divider { background:rgba(0,0,0,0.07); }
+    .pricing-desc { font-size:13.5px; font-weight:300; color:rgba(255,255,255,0.45); line-height:1.68; margin-bottom:28px; }
+    .pricing-card.featured .pricing-desc { color:var(--muted); }
+    .pricing-features { list-style:none; display:flex; flex-direction:column; gap:11px; margin-bottom:36px; flex:1; }
+    .pricing-feat {
+      display:flex; align-items:flex-start; gap:10px;
+      font-size:13.5px; font-weight:300; color:rgba(255,255,255,0.75); line-height:1.5;
+    }
+    .pricing-card.featured .pricing-feat { color:var(--ink); }
+    .pf-check {
+      width:16px; height:16px; border-radius:50%; flex-shrink:0; margin-top:2px;
+      background:rgba(106,158,138,0.2);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .pricing-card.featured .pf-check { background:var(--green-bg); }
+    .pf-check svg { width:8px; height:8px; }
+    .pricing-cta {
+      display:block; text-align:center; border-radius:8px; padding:13px 20px;
+      font-size:13.5px; font-weight:400; font-family:'Outfit',sans-serif;
+      text-decoration:none; transition:all 0.2s; cursor:pointer; border:none;
+    }
+    .pricing-cta.outline { border:1.5px solid rgba(255,255,255,0.18); color:#fff; background:transparent; }
+    .pricing-cta.outline:hover { background:rgba(255,255,255,0.1); }
+    .pricing-cta.filled { background:var(--ink); color:#fff; }
+    .pricing-cta.filled:hover { background:#2d2a22; }
+    .pricing-cta.solid { background:var(--green); color:#fff; }
+    .pricing-cta.solid:hover { background:var(--green-lt); }
+
+    /* ── CAROUSEL ── */
+    .carousel {
+      background: transparent;
+      padding: 140px 0 140px 52px;
+      overflow:hidden;
+    }
+    .carousel-header {
+      display:flex; align-items:flex-end; justify-content:space-between;
+      padding-right:52px; margin-bottom:48px;
+    }
+    .carousel-title { font-family:'Instrument Serif',serif; font-size:clamp(30px,4vw,50px); font-weight:400; letter-spacing:0.02em; line-height:1.1; }
+    .carousel-title em { font-style:italic; color:var(--green); }
+    .carousel-nav { display:flex; gap:10px; flex-shrink:0; }
+    .carousel-btn {
+      width:44px; height:44px; border-radius:50%; border:1.5px solid rgba(0,0,0,0.13);
+      background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:16px; color:var(--ink); transition:all 0.2s; font-family:'Outfit',sans-serif;
+    }
+    .carousel-btn:hover { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .carousel-btn:disabled { opacity:0.3; pointer-events:none; }
+    .carousel-track-wrap { overflow:hidden; }
+    .carousel-track {
+      display:flex; gap:20px;
+      transition:transform 0.6s cubic-bezier(0.16,1,0.3,1);
+      will-change:transform;
+    }
+    .carousel-slide {
+      flex-shrink:0; width:360px; height:440px; border-radius:16px;
+      position:relative; overflow:hidden; cursor:pointer;
+      background-size:cover; background-position:center;
+    }
+    @property --frost-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+    .carousel-slide::before {
+      content: ''; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      mask-image: radial-gradient(circle var(--frost-r) at calc(100% - 45px) 45px, black 96%, transparent 100%);
+      -webkit-mask-image: radial-gradient(circle var(--frost-r) at calc(100% - 45px) 45px, black 96%, transparent 100%);
+      --frost-r: 0px;
+      transition: --frost-r 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .carousel-slide:hover::before {
+      --frost-r: 900px;
+      transition: --frost-r 0.55s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .cs-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .carousel-slide:hover .cs-overlay { opacity: 0.3; transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1); }
+    .cs-icon-svg {
+      position:absolute; top:24px; right:24px; width:42px; height:42px;
+      background:rgba(255,255,255,0.15); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+      z-index: 2;
+    }
+    .cs-icon-svg svg { width:18px; height:18px; }
+    .cs-label {
+      position:absolute; bottom:28px; left:24px; right:24px; z-index: 2;
+    }
+    .cs-tag { font-size:10px; font-weight:500; letter-spacing:0.04em; color:rgba(255,255,255,0.65); margin-bottom:6px; }
+    .cs-title { font-family:'Instrument Serif',serif; font-size:26px; font-weight:400; color:#fff; letter-spacing:0.03em; line-height:1.2; }
+    .cs-desc { font-size:13px; font-weight:300; color:rgba(255,255,255,0.65); margin-top:6px; line-height:1.5; }
+    .carousel-dots { display:flex; gap:6px; margin-top:28px; padding-right:52px; justify-content:flex-end; }
+    .carousel-dot { width:24px; height:3px; border-radius:2px; background:rgba(0,0,0,0.12); transition:all 0.3s; cursor:pointer; }
+    .carousel-dot.active { width:40px; background:var(--green); }
+
+    /* ── DEMO ── */
+    .demo {
+      background: transparent;
+      padding: 140px 52px;
+    }
+    .demo-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .demo-left { position:relative; }
+    .demo-overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:18px; }
+    .demo-headline {
+      font-family:'Instrument Serif',serif; font-size:clamp(36px,4.5vw,62px);
+      font-weight:400; letter-spacing:0.01em; line-height:1.04; color:var(--ink); margin-bottom:22px;
+    }
+    .demo-headline em { font-style:italic; color:var(--green); }
+    .demo-sub { font-size:16px; font-weight:300; color:var(--muted); line-height:1.72; margin-bottom:40px; max-width:400px; }
+    .demo-trust { display:flex; flex-direction:column; gap:14px; }
+    .demo-trust-item { display:flex; align-items:center; gap:12px; font-size:14px; font-weight:300; color:var(--muted); }
+    .demo-trust-icon { width:32px; height:32px; border-radius:8px; background:var(--green-bg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .demo-trust-icon svg { width:15px; height:15px; }
+    .demo-form-wrap {
+      background:#fff; border-radius:20px; padding:48px 44px;
+      box-shadow:0 24px 80px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
+    }
+    .demo-form-title { font-family:'Instrument Serif',serif; font-size:26px; font-weight:400; color:var(--ink); margin-bottom:6px; letter-spacing:0.04em; }
+    .demo-form-sub { font-size:13px; font-weight:300; color:var(--muted); margin-bottom:32px; line-height:1.6; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .form-group { margin-bottom:14px; }
+    .form-label { font-size:11.5px; font-weight:500; color:var(--ink); margin-bottom:6px; display:block; }
+    .form-input, .form-select {
+      width:100%; height:44px; border:1.5px solid rgba(0,0,0,0.1); border-radius:8px;
+      padding:0 14px; font-size:13px; font-family:'Outfit',sans-serif; color:var(--ink);
+      background:#fff; outline:none; transition:border-color 0.15s, box-shadow 0.15s;
+      appearance:none;
+    }
+    .form-input:focus, .form-select:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(75,114,99,0.1); }
+    .form-input::placeholder { color:var(--faint); }
+    .btn-submit {
+      width:100%; height:48px; background:var(--ink); color:#fff; border:none;
+      border-radius:8px; font-size:14px; font-weight:400; font-family:'Outfit',sans-serif;
+      cursor:pointer; margin-top:6px; transition:background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-submit:hover { background:#2d2a22; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.14); }
+    .form-note { font-size:11px; font-weight:300; color:var(--faint); text-align:center; margin-top:10px; }
+
+    /* ── FAQ ── */
+    .faq { background: transparent; padding: 120px 52px; }
+    .faq-header { max-width: 600px; }
+    .faq-header { margin-bottom: 56px; }
+    .faq-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 400; letter-spacing: 0.02em; line-height: 1.1; color: var(--ink);
+    }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--bg-3);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .faq-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 120px; height: 120px;
+      background: var(--bg);
+      border-top-left-radius: 100%;
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+      transform-origin: bottom right;
+      pointer-events: none;
+    }
+    .faq-item:hover { transform: translateY(-3px); }
+    .faq-item:hover::after { transform: scale(0); }
+    .faq-btn {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 26px; cursor: pointer; background: none; border: none;
+      text-align: left; gap: 24px; font-family: 'Outfit', sans-serif;
+      position: relative; z-index: 1;
+    }
+    .faq-q { font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.45; }
+    .faq-icon {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.13);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 18px; line-height: 1;
+      transition: background 0.35s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.35s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                  color 0.35s cubic-bezier(0.16,1,0.3,1);
+      color: var(--ink);
+    }
+    .faq-item.open .faq-icon {
+      background: var(--ink); border-color: var(--ink); color: #fff;
+      transform: rotate(45deg);
+    }
+    .faq-body {
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    .faq-item.open .faq-body { grid-template-rows: 1fr; }
+    .faq-body-inner { overflow: hidden; }
+    .faq-a {
+      font-size: 15px; font-weight: 300; color: var(--muted);
+      line-height: 1.75; padding: 0 26px 28px; max-width: 640px;
+    }
+
+    /* ── PROTECT CTA ── */
+    .protect-cta {
+      background: transparent;
+      padding: 120px 52px;
+      text-align: center;
+    }
+    .protect-cta h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(38px, 5.5vw, 76px);
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      line-height: 1.05;
+      margin-bottom: 48px;
+      color: var(--ink);
+    }
+    .protect-cta h2 em { font-style: italic; color: var(--green); }
+    .cta-cursor {
+      display: inline-block; width: 3px; height: 0.85em;
+      background: var(--ink); margin-left: 4px; vertical-align: middle;
+      border-radius: 2px; animation: cursorBlink 0.85s step-end infinite;
+    }
+    .cta-cursor.off { opacity: 0; animation: none; }
+    .protect-cta-actions { display: flex; align-items: center; justify-content: center; gap: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      padding: 60px 52px 48px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 0; }
+    .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; margin-bottom:10px; }
+    .footer-logo img { width:22px; height:22px; object-fit:contain; }
+    .footer-logo-name { font-family:'Instrument Serif',serif; font-size:16px; color:var(--ink); letter-spacing:0.04em; }
+    .footer-copy { font-size:12px; font-weight:300; color:var(--faint); }
+    .footer-cols { display: flex; gap: 56px; }
+    .footer-col-head { font-size:13px; font-weight:400; letter-spacing:0; color:var(--ink); margin-bottom:16px; }
+    .footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-links a { font-size:13px; font-weight:300; color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:var(--ink); }
+
+    /* Shared */
+    .overline { font-size:11px; font-weight:500; letter-spacing:0.04em; color:var(--green); margin-bottom:14px; }
+
+    /* Alive extras */
+    .stat-num { color: var(--green); }
+    .stat-suffix { color: var(--ink); font-size: 0.5em; }
+    .demo { position:relative; }
+    .demo::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background: radial-gradient(ellipse 55% 60% at 15% 50%, rgba(75,114,99,0.06) 0%, transparent 65%),
+                  radial-gradient(ellipse 40% 50% at 85% 50%, rgba(196,149,106,0.05) 0%, transparent 65%);
+    }
+    .feat-item-num { color: var(--green); font-family:'Instrument Serif',serif; font-size:13px; font-style:italic; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a class="nav-logo" href="marketing4.html">
+    <img src="../cherries.png" alt="Cherrytree" />
+    <span class="nav-logo-text">Cherrytree</span>
+  </a>
+  <ul class="nav-links">
+    <li class="has-dropdown">
+      <a href="#">Products <span class="nav-chevron">▾</span></a>
+      <div class="nav-dropdown">
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Equity Calculator</span>
+          <span class="nav-dd-sub">Fair splits, instantly</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Contract Creator</span>
+          <span class="nav-dd-sub">Custom cofounder agreements</span>
+        </a>
+      </div>
+    </li>
+    <li class="has-dropdown">
+      <a href="#">Resources <span class="nav-chevron">▾</span></a>
+      <div class="nav-dropdown">
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Coaching</span>
+          <span class="nav-dd-sub">1-on-1 cofounder guidance</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Newsletter</span>
+          <span class="nav-dd-sub">Founder insights, weekly</span>
+        </a>
+        <a class="nav-dd-item" href="#">
+          <span class="nav-dd-name">Attorney</span>
+          <span class="nav-dd-sub">Legal review on demand</span>
+        </a>
+      </div>
+    </li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-signin" href="../product/signin.html">Sign in</a>
+    <a class="nav-cta" href="../product/signup.html">Get started</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="top">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <!-- <div class="hero-eyebrow"><span class="hero-eyebrow-mark"></span>Cofounder agreement tool</div> -->
+  <h1 class="hero-headline" id="hero-hl">
+    <span class="line d1"><span class="inner">Great companies start</span></span>
+    <span class="line d2"><span class="inner"><em><span class="hero-typed"></span><span class="hero-cursor"></span></em></span></span>
+  </h1>
+  <p class="hero-sub">Answer guided questions with your cofounders and get a complete Cofounder Agreement.<br>No sketchy templates, no overpriced lawyers.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="../product/signup.html">Get started</a>
+  </div>
+  <div class="hero-strip"></div>
+  <div class="hero-visual">
+    <div class="hv-bar">
+      <span class="hv-dot r"></span><span class="hv-dot y"></span><span class="hv-dot g"></span>
+      <div class="hv-url">cherrytree.app / agreement</div>
+    </div>
+    <div class="hv-body">
+      <div class="hv-sidebar">
+        <div class="hv-logo"><div class="hv-logo-mark"></div><div class="hv-logo-name">Cherrytree</div></div>
+        <div class="hv-prog-lbl">30% Complete</div>
+        <div class="hv-prog-bar"><div class="hv-prog-fill"></div></div>
+        <div class="hv-nav-item"><span class="hv-nav-dot done"></span>Formation</div>
+        <div class="hv-nav-item"><span class="hv-nav-dot done"></span>Cofounder Info</div>
+        <div class="hv-nav-item active"><span class="hv-nav-dot act"></span>Equity Allocation</div>
+        <div class="hv-nav-item"><span class="hv-nav-dot"></span>Vesting</div>
+        <div class="hv-nav-item"><span class="hv-nav-dot"></span>Decision-Making</div>
+        <div class="hv-nav-item"><span class="hv-nav-dot"></span>IP &amp; Ownership</div>
+      </div>
+      <div class="hv-main">
+
+        <!-- Screen 1: Equity Allocation — typing -->
+        <div class="hv-screen active" id="hvs-1">
+          <div class="hv-sec-lbl">Section 3 of 10 · Equity Allocation</div>
+          <div class="hv-q-title">How will you split equity?</div>
+          <div class="hv-q-hint">Describe your approach or run the equity calculator to surface each founder's contribution.</div>
+          <div class="hv-input-field focused" id="hv-inp-field">
+            <span id="hv-inp-text"></span><span class="hv-inp-cursor" id="hv-inp-cur"></span>
+          </div>
+          <button class="hv-continue" id="hv-cont-1">Continue →</button>
+        </div>
+
+        <!-- Screen 2: Vesting — option click -->
+        <div class="hv-screen" id="hvs-2">
+          <div class="hv-sec-lbl">Section 4 of 10 · Vesting</div>
+          <div class="hv-q-title">How long should shares vest?</div>
+          <div class="hv-q-hint">Most startups use a 4-year vesting schedule with a 1-year cliff to protect both founders.</div>
+          <div class="hv-options">
+            <div class="hv-opt" id="hv-opt-2y">2 years</div>
+            <div class="hv-opt" id="hv-opt-4y">4 years</div>
+            <div class="hv-opt" id="hv-opt-6y">6 years</div>
+          </div>
+          <button class="hv-continue" id="hv-cont-2">Continue →</button>
+        </div>
+
+        <!-- Screen 3: Decision-Making — option click -->
+        <div class="hv-screen" id="hvs-3">
+          <div class="hv-sec-lbl">Section 5 of 10 · Decision-Making</div>
+          <div class="hv-q-title">How will major decisions be made?</div>
+          <div class="hv-q-hint">Agreeing on a framework now prevents costly disputes later.</div>
+          <div class="hv-options">
+            <div class="hv-opt" id="hv-opt-una">Unanimous vote</div>
+            <div class="hv-opt" id="hv-opt-maj">Majority vote</div>
+            <div class="hv-opt" id="hv-opt-ceo">CEO decides</div>
+          </div>
+          <button class="hv-continue" id="hv-cont-3">Continue →</button>
+        </div>
+
+        <!-- Screen 4: IP — two-col fields -->
+        <div class="hv-screen" id="hvs-4">
+          <div class="hv-sec-lbl">Section 6 of 10 · IP &amp; Ownership</div>
+          <div class="hv-q-title">Who owns what you build?</div>
+          <div class="hv-q-hint">All IP created for the company should be assigned to the entity, not individuals.</div>
+          <div class="hv-two-col">
+            <div class="hv-field-group">
+              <div class="hv-field-lbl">Company name</div>
+              <div class="hv-field-val" id="hv-ip-co"></div>
+            </div>
+            <div class="hv-field-group">
+              <div class="hv-field-lbl">Jurisdiction</div>
+              <div class="hv-field-val" id="hv-ip-jur"></div>
+            </div>
+          </div>
+          <button class="hv-continue" id="hv-cont-4">Continue →</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOGO WALL ── -->
+<section class="logowall">
+  <div class="logowall-label">Trusted by founding teams from</div>
+  <div class="logowall-track-wrap">
+    <div class="logowall-track" id="lw-track">
+
+      <!-- Set A -->
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="3.5" height="3.5" rx="0.5"/><rect x="6.5" y="2" width="3.5" height="3.5" rx="0.5"/><rect x="2" y="6.5" width="3.5" height="3.5" rx="0.5"/><rect x="6.5" y="6.5" width="3.5" height="3.5" rx="0.5"/></svg></div>
+        <span class="lw-name">Arboreal</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4"/></svg></div>
+        <span class="lw-name">Meridian</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><polygon points="6,1 11,10 1,10"/></svg></div>
+        <span class="lw-name">Crestline</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="1" y="3" width="10" height="6" rx="1.5"/></svg></div>
+        <span class="lw-name">Fieldwork</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><path d="M6 1 L11 6 L6 11 L1 6 Z"/></svg></div>
+        <span class="lw-name">Vantage</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><circle cx="6" cy="4" r="2.5"/><path d="M1 11 Q6 7 11 11"/></svg></div>
+        <span class="lw-name">Overton</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3"/></svg></div>
+        <span class="lw-name">Clearpath</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><line x1="1" y1="6" x2="11" y2="6" stroke="#fff" stroke-width="2"/><line x1="6" y1="1" x2="6" y2="11" stroke="#fff" stroke-width="2"/></svg></div>
+        <span class="lw-name">Inkwell</span>
+      </div>
+      <div class="lw-divider"></div>
+
+      <!-- Set B (duplicate for seamless loop) -->
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="3.5" height="3.5" rx="0.5"/><rect x="6.5" y="2" width="3.5" height="3.5" rx="0.5"/><rect x="2" y="6.5" width="3.5" height="3.5" rx="0.5"/><rect x="6.5" y="6.5" width="3.5" height="3.5" rx="0.5"/></svg></div>
+        <span class="lw-name">Arboreal</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4"/></svg></div>
+        <span class="lw-name">Meridian</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><polygon points="6,1 11,10 1,10"/></svg></div>
+        <span class="lw-name">Crestline</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="1" y="3" width="10" height="6" rx="1.5"/></svg></div>
+        <span class="lw-name">Fieldwork</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><path d="M6 1 L11 6 L6 11 L1 6 Z"/></svg></div>
+        <span class="lw-name">Vantage</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><circle cx="6" cy="4" r="2.5"/><path d="M1 11 Q6 7 11 11"/></svg></div>
+        <span class="lw-name">Overton</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3"/></svg></div>
+        <span class="lw-name">Clearpath</span>
+      </div>
+      <div class="lw-divider"></div>
+      <div class="lw-logo">
+        <div class="lw-mark"><svg viewBox="0 0 12 12"><line x1="1" y1="6" x2="11" y2="6" stroke="#fff" stroke-width="2"/><line x1="6" y1="1" x2="6" y2="11" stroke="#fff" stroke-width="2"/></svg></div>
+        <span class="lw-name">Inkwell</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features" id="features">
+  <div class="feat-header">
+    <div class="overline rv"></div>
+    <h2 class="rv d1">Built for <br><em>early-stage </em>cofounders.</h2>
+    <br>
+    <p class="stats-body rv d3">Get your equity, expectations, and everything else right from the start.</p>
+  </div>
+  <div class="feat-body">
+    <div class="feat-visual rv-l">
+      <div class="feat-panel active" id="fp-0">
+        <div class="step1-bg"></div>
+        <div class="step1-content">
+          <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Step 1</div>
+          <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:22px;">Invite your cofounders</div>
+          <div class="step1-card">
+            <div class="step1-card-label">Team</div>
+            <div class="step1-row">
+              <span class="step1-dot green"></span>
+              <span class="step1-row-email">you@email.com</span>
+              <span class="step1-badge-s owner">Owner</span>
+            </div>
+            <div class="step1-row">
+              <span class="step1-dot light"></span>
+              <span class="step1-row-email">alex@startup.co</span>
+              <span class="step1-badge-s added">Added</span>
+            </div>
+            <div class="step1-row step1-row-new" id="s1-new-row">
+              <span class="step1-dot light"></span>
+              <span class="step1-row-email" id="s1-new-email"></span>
+              <span class="step1-badge-s added">Added</span>
+            </div>
+            <div class="step1-input-area">
+              <div class="step1-input"><span id="s1-typed"></span><span class="step1-icursor"></span></div>
+              <button class="step1-btn" id="s1-btn">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-panel" id="fp-1">
+        <div class="step2-bg"></div>
+        <div class="step2-content">
+          <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Step 2</div>
+          <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:18px;">Collab on the agreement</div>
+          <div class="step2-card">
+            <div class="step2-card-label">Formation &amp; Purpose</div>
+            <div class="step2-qlist" id="s2-qlist">
+              <!-- JS will render question cards here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-panel" id="fp-3">
+        <div class="s3-bg"></div>
+        <div class="s3-content">
+          <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Equity</div>
+          <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:18px;">Equity Calculator</div>
+          <div class="s3-card">
+            <div class="s3-progress-row">
+              <span class="s3-category" id="s3-category">Cash Invested</span>
+              <span class="s3-counter" id="s3-counter">1 / 18</span>
+            </div>
+            <div class="s3-section-lbl">How important is this?</div>
+            <div class="s3-slider-row">
+              <div class="s3-slider-track"><div class="s3-slider-fill" id="s3-sfill"></div><div class="s3-slider-thumb" id="s3-sthumb"></div></div>
+              <span class="s3-slider-val" id="s3-sval">—</span>
+            </div>
+            <div class="s3-section-lbl" style="margin-top:10px;">Score each cofounder</div>
+            <div id="s3-cofounders"></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-panel" id="fp-4">
+        <div class="s4-bg"></div>
+        <div class="s4-content">
+          <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Support</div>
+          <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:18px;">Expert Guidance</div>
+          <div class="s4-card">
+            <div class="s4-expert-row">
+              <div class="s4-avatar">T</div>
+              <div>
+                <div class="s4-expert-name">Tim</div>
+                <div class="s4-expert-role">Cofounder Coach</div>
+              </div>
+            </div>
+            <div class="s4-messages" id="s4-messages"></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-panel" id="fp-2">
+        <div class="s2r-bg"></div>
+        <div class="s2r-content">
+          <div class="feat-panel-tag" style="color:rgba(255,255,255,0.55);">Step 3</div>
+          <div class="feat-panel-title" style="color:#fff; font-size:24px; margin-bottom:18px;">Do a final review</div>
+          <div class="s2r-card">
+            <div class="s2r-card-label">Cofounder Agreement</div>
+            <div class="s2r-progress-track"><div class="s2r-progress-fill" id="s2r-progress"></div></div>
+            <div id="s2r-sections"></div>
+            <div class="s2r-footer" id="s2r-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-list" id="feat-list">
+      <div class="feat-item active" data-panel="0">
+        <div class="feat-item-line"></div>
+        <div class="feat-item-num">01</div>
+        <div class="feat-item-title">Invite your cofounders</div>
+        <p class="feat-item-desc">Add your cofounders as collaborators. They must be added to be included in the Cofounder Agreement.</p>
+      </div>
+      <div class="feat-item" data-panel="1">
+        <div class="feat-item-line"></div>
+        <div class="feat-item-num">02</div>
+        <div class="feat-item-title">Collab on the agreement</div>
+        <p class="feat-item-desc">You and your cofounders answer a set of guided questions together. Nobody has to play "project manager" or relay answers.</p>
+      </div>
+      <div class="feat-item" data-panel="3">
+        <div class="feat-item-line"></div>
+        <div class="feat-item-num">03</div>
+        <div class="feat-item-title">Equity Calculator</div>
+        <p class="feat-item-desc">Use our proprietary equity calculator to determine ownership. Instant, precise splits so everyone knows their stake.</p>
+      </div>
+      <div class="feat-item" data-panel="2">
+        <div class="feat-item-line"></div>
+        <div class="feat-item-num">04</div>
+        <div class="feat-item-title">Do a final review</div>
+        <p class="feat-item-desc">We take your responses and turn them into a Cofounder Agreement, ready for your final review and signature.</p>
+      </div>
+      <div class="feat-item" data-panel="4">
+        <div class="feat-item-line"></div>
+        <div class="feat-item-num">05</div>
+        <div class="feat-item-title">Expert Guidance</div>
+        <p class="feat-item-desc">We are a team of cofounder coaches, founders, and attorneys ready to help. You're in good hands every step of the way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section class="stats" id="stats">
+  <div class="stats-inner">
+    <div class="stats-left">
+      <div class="overline rv"></div>
+      <h2 class="stats-headline rv d1">The proof is in the<br><em>partnership.</em></h2>
+      <p class="stats-body rv d3"></p>
+    </div>
+    <div class="stats-right">
+      <div class="stat-row rv">
+        <div class="stat-num-row">
+          <div class="stat-num"><span class="count-up" data-target="2400">0</span><span class="stat-suffix">+</span></div>
+          <div class="stat-label">Founding teams have started<br>their agreement</div>
+        </div>
+      </div>
+      <div class="stat-row rv d1">
+        <div class="stat-num-row">
+          <div class="stat-num"><span class="count-up" data-target="6100">0</span><span class="stat-suffix">+</span></div>
+          <div class="stat-label">Founders have used<br>Cherrytree</div>
+        </div>
+      </div>
+      <div class="stat-row rv d2">
+        <div class="stat-num-row">
+          <div class="stat-num"><span class="count-up" data-target="10">0</span></div>
+          <div class="stat-label">Sections covering every angle<br>of your cofounder agreement</div>
+        </div>
+      </div>
+      <div class="stat-row rv d3">
+        <div class="stat-num-row">
+          <div class="stat-num">$<span class="count-up" data-target="0">0</span></div>
+          <div class="stat-label">To get started.<br>No lawyer required.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials" id="testimonials">
+  <div class="testi-header">
+    <div class="overline rv"></div>
+    <h2 class="rv d1">What founders are saying.</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card rv">
+      <p class="testi-quote">"We thought we were aligned on equity until Cherrytree showed us we weren't. It surfaced a real disagreement before it became a real problem. Worth every minute."</p>
+      <div class="testi-author">
+        <div><div class="testi-name">Maya R.</div><div class="testi-role">Co-founder, Stealth startup</div></div>
+      </div>
+    </div>
+    <div class="testi-card rv d1">
+      <p class="testi-quote">"Our accelerator recommended this and I'm glad they did. We got through IP and vesting in one sitting and actually understood what we were agreeing to."</p>
+      <div class="testi-author">
+        <div><div class="testi-name">James T.</div><div class="testi-role">Founder, YC S24</div></div>
+      </div>
+    </div>
+    <div class="testi-card rv d2">
+      <p class="testi-quote">"The equity calculator alone is worth it. We scored each other independently and compared — it was the most honest conversation we'd had about the company."</p>
+      <div class="testi-author">
+        <div><div class="testi-name">Sarah K.</div><div class="testi-role">Co-founder, FinTech startup</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAROUSEL ── -->
+<section class="carousel" id="who">
+  <div class="carousel-header rv">
+    <div>
+      <div class="overline" style="margin-bottom:12px;"></div>
+      <h2 class="carousel-title">Built for every kind of <em>founding team.</em></h2>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" id="cs-prev" aria-label="Previous">←</button>
+      <button class="carousel-btn" id="cs-next" aria-label="Next">→</button>
+    </div>
+  </div>
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="cs-track">
+      <div class="carousel-slide" style="background-image:url('images/universities.png');background-position:50% 0%">
+        <div class="cs-overlay"></div>
+        <div class="cs-icon-svg">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 2L2 7l8 5 8-5-8-5z"/><path d="M2 13l8 5 8-5"/><path d="M2 10l8 5 8-5"/>
+          </svg>
+        </div>
+        <div class="cs-label">
+          <div class="cs-tag">Universities</div>
+          <div class="cs-title">Help student teams start right.</div>
+          <div class="cs-desc">Give entrepreneurship programs a structured tool for the conversations students skip.</div>
+        </div>
+      </div>
+      <div class="carousel-slide" style="background-image:url('images/individuals.png')">
+        <div class="cs-overlay"></div>
+        <div class="cs-icon-svg">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="7" r="3.5"/><path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7"/>
+          </svg>
+        </div>
+        <div class="cs-label">
+          <div class="cs-tag">Individuals</div>
+          <div class="cs-title">Know what you're getting into.</div>
+          <div class="cs-desc">Think through every dimension of the partnership before you commit to a cofounder.</div>
+        </div>
+      </div>
+      <div class="carousel-slide" style="background-image:url('images/accelerators.png')">
+        <div class="cs-overlay"></div>
+        <div class="cs-icon-svg">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 2c0 0 6 4 6 9a6 6 0 01-12 0c0-5 6-9 6-9z"/><path d="M10 11v5"/><path d="M7 14h6"/>
+          </svg>
+        </div>
+        <div class="cs-label">
+          <div class="cs-tag">Accelerators</div>
+          <div class="cs-title">Give your cohort a foundation.</div>
+          <div class="cs-desc">Surface cofounder misalignment in your portfolio before Demo Day pressure takes over.</div>
+        </div>
+      </div>
+      <div class="carousel-slide" style="background-image:url('images/first-time-founders.png')">
+        <div class="cs-overlay"></div>
+        <div class="cs-icon-svg">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 3v14M3 10h14"/><circle cx="10" cy="10" r="7"/>
+          </svg>
+        </div>
+        <div class="cs-label">
+          <div class="cs-tag">First-time founders</div>
+          <div class="cs-title">You don't know what you don't know.</div>
+          <div class="cs-desc">Walk through every section with the context you need — no legal background required.</div>
+        </div>
+      </div>
+      <div class="carousel-slide" style="background-image:url('images/serial-founders.png')">
+        <div class="cs-overlay"></div>
+        <div class="cs-icon-svg">
+          <svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14l4-4 3 3 5-7"/>
+          </svg>
+        </div>
+        <div class="cs-label">
+          <div class="cs-tag">Serial founders</div>
+          <div class="cs-title">You've been burned before.</div>
+          <div class="cs-desc">A fast, structured way to get alignment on paper — without going back to lawyers for the basics.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="carousel-dots" id="cs-dots"></div>
+</section>
+
+<!-- ── PRICING ── -->
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <div class="overline rv"></div>
+    <h2 class="rv d1">Founder-friendly pricing.</h2>
+    <p class="rv d2" style="font-size:16px;font-weight:300;color:var(--muted);margin-top:14px;">Choose the plan that's right for your team.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card rv">
+      <div class="pricing-tier">Bootstrapped</div>
+      <div class="pricing-price"><span>$</span>200</div>
+      <div class="pricing-period">One-time payment</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Ideal for early-stage or bootstrapped teams that need to move fast and start building now.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Expert-designed survey</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Comprehensive agreements</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Proprietary equity calculator</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Best practices and tips</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Up to 5 collaborators</li>
+      </ul>
+      <a class="pricing-cta outline" href="../product/signup.html">Get started</a>
+    </div>
+    <div class="pricing-card featured rv d1">
+      <div class="pricing-badge">Most popular</div>
+      <div class="pricing-tier">Scale</div>
+      <div class="pricing-price"><span>$</span>2,000</div>
+      <div class="pricing-period">One-time payment</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Built for funded teams that need deeper control, greater detail, and stronger foundations.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Bootstrapped</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Final attorney review</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Personalized onboarding</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cofounder coaching</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#6a9e8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priority support</li>
+      </ul>
+      <a class="pricing-cta filled" href="../product/signup.html">Get started</a>
+    </div>
+    <div class="pricing-card rv d2">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price" style="font-size:40px;letter-spacing:-1px;">Custom</div>
+      <div class="pricing-period">contact for volume pricing</div>
+      <div class="pricing-divider"></div>
+      <p class="pricing-desc">Running a fund or accelerator and want to deploy in bulk? We'll set you up.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Everything in Scale, for your cohort</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cohort dashboard and progress tracking</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Branded experience for your program</li>
+        <li class="pricing-feat"><span class="pf-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#4B7263" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Dedicated account support</li>
+      </ul>
+      <a class="pricing-cta solid" href="#demo">Contact sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── DEMO ── -->
+<!-- <section class="demo" id="demo">
+  <div class="demo-inner">
+    <div class="demo-left">
+      <div class="demo-overline rv">Request a demo</div>
+      <h2 class="demo-headline rv d1">Let's walk through it <em>together.</em></h2>
+      <p class="demo-sub rv d2">Whether you're running an accelerator, a university program, or just starting your first company — book 20 minutes and we'll get you set up.</p>
+      <div class="demo-trust rv d3">
+        <div class="demo-trust-item">
+          <span class="demo-trust-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2L2 7l8 5 8-5-8-5z"/><path d="M2 13l8 5 8-5"/><path d="M2 10l8 5 8-5"/>
+            </svg>
+          </span>
+          Used at 12+ university programs
+        </div>
+        <div class="demo-trust-item">
+          <span class="demo-trust-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2c0 0 6 4 6 9a6 6 0 01-12 0c0-5 6-9 6-9z"/><path d="M10 11v5"/><path d="M7 14h6"/>
+            </svg>
+          </span>
+          Recommended by accelerators and YC founders
+        </div>
+        <div class="demo-trust-item">
+          <span class="demo-trust-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="9" width="12" height="9" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/>
+            </svg>
+          </span>
+          Private until your team is ready to compare
+        </div>
+      </div>
+    </div>
+    <div class="demo-form-wrap rv d1">
+      <div class="demo-form-title">Book a 20-minute demo</div>
+      <div class="demo-form-sub">Tell us about your organization and we'll be in touch within one business day.</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First name</label>
+          <input class="form-input" type="text" placeholder="Alex" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last name</label>
+          <input class="form-input" type="text" placeholder="Chen" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Work email</label>
+        <input class="form-input" type="email" placeholder="alex@university.edu" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Organization type</label>
+        <select class="form-select">
+          <option value="" disabled selected>Select one</option>
+          <option>University / Program</option>
+          <option>Accelerator / Incubator</option>
+          <option>Enterprise team</option>
+          <option>Individual / Startup</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Organization name</label>
+        <input class="form-input" type="text" placeholder="UC Berkeley, Y Combinator..." />
+      </div>
+      <button class="btn-submit">Request a demo</button>
+      <div class="form-note">We'll get back to you soon.</div>
+    </div>
+  </div>
+</section> -->
+
+
+<!-- ── PROTECT CTA ── -->
+<section class="protect-cta" id="protect-cta">
+  <h2><span id="cta-typed"></span><span id="cta-cursor" class="cta-cursor"></span></h2>
+  <div class="protect-cta-actions">
+    <a class="btn-primary" href="../product/signup.html">Get started</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="footer-logo" href="marketing4.html">
+        <img src="../cherries.png" alt="Cherrytree" />
+        <span class="footer-logo-name">Cherrytree</span>
+      </a>
+      <span class="footer-copy">© 2026 Cherrytree, LLC</span>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-head">Product</div>
+        <ul class="footer-links">
+          <li><a href="#">Contract Creator</a></li>
+          <li><a href="#">Equity Calculator</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Coaching</a></li>
+          <li><a href="#">Attorney</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- grain texture -->
+<svg class="grain-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<script>
+  // Hero headline trigger
+  setTimeout(() => {
+    document.querySelectorAll('.hero-headline .line').forEach(l => l.classList.add('go'));
+  }, 100);
+
+  // Type out "with great company" once
+  const twTarget = 'with great company';
+  let twChar = 0;
+  const twEl = document.querySelector('.hero-typed');
+  function typeWriter() {
+    if (!twEl || twChar >= twTarget.length) return;
+    twEl.textContent = twTarget.slice(0, ++twChar);
+    setTimeout(typeWriter, 68);
+  }
+  setTimeout(typeWriter, 800);
+
+  // Scroll reveal observer
+  const rvObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); rvObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rv, .rv-l, .rv-r, .rv-scale, .clip-wrap').forEach(el => rvObs.observe(el));
+
+  // Scroll-driven feature activation
+  const featItems = document.querySelectorAll('.feat-item');
+  const featItemsList = Array.from(featItems);
+  let featAutoTimer = null;
+  // Per-step color shifts within the features section — more dramatic range
+  // Per-step colors — dramatic range, darkest at equity calculator
+  const featItemColors = [
+    '#E0DDD7',  // 01 Invite — light entry
+    '#B8B5AF',  // 02 Collab — clear step down
+    '#2E2C2A',  // 03 Equity — near dark
+    '#B5B2AC',  // 04 Review — back up
+    '#D0CEC8',  // 05 Expert — returning toward exit
+  ];
+  const featItemDark = [false, false, true, false, false];
+
+  function activateFeature(item) {
+    if (item.classList.contains('active')) return;
+    if (featAutoTimer) { clearTimeout(featAutoTimer); featAutoTimer = null; }
+    featItems.forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.feat-panel').forEach(p => p.classList.remove('active'));
+    item.classList.add('active');
+    const panel = item.dataset.panel;
+    const fp = document.getElementById('fp-' + panel);
+    if (fp) fp.classList.add('active');
+    // Per-feature background tint
+    const idx = featItemsList.indexOf(item);
+    if (featItemColors[idx]) document.body.style.backgroundColor = featItemColors[idx];
+    document.body.classList.toggle('feat-dark', !!featItemDark[idx]);
+    // Auto-advance to next item after bar fills (5s)
+    const next = featItemsList[(idx + 1) % featItemsList.length];
+    featAutoTimer = setTimeout(() => {
+      next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 5100);
+  }
+  function onFeatScroll() {
+    const triggerY = window.innerHeight * 0.42;
+    let best = null, bestDist = Infinity;
+    featItems.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      const mid = (rect.top + rect.bottom) / 2;
+      const dist = Math.abs(mid - triggerY);
+      if (rect.top < triggerY * 1.6 && rect.bottom > triggerY * 0.3 && dist < bestDist) {
+        bestDist = dist; best = item;
+      }
+    });
+    if (best) activateFeature(best);
+  }
+  window.addEventListener('scroll', onFeatScroll, { passive: true });
+  onFeatScroll();
+
+  // Stats line animation + count-up
+  const lineObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('line-in');
+        const el = e.target.querySelector('.count-up');
+        if (el && !el.dataset.counted) {
+          el.dataset.counted = '1';
+          const target = parseInt(el.dataset.target);
+          if (target === 0) return;
+          let start = null;
+          const step = ts => {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / 1600, 1);
+            const ease = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(ease * target).toLocaleString();
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+        lineObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.stat-row').forEach(el => lineObs.observe(el));
+
+  // Carousel
+  const track = document.getElementById('cs-track');
+  const slides = track.querySelectorAll('.carousel-slide');
+  const dotsEl = document.getElementById('cs-dots');
+  const prevBtn = document.getElementById('cs-prev');
+  const nextBtn = document.getElementById('cs-next');
+  const total = slides.length;
+  let current = 0;
+  const SLIDE_W = 360 + 20; // width + gap
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function getMaxIdx() {
+    const wrapW = track.parentElement.offsetWidth;
+    return Math.max(0, total - Math.floor(wrapW / SLIDE_W));
+  }
+  function goTo(idx) {
+    const maxIdx = getMaxIdx();
+    current = Math.max(0, Math.min(idx, maxIdx));
+    track.style.transform = `translateX(-${current * SLIDE_W}px)`;
+    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current >= maxIdx;
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  prevBtn.disabled = true;
+  goTo(0);
+
+  // Drag/swipe on carousel
+  let dragStart = null;
+  track.addEventListener('pointerdown', e => { dragStart = e.clientX; track.style.transition = 'none'; });
+  track.addEventListener('pointermove', e => {
+    if (dragStart === null) return;
+    const dx = e.clientX - dragStart;
+    track.style.transform = `translateX(${-current * SLIDE_W + dx}px)`;
+  });
+  track.addEventListener('pointerup', e => {
+    if (dragStart === null) return;
+    const dx = e.clientX - dragStart;
+    track.style.transition = '';
+    if (dx < -60) goTo(current + 1);
+    else if (dx > 60) goTo(current - 1);
+    else goTo(current);
+    dragStart = null;
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ── Step 2 progressive disclosure animation ──
+  const s2Questions = [
+    { q: "What's your company's name?",        a: "Acme Labs" },
+    { q: "What's the legal structure?",        a: "C-Corp" },
+    { q: "What state will you register in?",   a: "Delaware" },
+    { q: "Describe your company in one line.", a: "AI tools for founders." },
+  ];
+  let s2Running = false, s2Timer = null;
+
+  function s2IsActive() { return document.getElementById('fp-1')?.classList.contains('active'); }
+
+  function s2BuildDOM() {
+    const list = document.getElementById('s2-qlist');
+    if (!list) return;
+    list.innerHTML = '';
+    s2Questions.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'step2-q';
+      div.id = `s2-q-${i}`;
+      div.innerHTML = `
+        <div class="step2-q-row">
+          <span class="step2-q-text">${item.q}</span>
+          <span class="step2-q-answer" id="s2-ans-${i}"></span>
+          <span class="step2-q-check">✓</span>
+        </div>
+        <div class="step2-q-body"><div class="step2-q-body-inner">
+          <div class="step2-input"><span id="s2-typed-${i}"></span><span class="step2-icursor"></span></div>
+        </div></div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function s2Activate(idx) {
+    document.querySelectorAll('.step2-q').forEach(q => q.classList.remove('active'));
+    const q = document.getElementById(`s2-q-${idx}`);
+    if (q) q.classList.add('active');
+  }
+
+  function s2Answer(idx) {
+    const q = document.getElementById(`s2-q-${idx}`);
+    const ansEl = document.getElementById(`s2-ans-${idx}`);
+    if (!q) return;
+    q.classList.remove('active');
+    q.classList.add('answered');
+    if (ansEl) ansEl.textContent = s2Questions[idx].a;
+  }
+
+  function s2ResetAll() {
+    s2Questions.forEach((_, i) => {
+      const q = document.getElementById(`s2-q-${i}`);
+      const ansEl = document.getElementById(`s2-ans-${i}`);
+      const typedEl = document.getElementById(`s2-typed-${i}`);
+      if (q) q.classList.remove('active', 'answered');
+      if (ansEl) ansEl.textContent = '';
+      if (typedEl) typedEl.textContent = '';
+    });
+  }
+
+  function s2RunQuestion(idx) {
+    if (!s2IsActive()) { s2Running = false; return; }
+    if (idx >= s2Questions.length) {
+      s2Timer = setTimeout(() => {
+        if (!s2IsActive()) { s2Running = false; return; }
+        s2ResetAll();
+        s2Timer = setTimeout(() => s2RunQuestion(0), 300);
+      }, 1600);
+      return;
+    }
+    s2Activate(idx);
+    const target = s2Questions[idx].a;
+    const typedEl = document.getElementById(`s2-typed-${idx}`);
+    if (typedEl) typedEl.textContent = '';
+    let char = 0;
+    function typeChar() {
+      if (!s2IsActive()) { s2Running = false; return; }
+      if (!typedEl) return;
+      if (char < target.length) {
+        typedEl.textContent = target.slice(0, ++char);
+        s2Timer = setTimeout(typeChar, 65);
+      } else {
+        s2Timer = setTimeout(() => {
+          s2Answer(idx);
+          // Wait for collapse transition (0.42s) then open next
+          s2Timer = setTimeout(() => s2RunQuestion(idx + 1), 420);
+        }, 700);
+      }
+    }
+    // Let accordion open (0.42s) before typing starts
+    s2Timer = setTimeout(typeChar, 80);
+  }
+
+  function s2Start() {
+    if (s2Timer) { clearTimeout(s2Timer); s2Timer = null; }
+    s2Running = true;
+    s2BuildDOM();
+    s2RunQuestion(0);
+  }
+
+  if (s2IsActive()) s2Start();
+  document.querySelectorAll('.feat-item').forEach(item => {
+    item.addEventListener('click', () => {
+      setTimeout(() => { if (s2IsActive()) { s2Running = false; s2Start(); } }, 50);
+    });
+  });
+
+  // ── Step 1 invite typing animation ──
+  const s1Emails = ['sarah@vc.io', 'priya@buildit.co', 'james@founder.io'];
+  let s1Idx = 0, s1Char = 0, s1Running = false;
+  const s1TypedEl = document.getElementById('s1-typed');
+  const s1NewRow  = document.getElementById('s1-new-row');
+  const s1NewEmail = document.getElementById('s1-new-email');
+  const s1BtnEl   = document.getElementById('s1-btn');
+
+  function s1IsActive() { return document.getElementById('fp-0')?.classList.contains('active'); }
+
+  function s1Type() {
+    if (!s1IsActive()) { s1Running = false; return; }
+    const email = s1Emails[s1Idx % s1Emails.length];
+    if (s1Char < email.length) {
+      s1TypedEl.textContent = email.slice(0, ++s1Char);
+      setTimeout(s1Type, 68);
+    } else {
+      setTimeout(s1Submit, 750);
+    }
+  }
+
+  function s1Submit() {
+    if (!s1IsActive()) { s1Running = false; return; }
+    s1BtnEl.classList.add('pressed');
+    setTimeout(() => {
+      s1BtnEl.classList.remove('pressed');
+      s1NewEmail.textContent = s1Emails[s1Idx % s1Emails.length];
+      s1NewRow.classList.add('visible');
+      s1TypedEl.textContent = '';
+      s1Char = 0;
+      s1Idx++;
+      setTimeout(() => {
+        s1NewRow.classList.remove('visible');
+        setTimeout(s1Type, 500);
+      }, 2000);
+    }, 180);
+  }
+
+  function s1Start() {
+    if (s1Running) return;
+    s1Running = true;
+    s1TypedEl.textContent = '';
+    s1Char = 0;
+    s1NewRow.classList.remove('visible');
+    setTimeout(s1Type, 800);
+  }
+
+  // Start on load if step 1 is active, and restart when step 1 becomes active
+  s1Start();
+
+  // ── fp-3: Equity Calculator (leaf.png) ──
+  const s3Steps = [
+    { cat: 'Cash Invested',      counter: '1 / 18', importance: 5, scores: [8, 3] },
+    { cat: 'Time Commitment',    counter: '2 / 18', importance: 8, scores: [9, 7] },
+    { cat: 'Idea Origination',   counter: '3 / 18', importance: 6, scores: [7, 10] },
+  ];
+  const s3CofoundrNames = ['Alex Chen', 'Jordan Lee'];
+  let s3Timer = null, s3StepIdx = 0;
+  function s3IsActive() { return document.getElementById('fp-3')?.classList.contains('active'); }
+
+  function s3BuildStep(step) {
+    document.getElementById('s3-category').textContent = step.cat;
+    document.getElementById('s3-counter').textContent = step.counter;
+    const sfill = document.getElementById('s3-sfill');
+    const sthumb = document.getElementById('s3-sthumb');
+    const sval = document.getElementById('s3-sval');
+    if (sfill) { sfill.style.transition = 'none'; sfill.style.width = '0%'; }
+    if (sthumb) { sthumb.style.transition = 'none'; sthumb.style.left = '0%'; }
+    if (sval) sval.textContent = '—';
+    const cfs = document.getElementById('s3-cofounders');
+    if (!cfs) return;
+    cfs.innerHTML = '';
+    s3CofoundrNames.forEach((name, ci) => {
+      const row = document.createElement('div');
+      row.className = 's3-cf-row';
+      const dots = Array.from({length: 10}, (_, di) =>
+        `<div class="s3-dot" id="s3-d-${ci}-${di+1}">${di+1}</div>`
+      ).join('');
+      row.innerHTML = `<div class="s3-cf-name">${name}</div><div class="s3-dots">${dots}</div>`;
+      cfs.appendChild(row);
+    });
+  }
+
+  function s3AnimateStep(step) {
+    if (!s3IsActive()) return;
+    // Animate slider
+    s3Timer = setTimeout(() => {
+      const pct = (step.importance / 10) * 100;
+      const sfill = document.getElementById('s3-sfill');
+      const sthumb = document.getElementById('s3-sthumb');
+      const sval = document.getElementById('s3-sval');
+      if (sfill) { sfill.style.transition = 'width 0.7s cubic-bezier(0.16,1,0.3,1)'; sfill.style.width = pct + '%'; }
+      if (sthumb) { sthumb.style.transition = 'left 0.7s cubic-bezier(0.16,1,0.3,1)'; sthumb.style.left = pct + '%'; }
+      if (sval) sval.textContent = step.importance;
+    }, 120);
+    // Animate scores per cofounder
+    step.scores.forEach((score, ci) => {
+      s3Timer = setTimeout(() => {
+        if (!s3IsActive()) return;
+        const dot = document.getElementById(`s3-d-${ci}-${score}`);
+        if (dot) dot.classList.add('selected');
+      }, 700 + ci * 420);
+    });
+    // Advance to next step
+    const totalDelay = 700 + step.scores.length * 420 + 800;
+    s3Timer = setTimeout(() => {
+      if (!s3IsActive()) return;
+      s3StepIdx = (s3StepIdx + 1) % s3Steps.length;
+      const next = s3Steps[s3StepIdx];
+      s3BuildStep(next);
+      s3AnimateStep(next);
+    }, totalDelay);
+  }
+
+  function s3Run() {
+    if (!s3IsActive()) return;
+    s3StepIdx = 0;
+    s3BuildStep(s3Steps[0]);
+    s3AnimateStep(s3Steps[0]);
+  }
+
+  // ── fp-4: Expert Guidance (chalk.png) ──
+  const s4Msgs = [
+    { text: "Hey Tim, what do you recommend for our vesting schedule.", sent: true },
+    { text: "Happy to help!", sent: false },
+    { text: "I'd recommend 4-year vest with a 1-year cliff for both founders.", sent: false },
+  ];
+  let s4Timer = null;
+  function s4IsActive() { return document.getElementById('fp-4')?.classList.contains('active'); }
+  function s4ClearMessages() {
+    const el = document.getElementById('s4-messages');
+    if (el) el.innerHTML = '';
+  }
+  function s4ShowMsg(idx) {
+    if (!s4IsActive()) return;
+    if (idx >= s4Msgs.length) {
+      s4Timer = setTimeout(() => { if (s4IsActive()) { s4ClearMessages(); s4ShowMsg(0); } }, 2000);
+      return;
+    }
+    const msgs = document.getElementById('s4-messages');
+    if (!msgs) return;
+    const msg = s4Msgs[idx];
+
+    if (msg.sent) {
+      // Sent messages appear directly on the right, no typing indicator
+      const bubble = document.createElement('div');
+      bubble.className = 's4-bubble sent';
+      bubble.textContent = msg.text;
+      msgs.appendChild(bubble);
+      s4Timer = setTimeout(() => bubble.classList.add('show'), 30);
+      s4Timer = setTimeout(() => s4ShowMsg(idx + 1), 1200);
+    } else {
+      // Received messages show typing indicator first
+      const typing = document.createElement('div');
+      typing.className = 's4-typing';
+      typing.innerHTML = `<div class="s4-dot-anim"></div><div class="s4-dot-anim"></div><div class="s4-dot-anim"></div>`;
+      msgs.appendChild(typing);
+      s4Timer = setTimeout(() => typing.classList.add('show'), 30);
+      s4Timer = setTimeout(() => {
+        if (!s4IsActive()) return;
+        typing.classList.remove('show');
+        s4Timer = setTimeout(() => {
+          if (!s4IsActive()) return;
+          typing.remove();
+          const bubble = document.createElement('div');
+          bubble.className = 's4-bubble';
+          bubble.textContent = msg.text;
+          msgs.appendChild(bubble);
+          s4Timer = setTimeout(() => bubble.classList.add('show'), 30);
+          s4Timer = setTimeout(() => s4ShowMsg(idx + 1), 1900);
+        }, 280);
+      }, 1300);
+    }
+  }
+  function s4Run() {
+    if (!s4IsActive()) return;
+    s4ClearMessages();
+    s4ShowMsg(0);
+  }
+
+  // ── fp-2: Final Review (paper.png) ──
+  const s2rSecs = ['Formation & Purpose', 'Cofounder Info', 'Equity Allocation', 'Vesting Schedule', 'Decision-Making'];
+  let s2rTimer = null;
+  function s2rIsActive() { return document.getElementById('fp-2')?.classList.contains('active'); }
+  function s2rBuildDOM() {
+    const el = document.getElementById('s2r-sections');
+    const progress = document.getElementById('s2r-progress');
+    const footer = document.getElementById('s2r-footer');
+    if (!el) return;
+    el.innerHTML = '';
+    s2rSecs.forEach((name, i) => {
+      const div = document.createElement('div');
+      div.className = 's2r-section';
+      div.id = `s2r-sec-${i}`;
+      div.innerHTML = `<span class="s2r-check" id="s2r-chk-${i}"></span>${name}`;
+      el.appendChild(div);
+    });
+    if (progress) { progress.style.transition = 'none'; progress.style.width = '0%'; }
+    if (footer) { footer.className = 's2r-footer'; footer.textContent = ''; }
+  }
+  function s2rRun() {
+    if (!s2rIsActive()) return;
+    s2rBuildDOM();
+    s2rTimer = setTimeout(() => {
+      if (!s2rIsActive()) return;
+      const progress = document.getElementById('s2r-progress');
+      if (progress) { progress.style.transition = 'width 2.2s cubic-bezier(0.16,1,0.3,1)'; progress.style.width = '100%'; }
+      s2rSecs.forEach((_, i) => {
+        s2rTimer = setTimeout(() => {
+          if (!s2rIsActive()) return;
+          const sec = document.getElementById(`s2r-sec-${i}`);
+          const chk = document.getElementById(`s2r-chk-${i}`);
+          if (sec) sec.classList.add('done');
+          if (chk) chk.textContent = '✓';
+        }, 280 + i * 350);
+      });
+      const totalMs = 280 + s2rSecs.length * 350 + 400;
+      s2rTimer = setTimeout(() => {
+        if (!s2rIsActive()) return;
+        const footer = document.getElementById('s2r-footer');
+        if (footer) { footer.textContent = '✓ Ready for signatures'; footer.classList.add('show'); }
+        s2rTimer = setTimeout(() => { if (s2rIsActive()) s2rRun(); }, 2200);
+      }, totalMs);
+    }, 120);
+  }
+
+  // ── Panel activation observer — starts animations on scroll AND click ──
+  const panelActivationObserver = new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+      const el = m.target;
+      if (!el.classList.contains('active')) return;
+      const id = el.id;
+      if (id === 'fp-1') { s2Running = false; s2Start(); }
+      if (id === 'fp-3') { if (s3Timer) clearTimeout(s3Timer); s3Run(); }
+      if (id === 'fp-4') { if (s4Timer) clearTimeout(s4Timer); s4Run(); }
+      if (id === 'fp-2') { if (s2rTimer) clearTimeout(s2rTimer); s2rRun(); }
+    });
+  });
+  document.querySelectorAll('#fp-1, #fp-2, #fp-3, #fp-4').forEach(p =>
+    panelActivationObserver.observe(p, { attributes: true, attributeFilter: ['class'] })
+  );
+
+  // ── Hero demo animation ──────────────────────────────────────────
+  const hvNavItems = document.querySelectorAll('.hv-nav-item');
+  const hvNavDots  = document.querySelectorAll('.hv-nav-dot');
+  const hvProgFill = document.querySelector('.hv-prog-fill');
+  const hvProgLbl  = document.querySelector('.hv-prog-lbl');
+
+  const hvScenes = [
+    { id:'hvs-1', navActive:2, prog:'30%', lbl:'30% Complete' },
+    { id:'hvs-2', navActive:3, prog:'42%', lbl:'42% Complete' },
+    { id:'hvs-3', navActive:4, prog:'54%', lbl:'54% Complete' },
+    { id:'hvs-4', navActive:5, prog:'66%', lbl:'66% Complete' },
+  ];
+
+  function hvSetSidebar(navActive, prog, lbl) {
+    hvNavItems.forEach((item, i) => {
+      item.classList.remove('active');
+      hvNavDots[i].classList.remove('done','act');
+      if (i < navActive)      hvNavDots[i].classList.add('done');
+      else if (i === navActive){ item.classList.add('active'); hvNavDots[i].classList.add('act'); }
+    });
+    if (hvProgFill) hvProgFill.style.width = prog;
+    if (hvProgLbl)  hvProgLbl.textContent = lbl;
+  }
+
+  function hvGoTo(idx) {
+    const prev = document.querySelector('.hv-screen.active');
+    if (prev) { prev.classList.add('exit'); prev.classList.remove('active'); setTimeout(()=>prev.classList.remove('exit'), 500); }
+    setTimeout(() => {
+      const scene = hvScenes[idx % hvScenes.length];
+      const next = document.getElementById(scene.id);
+      if (!next) return;
+      next.classList.add('active');
+      hvSetSidebar(scene.navActive, scene.prog, scene.lbl);
+      if (idx % hvScenes.length === 0) hvRunScene0();
+      if (idx % hvScenes.length === 1) hvRunScene1();
+      if (idx % hvScenes.length === 2) hvRunScene2();
+      if (idx % hvScenes.length === 3) hvRunScene3();
+    }, 120);
+  }
+
+  function hvClickContinue(btnId, then) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.classList.add('clicking');
+    setTimeout(() => { btn.classList.remove('clicking'); setTimeout(then, 160); }, 260);
+  }
+
+  // Scene 0: type answer into field
+  function hvRunScene0() {
+    const txtEl = document.getElementById('hv-inp-text');
+    const curEl = document.getElementById('hv-inp-cur');
+    const field = document.getElementById('hv-inp-field');
+    if (!txtEl) return;
+    txtEl.textContent = '';
+    if (curEl) { curEl.classList.remove('off'); }
+    if (field) field.classList.add('focused');
+    const answer = 'We agreed on an equal 50 / 50 split.';
+    let i = 0;
+    function step() {
+      if (i < answer.length) { txtEl.textContent = answer.slice(0, ++i); setTimeout(step, 44); }
+      else {
+        setTimeout(() => {
+          if (curEl) curEl.classList.add('off');
+          setTimeout(() => hvClickContinue('hv-cont-1', () => hvGoTo(1)), 700);
+        }, 900);
+      }
+    }
+    setTimeout(step, 500);
+  }
+
+  // Scene 1: click vesting option
+  function hvRunScene1() {
+    document.querySelectorAll('#hvs-2 .hv-opt').forEach(o => o.classList.remove('selected'));
+    setTimeout(() => {
+      document.getElementById('hv-opt-4y')?.classList.add('selected');
+      setTimeout(() => hvClickContinue('hv-cont-2', () => hvGoTo(2)), 900);
+    }, 700);
+  }
+
+  // Scene 2: click decision-making option
+  function hvRunScene2() {
+    document.querySelectorAll('#hvs-3 .hv-opt').forEach(o => o.classList.remove('selected'));
+    setTimeout(() => {
+      document.getElementById('hv-opt-una')?.classList.add('selected');
+      setTimeout(() => hvClickContinue('hv-cont-3', () => hvGoTo(3)), 900);
+    }, 700);
+  }
+
+  // Scene 3: type into two fields, then loop
+  function hvRunScene3() {
+    const coEl  = document.getElementById('hv-ip-co');
+    const jurEl = document.getElementById('hv-ip-jur');
+    if (!coEl || !jurEl) return;
+    coEl.textContent = ''; jurEl.textContent = '';
+    const coText  = 'Acme Technologies, Inc.';
+    const jurText = 'Delaware';
+    let i = 0;
+    function typeCo() {
+      if (i < coText.length) { coEl.textContent = coText.slice(0, ++i); setTimeout(typeCo, 46); }
+      else { setTimeout(typeJur, 300); }
+    }
+    let j = 0;
+    function typeJur() {
+      if (j < jurText.length) { jurEl.textContent = jurText.slice(0, ++j); setTimeout(typeJur, 60); }
+      else { setTimeout(() => hvClickContinue('hv-cont-4', () => hvGoTo(0)), 800); }
+    }
+    setTimeout(typeCo, 500);
+  }
+
+  // Kick off after hero text finishes animating in
+  setTimeout(() => hvRunScene0(), 2400);
+
+  // CTA typing effect — fires once when section scrolls into view
+  (function() {
+    const el = document.getElementById('cta-typed');
+    const cur = document.getElementById('cta-cursor');
+    if (!el || !cur) return;
+
+    const lines = [
+      'Protect your piece of the pie',
+      'and your peace of mind.'
+    ];
+    let started = false;
+
+    function runTyping() {
+      if (started) return;
+      started = true;
+      let lineIdx = 0, charIdx = 0;
+
+      function typeNext() {
+        if (lineIdx >= lines.length) {
+          cur.classList.add('off');
+          return;
+        }
+        const line = lines[lineIdx];
+        if (charIdx < line.length) {
+          // Build HTML: first line plain, second line wrapped in <em>
+          const l0 = lineIdx === 0 ? line.slice(0, charIdx + 1) : lines[0];
+          const l1 = lineIdx === 1 ? '<em>' + line.slice(0, charIdx + 1) + '</em>' : '';
+          el.innerHTML = l0 + (l1 ? '<br>' + l1 : '');
+          charIdx++;
+          setTimeout(typeNext, 42);
+        } else {
+          lineIdx++;
+          charIdx = 0;
+          setTimeout(typeNext, lineIdx === 1 ? 180 : 42);
+        }
+      }
+      typeNext();
+    }
+
+    const obs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { runTyping(); obs.disconnect(); }
+    }, { threshold: 0.4 });
+    const section = document.getElementById('protect-cta');
+    if (section) obs.observe(section);
+  })();
+
+  // ── Scroll-driven background gradient ──
+  // Each section gets a very subtle complementary background color.
+  // The body transitions smoothly between them as sections enter view.
+  const sectionBgMap = [
+    { id: 'top',          color: '#F6F3EE' },  // base beige
+    { id: 'features',     color: '#D8D5CF' },  // cool gray (overridden per-item)
+    { id: 'stats',        color: '#E8EDE9' },  // fresh sage tint — clean return
+    { id: 'testimonials', color: '#DDD9D3' },  // medium earthy gray
+    { id: 'who',          color: '#ECF0EB' },  // airy green-gray
+    { id: 'pricing',      color: '#E0DDD7' },  // cool mid-depth
+    { id: 'protect-cta',  color: '#F6F3EE' },  // back to base
+  ];
+  const bgObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const found = sectionBgMap.find(s => s.id === e.target.id);
+        if (found) document.body.style.backgroundColor = found.color;
+      }
+    });
+  }, { threshold: 0.25 });
+  sectionBgMap.forEach(({ id }) => {
+    const el = document.getElementById(id);
+    if (el) bgObs.observe(el);
+  });
+</script>
+</body>
+</html>
