@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visual Identity — Cherrytree</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@200;300;400;500;600&display=swap');
+
+    :root {
+      --bg:    #F6F3EE;
+      --bg-2:  #F0EDE8;
+      --bg-3:  #E3DFD8;
+      --ink:   #1a1a1a;
+      --muted: #6b6560;
+      --faint: #aaa49c;
+      --green: #4B7263;
+      --green-lt: #6a9e8a;
+      --green-bg: #eaf1ee;
+      --radius: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--ink); }
+
+    /* ── Page header ── */
+    .vi-header {
+      padding: 80px 72px 64px;
+      border-bottom: 1px solid var(--bg-3);
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .vi-header-left {}
+    .vi-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--green); margin-bottom: 14px; text-transform: uppercase; }
+    .vi-title { font-family: 'Instrument Serif', serif; font-size: clamp(42px, 6vw, 80px); font-weight: 400; letter-spacing: 0.01em; line-height: 1; }
+    .vi-title em { font-style: italic; color: var(--green); }
+    .vi-sub { font-size: 15px; font-weight: 300; color: var(--muted); max-width: 480px; line-height: 1.7; margin-top: 20px; }
+    .vi-header-meta { font-size: 12px; font-weight: 300; color: var(--faint); text-align: right; line-height: 1.8; }
+
+    /* ── Sections ── */
+    .vi-section { padding: 80px 72px; border-bottom: 1px solid var(--bg-3); }
+    .vi-section:last-child { border-bottom: none; }
+    .vi-section-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--faint);
+      text-transform: uppercase; margin-bottom: 48px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .vi-section-label::after { content: ''; flex: 1; height: 1px; background: var(--bg-3); }
+
+    /* ── Palette ── */
+    .palette-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .swatch {
+      display: flex; flex-direction: column; gap: 10px; align-items: center;
+    }
+    .swatch-chip {
+      width: 72px; height: 72px; border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .swatch-name { font-size: 10px; font-weight: 400; color: var(--muted); text-align: center; }
+    .swatch-hex  { font-size: 10px; font-weight: 300; color: var(--faint); }
+
+    /* ── Type specimens ── */
+    .type-row { display: flex; flex-direction: column; gap: 24px; }
+    .type-specimen { display: flex; align-items: baseline; gap: 24px; }
+    .type-label { font-size: 11px; font-weight: 400; color: var(--faint); width: 120px; flex-shrink: 0; }
+    .t-display  { font-family: 'Instrument Serif', serif; font-size: 52px; font-weight: 400; letter-spacing: 0.02em; }
+    .t-display em { font-style: italic; color: var(--green); }
+    .t-heading  { font-family: 'Instrument Serif', serif; font-size: 32px; font-weight: 400; letter-spacing: 0.02em; }
+    .t-body     { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.7; }
+    .t-label    { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); }
+    .t-caption  { font-size: 12px; font-weight: 300; color: var(--faint); }
+
+    /* ── Motif grid ── */
+    .motif-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Base motif card ── */
+    .motif-card {
+      background: var(--bg-3);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: default;
+    }
+    .motif-demo {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .motif-info {
+      padding: 20px 22px 22px;
+      background: var(--bg);
+      border-top: 1px solid var(--bg-3);
+    }
+    .motif-name { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.02em; margin-bottom: 4px; }
+    .motif-desc { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+    .motif-tag  {
+      display: inline-block; margin-top: 10px;
+      padding: 3px 10px; border-radius: 50px;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.05em;
+      background: var(--green-bg); color: var(--green);
+    }
+
+    /* ══════════════════════════════
+       VARIANT A — Corner Notch (current FAQ)
+    ══════════════════════════════ */
+    #v-a .motif-demo { background: var(--bg-3); }
+    #v-a .motif-demo::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 110px; height: 110px;
+      background: var(--bg);
+      border-top-left-radius: 100%;
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+      transform-origin: bottom right;
+    }
+    #v-a:hover .motif-demo::after { transform: scale(0); }
+    #v-a .motif-demo .demo-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; padding: 28px;
+      gap: 10px; z-index: 1;
+    }
+    .demo-line { height: 10px; background: rgba(0,0,0,0.1); border-radius: 5px; }
+    .demo-line.w60 { width: 60%; }
+    .demo-line.w80 { width: 80%; }
+    .demo-line.w45 { width: 45%; }
+
+    /* ══════════════════════════════
+       VARIANT B — Floating Bubble
+    ══════════════════════════════ */
+    #v-b .motif-demo { background: var(--bg-2); }
+    #v-b .motif-demo::before {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: var(--bg-3);
+      border-radius: 50%;
+      transition: transform 0.65s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-b:hover .motif-demo::before { transform: translate(-22px, -22px); }
+
+    /* ══════════════════════════════
+       VARIANT C — Arc Sweep
+    ══════════════════════════════ */
+    #v-c .motif-demo { background: var(--bg-3); overflow: hidden; }
+    #v-c .motif-demo::after {
+      content: '';
+      position: absolute;
+      top: -80px; left: -80px;
+      width: 320px; height: 320px;
+      background: var(--bg);
+      border-radius: 50%;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    #v-c:hover .motif-demo::after { transform: scale(1.15) translate(8px, 8px); }
+
+    /* ══════════════════════════════
+       VARIANT D — Pill Stack
+    ══════════════════════════════ */
+    #v-d .motif-demo {
+      background: var(--bg-2);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 28px; gap: 10px;
+    }
+    .pill-row {
+      height: 36px; border-radius: 50px;
+      background: var(--bg-3);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), width 0.4s;
+    }
+    .pill-row.p1 { width: 70%; }
+    .pill-row.p2 { width: 90%; }
+    .pill-row.p3 { width: 55%; }
+    #v-d:hover .pill-row.p1 { transform: translateX(8px); }
+    #v-d:hover .pill-row.p2 { transform: translateX(4px); }
+    #v-d:hover .pill-row.p3 { transform: translateX(12px); }
+
+    /* ══════════════════════════════
+       VARIANT E — Dot Grid
+    ══════════════════════════════ */
+    #v-e .motif-demo { background: var(--bg-2); }
+    .dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.12) 1.2px, transparent 1.2px);
+      background-size: 18px 18px;
+      transition: opacity 0.4s;
+    }
+    #v-e .motif-demo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 75% 75%, var(--bg-3) 0%, transparent 65%);
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-e:hover .motif-demo::after { transform: scale(1.3); }
+
+    /* ══════════════════════════════
+       VARIANT F — Concentric Rings
+    ══════════════════════════════ */
+    #v-f .motif-demo { background: var(--bg-3); }
+    .rings {
+      position: absolute;
+      bottom: -60px; right: -60px;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.09);
+      transform: translate(-50%, -50%);
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ring-1 { width: 120px; height: 120px; }
+    .ring-2 { width: 200px; height: 200px; }
+    .ring-3 { width: 280px; height: 280px; }
+    .ring-4 { width: 360px; height: 360px; }
+    #v-f:hover .ring-1 { transform: translate(-50%, -50%) scale(1.15); }
+    #v-f:hover .ring-2 { transform: translate(-50%, -50%) scale(1.1); }
+    #v-f:hover .ring-3 { transform: translate(-50%, -50%) scale(1.06); }
+    #v-f:hover .ring-4 { transform: translate(-50%, -50%) scale(1.03); }
+
+    /* ══════════════════════════════
+       VARIANT G — Diagonal Stripe
+    ══════════════════════════════ */
+    #v-g .motif-demo { background: var(--bg-2); overflow: hidden; }
+    #v-g .motif-demo::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 12px,
+        rgba(0,0,0,0.04) 12px,
+        rgba(0,0,0,0.04) 13px
+      );
+    }
+    #v-g .motif-demo::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 80%; height: 100%;
+      background: linear-gradient(to right, transparent, var(--bg-2) 60%);
+      transition: left 0.55s cubic-bezier(0.16,1,0.3,1);
+    }
+    #v-g:hover .motif-demo::after { left: 30%; }
+
+    /* ══════════════════════════════
+       VARIANT H — Notched Corner (sharp)
+    ══════════════════════════════ */
+    #v-h .motif-demo { background: var(--bg-3); }
+    #v-h .motif-demo::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 0 80px 80px 0;
+      border-color: transparent var(--bg) transparent transparent;
+      transition: border-width 0.45s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-h:hover .motif-demo::after {
+      border-width: 0 120px 120px 0;
+    }
+
+    /* ══════════════════════════════
+       VARIANT I — Green Accent Bar
+    ══════════════════════════════ */
+    #v-i .motif-demo { background: var(--bg-2); }
+    .accent-bar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--green);
+      border-radius: 0 2px 2px 0;
+      transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-i:hover .accent-bar { width: 28px; border-radius: 0 8px 8px 0; }
+    #v-i .demo-content-i {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; padding: 28px 36px;
+      gap: 10px;
+    }
+
+    /* ══════════════════════════════
+       VARIANT J — Blob / Organic
+    ══════════════════════════════ */
+    #v-j .motif-demo { background: var(--bg-2); overflow: hidden; }
+    .blob {
+      position: absolute;
+      bottom: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: #CCCAC3;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 55%;
+      transition: border-radius 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-j:hover .blob {
+      border-radius: 40% 60% 45% 55% / 60% 40% 55% 50%;
+      transform: translate(-16px, -16px) rotate(20deg);
+    }
+
+    /* ══════════════════════════════
+       VARIANT K — Line Constellation
+    ══════════════════════════════ */
+    #v-k .motif-demo { background: var(--bg-2); }
+    .constellation { position: absolute; inset: 0; }
+    .c-dot {
+      position: absolute; width: 5px; height: 5px;
+      background: rgba(0,0,0,0.15); border-radius: 50%;
+      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #v-k:hover .c-dot { transform: scale(1.8); }
+    .c-line {
+      position: absolute; background: rgba(0,0,0,0.07);
+      transform-origin: left center;
+      height: 1px;
+      transition: opacity 0.4s;
+    }
+
+    /* ══════════════════════════════
+       VARIANT L — Stamp / Seal
+    ══════════════════════════════ */
+    #v-l .motif-demo { background: var(--bg-3); display: flex; align-items: center; justify-content: center; }
+    .seal {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.12);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .seal::before {
+      content: '';
+      position: absolute; inset: -8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(0,0,0,0.1);
+      animation: rotateSeal 12s linear infinite;
+    }
+    .seal-inner {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .seal-inner svg { color: #fff; }
+    @keyframes rotateSeal { to { transform: rotate(360deg); } }
+    #v-l:hover .seal { transform: rotate(-8deg) scale(1.08); }
+    #v-l:hover .seal-inner { transform: rotate(8deg); }
+
+    /* ── Applied examples section ── */
+    .applied-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .applied-card {
+      background: var(--bg-3);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .applied-card h3 { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; position: relative; z-index: 1; }
+    .applied-card p { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.65; position: relative; z-index: 1; }
+
+    /* Applied: corner notch */
+    .app-notch::after {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 90px; height: 90px;
+      background: var(--bg); border-top-left-radius: 100%;
+      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+      transform-origin: bottom right;
+    }
+    .app-notch:hover::after { transform: scale(0); }
+
+    /* Applied: bubble */
+    .app-bubble::before {
+      content: '';
+      position: absolute; bottom: -50px; right: -50px;
+      width: 160px; height: 160px;
+      background: var(--bg); border-radius: 50%;
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-bubble:hover::before { transform: translate(-16px,-16px); }
+
+    /* Applied: rings */
+    .app-rings::after {
+      content: '';
+      position: absolute; bottom: -80px; right: -80px;
+      width: 200px; height: 200px;
+      border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.1);
+      box-shadow: 0 0 0 20px rgba(0,0,0,0.04), 0 0 0 40px rgba(0,0,0,0.03);
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-rings:hover::after { transform: scale(1.2); }
+
+    /* Applied: cherry (subtle — blob body + hint of stem) */
+    .app-cherry::before {
+      content: '';
+      position: absolute;
+      bottom: -25px; right: -25px;
+      width: 140px; height: 138px;
+      background: #CCCAC3;
+      border-radius: 47% 53% 52% 48% / 56% 56% 44% 44%;
+      transition: border-radius 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-cherry::after {
+      content: '';
+      position: absolute;
+      bottom: 107px; right: 40px;
+      width: 2px; height: 26px;
+      background: #CCCAC3;
+      border-radius: 2px;
+      transform: rotate(-12deg);
+      transform-origin: bottom center;
+      transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-cherry:hover::before {
+      border-radius: 52% 48% 47% 53% / 48% 48% 52% 52%;
+      transform: translate(-14px, -14px) rotate(18deg);
+    }
+    .app-cherry:hover::after {
+      transform: rotate(-18deg) translate(-6px, -6px);
+    }
+
+    /* Applied: obvious cherry */
+    .app-cherry-bold::before {
+      content: '';
+      position: absolute;
+      bottom: -22px; right: -22px;
+      width: 148px; height: 145px;
+      background: #CCCAC3;
+      /* Distinct cherry silhouette: flatter top with indent, round bottom */
+      border-radius: 48% 52% 52% 48% / 62% 62% 38% 38%;
+      transition: border-radius 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-cherry-bold::after {
+      content: '';
+      position: absolute;
+      bottom: 114px; right: 37px;
+      width: 5px; height: 38px;
+      background: #CCCAC3;
+      border-radius: 5px 5px 2px 2px;
+      transform: rotate(-16deg);
+      transform-origin: bottom center;
+      transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-cherry-bold:hover::before {
+      border-radius: 52% 48% 47% 53% / 60% 60% 40% 40%;
+      transform: translate(-14px, -14px) rotate(18deg);
+    }
+    .app-cherry-bold:hover::after {
+      transform: rotate(-22deg) translate(-7px, -7px);
+    }
+
+    /* Applied: blob */
+    .app-blob::before {
+      content: '';
+      position: absolute;
+      bottom: -50px; right: -50px;
+      width: 190px; height: 190px;
+      background: #CCCAC3;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 55%;
+      transition: border-radius 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .app-blob:hover::before {
+      border-radius: 40% 60% 45% 55% / 60% 40% 55% 50%;
+      transform: translate(-18px, -18px) rotate(20deg);
+    }
+
+    /* ── Button specimens ── */
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn-s {
+      padding: 10px 22px; border-radius: 8px; border: none;
+      font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-dark  { background: var(--ink); color: #fff; }
+    .btn-dark:hover  { background: #2d2a22; }
+    .btn-outline { background: none; border: 1.5px solid var(--bg-3); color: var(--ink); }
+    .btn-outline:hover { border-color: var(--ink); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: var(--green-lt); }
+    .btn-ghost  { background: none; color: var(--muted); }
+    .btn-ghost:hover  { color: var(--ink); }
+    .btn-pill   { border-radius: 50px; background: var(--ink); color: #fff; }
+    .btn-pill:hover { background: #2d2a22; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="vi-header">
+  <div class="vi-header-left">
+    <div class="vi-overline">Cherrytree</div>
+    <h1 class="vi-title">Visual <em>Identity</em></h1>
+    <p class="vi-sub">Shape motifs, palette, typography, and interaction patterns — reference for design consistency across the product and marketing site.</p>
+  </div>
+  <div class="vi-header-meta">
+    Cherrytree Design System<br>
+    Exploration Draft
+  </div>
+</div>
+
+<!-- ── Palette ── -->
+<section class="vi-section">
+  <div class="vi-section-label">01 — Colour Palette</div>
+  <div class="palette-row">
+    <div class="swatch"><div class="swatch-chip" style="background:#F6F3EE;"></div><div class="swatch-name">--bg</div><div class="swatch-hex">#F6F3EE</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#F0EDE8;"></div><div class="swatch-name">--bg-2</div><div class="swatch-hex">#F0EDE8</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#E3DFD8;"></div><div class="swatch-name">--bg-3</div><div class="swatch-hex">#E3DFD8</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#D8D5CF;"></div><div class="swatch-name">deep</div><div class="swatch-hex">#D8D5CF</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#C2C0B9;"></div><div class="swatch-name">deeper</div><div class="swatch-hex">#C2C0B9</div></div>
+    <div class="swatch" style="margin-left:20px;"><div class="swatch-chip" style="background:#4B7263;"></div><div class="swatch-name">--green</div><div class="swatch-hex">#4B7263</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#6a9e8a;"></div><div class="swatch-name">--green-lt</div><div class="swatch-hex">#6a9e8a</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#eaf1ee;"></div><div class="swatch-name">--green-bg</div><div class="swatch-hex">#EAF1EE</div></div>
+    <div class="swatch" style="margin-left:20px;"><div class="swatch-chip" style="background:#1a1a1a;"></div><div class="swatch-name">--ink</div><div class="swatch-hex">#1A1A1A</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#6b6560;"></div><div class="swatch-name">--muted</div><div class="swatch-hex">#6B6560</div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#aaa49c;"></div><div class="swatch-name">--faint</div><div class="swatch-hex">#AAA49C</div></div>
+  </div>
+</section>
+
+<!-- ── Typography ── -->
+<section class="vi-section">
+  <div class="vi-section-label">02 — Typography</div>
+  <div class="type-row">
+    <div class="type-specimen">
+      <div class="type-label">Display / Serif</div>
+      <div class="t-display">Great companies start <em>with great company.</em></div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Heading / Serif</div>
+      <div class="t-heading">Protect your piece of the pie.</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Body / Sans</div>
+      <div class="t-body">Answer guided questions with your cofounders and get a complete Cofounder Agreement. No sketchy templates, no overpriced lawyers.</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Overline</div>
+      <div class="t-label">Built for early-stage cofounders</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Caption</div>
+      <div class="t-caption">Saved 2 min ago · 25% complete · 4 sections remaining</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Buttons ── -->
+<section class="vi-section">
+  <div class="vi-section-label">03 — Buttons</div>
+  <div class="btn-row">
+    <button class="btn-s btn-dark">Get started</button>
+    <button class="btn-s btn-green">Sign up free</button>
+    <button class="btn-s btn-outline">Learn more</button>
+    <button class="btn-s btn-ghost">View pricing</button>
+    <button class="btn-s btn-pill">Upgrade to Pro ↑</button>
+  </div>
+</section>
+
+<!-- ── Motif variants ── -->
+<section class="vi-section">
+  <div class="vi-section-label">04 — Shape &amp; Motif Variants</div>
+  <div class="motif-grid">
+
+    <!-- A: Corner Notch (current) -->
+    <div class="motif-card" id="v-a">
+      <div class="motif-demo">
+        <div class="demo-content">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Corner Notch</div>
+        <div class="motif-desc">White circle tucked into the bottom-right corner. On hover it retracts — used in the FAQ section.</div>
+        <span class="motif-tag">Current — FAQ</span>
+      </div>
+    </div>
+
+    <!-- B: Floating Bubble -->
+    <div class="motif-card" id="v-b">
+      <div class="motif-demo">
+        <div class="demo-content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px;gap:10px;z-index:1;">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Floating Bubble</div>
+        <div class="motif-desc">Large circle anchored off-corner, nudges inward on hover. Used in the hero strip.</div>
+        <span class="motif-tag">Current — Hero</span>
+      </div>
+    </div>
+
+    <!-- C: Arc Sweep -->
+    <div class="motif-card" id="v-c">
+      <div class="motif-demo">
+        <div class="demo-content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px 28px 28px 140px;gap:10px;z-index:1;">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Arc Sweep</div>
+        <div class="motif-desc">Large circle anchored to the top-left corner, sweeping across the card — content sits in the revealed area.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- D: Pill Stack -->
+    <div class="motif-card" id="v-d">
+      <div class="motif-demo">
+        <div class="pill-row p1"></div>
+        <div class="pill-row p2"></div>
+        <div class="pill-row p3"></div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Pill Stack</div>
+        <div class="motif-desc">Rounded pill shapes stacked horizontally, shifting offset on hover — works as a content skeleton or decorative element.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- E: Dot Grid -->
+    <div class="motif-card" id="v-e">
+      <div class="motif-demo">
+        <div class="dot-grid"></div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Dot Grid</div>
+        <div class="motif-desc">Subtle repeating dot matrix with a radial glow spot that expands on hover. Understated and paper-like.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- F: Concentric Rings -->
+    <div class="motif-card" id="v-f">
+      <div class="motif-demo">
+        <div class="rings">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+          <div class="ring ring-4"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Concentric Rings</div>
+        <div class="motif-desc">Expanding rings emanating from a corner — like a ripple or signal. Scales up subtly on hover.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- G: Diagonal Stripe -->
+    <div class="motif-card" id="v-g">
+      <div class="motif-demo">
+        <div class="demo-content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px;gap:10px;z-index:2;">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Diagonal Stripe</div>
+        <div class="motif-desc">Fine diagonal hatching across the surface — a gradient wipe on hover reveals clean space. Textured and editorial.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- H: Sharp Corner Dog-ear -->
+    <div class="motif-card" id="v-h">
+      <div class="motif-demo">
+        <div class="demo-content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px;gap:10px;z-index:1;">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Dog-ear</div>
+        <div class="motif-desc">Sharp triangular fold in the top-right corner — like a turned document page. Grows larger on hover.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- I: Green Accent Bar -->
+    <div class="motif-card" id="v-i">
+      <div class="motif-demo">
+        <div class="accent-bar"></div>
+        <div class="demo-content-i">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Accent Bar</div>
+        <div class="motif-desc">Thin green left-edge bar that expands into a full accent strip on hover. Clean and brand-forward.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- J: Blob / Organic -->
+    <div class="motif-card" id="v-j">
+      <div class="motif-demo">
+        <div class="blob"></div>
+        <div class="demo-content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px;gap:10px;z-index:1;">
+          <div class="demo-line w80"></div>
+          <div class="demo-line w60"></div>
+          <div class="demo-line w45"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Organic Blob</div>
+        <div class="motif-desc">Amorphous fluid shape anchored to a corner — morphs to a different irregular form on hover. Warm and playful.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- K: Line Constellation -->
+    <div class="motif-card" id="v-k">
+      <div class="motif-demo">
+        <div class="constellation">
+          <div class="c-dot" style="top:40px;left:50px;"></div>
+          <div class="c-dot" style="top:80px;left:140px;"></div>
+          <div class="c-dot" style="top:130px;left:70px;"></div>
+          <div class="c-dot" style="top:60px;left:200px;"></div>
+          <div class="c-dot" style="top:150px;left:180px;"></div>
+          <div class="c-dot" style="top:110px;left:240px;"></div>
+          <div class="c-line" style="top:42px;left:55px;width:88px;transform:rotate(22deg);"></div>
+          <div class="c-line" style="top:82px;left:75px;width:96px;transform:rotate(37deg);"></div>
+          <div class="c-line" style="top:62px;left:145px;width:58px;transform:rotate(-10deg);"></div>
+          <div class="c-line" style="top:152px;left:185px;width:58px;transform:rotate(-12deg);"></div>
+          <div class="c-line" style="top:112px;left:182px;width:62px;transform:rotate(28deg);"></div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Constellation</div>
+        <div class="motif-desc">Scattered dots connected by fine lines — like a star map. Dots pulse outward on hover. Sophisticated and technical.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+    <!-- L: Seal / Stamp -->
+    <div class="motif-card" id="v-l">
+      <div class="motif-demo">
+        <div class="seal">
+          <div class="seal-inner">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12l2 2 4-4"/>
+              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="motif-info">
+        <div class="motif-name">Seal / Stamp</div>
+        <div class="motif-desc">Circular stamp motif with dashed outer ring that rotates. Conveys authenticity and finality — great for the "Final Agreement" state.</div>
+        <span class="motif-tag">Variant</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Applied examples ── -->
+<section class="vi-section">
+  <div class="vi-section-label">05 — Applied to Cards</div>
+  <div class="applied-grid">
+
+    <div class="applied-card app-notch">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;">Corner Notch</div>
+      <h3>Equity Allocation</h3>
+      <p style="margin-top:6px;">Use our proprietary calculator to determine ownership.</p>
+    </div>
+
+    <div class="applied-card app-bubble">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;">Floating Bubble</div>
+      <h3>Vesting Schedule</h3>
+      <p style="margin-top:6px;">4-year vesting with a 1-year cliff protects everyone.</p>
+    </div>
+
+    <div class="applied-card app-rings">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;">Concentric Rings</div>
+      <h3>Expert Guidance</h3>
+      <p style="margin-top:6px;">A team of coaches, founders, and attorneys ready to help.</p>
+    </div>
+
+    <div class="applied-card app-blob">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;position:relative;z-index:1;">Organic Blob</div>
+      <h3 style="position:relative;z-index:1;">IP &amp; Ownership</h3>
+      <p style="margin-top:6px;position:relative;z-index:1;">Everything your company creates belongs to the company — not individual cofounders.</p>
+    </div>
+
+    <div class="applied-card app-cherry">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;position:relative;z-index:1;">Cherry (subtle)</div>
+      <h3 style="position:relative;z-index:1;">Final Agreement</h3>
+      <p style="margin-top:6px;position:relative;z-index:1;">Your completed Cofounder Agreement, ready to sign.</p>
+    </div>
+
+    <div class="applied-card app-cherry-bold">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--green);margin-bottom:10px;text-transform:uppercase;position:relative;z-index:1;">Cherry (obvious)</div>
+      <h3 style="position:relative;z-index:1;">Final Agreement</h3>
+      <p style="margin-top:6px;position:relative;z-index:1;">Your completed Cofounder Agreement, ready to sign.</p>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>
