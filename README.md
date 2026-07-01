@@ -32,6 +32,3 @@ link: <a>https://anikanb-32.github.io/cherrytreedesign/marketing/marketing4.html
 
 ## Version 6 LATEST  
 link: <a>https://anikanb-32.github.io/cherrytreedesign/marketing/marketing6.html</a>
-
-
-

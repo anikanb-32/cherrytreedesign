@@ -19,7 +19,7 @@
       <ul class="nav-list">
         <li class="active"><a href="#">Dashboard</a></li>
         <li><a href="#">Recent Documents</a></li>
-        <li><a href="#">Chat with AI</a></li>
+        <li><a href="chat.html">Chat with AI</a></li>
         <li><a href="#">Billing</a></li>
       </ul>
     </nav>
@@ -36,11 +36,27 @@
   <!-- MAIN -->
   <main class="main">
     <div class="top-bar">
-      <div class="avatar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
-        </svg>
+      <div class="avatar-wrap" id="avatar-wrap" style="position:relative;">
+        <div class="avatar" id="avatar-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div id="profile-dropdown" style="
+          position:absolute; top:calc(100% + 8px); right:0; width:200px;
+          background:#F6F3EE; border:1px solid #E3DFD8; border-radius:12px;
+          box-shadow:0 8px 32px rgba(0,0,0,0.12); padding:6px;
+          opacity:0; pointer-events:none;
+          transform:translateY(-6px) scale(0.97); transform-origin:top right;
+          transition:opacity 0.18s ease, transform 0.18s cubic-bezier(0.16,1,0.3,1);
+          z-index:200; font-family:'Outfit',sans-serif;">
+          <div style="font-size:11px;font-weight:300;color:#aaa49c;padding:6px 10px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">name@startup.co</div>
+          <div style="height:1px;background:#E3DFD8;margin:4px 0;"></div>
+          <button onclick="window.location='#'" style="display:block;width:100%;padding:8px 10px;background:none;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:300;color:#1a1a1a;text-align:left;cursor:pointer;" onmouseover="this.style.background='#EDE9E3'" onmouseout="this.style.background='none'">Account</button>
+          <button id="profile-billing-btn" style="display:block;width:100%;padding:8px 10px;background:none;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:300;color:#1a1a1a;text-align:left;cursor:pointer;" onmouseover="this.style.background='#EDE9E3'" onmouseout="this.style.background='none'">Billing</button>
+          <button id="profile-signout-btn" style="display:block;width:100%;padding:8px 10px;background:none;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:300;color:#b94040;text-align:left;cursor:pointer;" onmouseover="this.style.background='#fdf2f2'" onmouseout="this.style.background='none'">Sign out</button>
+        </div>
       </div>
     </div>
 
@@ -263,6 +279,15 @@
 
   <script src="../interactions.js"></script>
   <script>
+    // Profile dropdown
+    const avatarBtn = document.getElementById('avatar-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    avatarBtn.addEventListener('click', e => { e.stopPropagation(); profileDropdown.style.opacity = profileDropdown.style.opacity === '1' ? '0' : '1'; profileDropdown.style.pointerEvents = profileDropdown.style.opacity === '1' ? 'auto' : 'none'; profileDropdown.style.transform = profileDropdown.style.opacity === '1' ? 'translateY(0) scale(1)' : 'translateY(-6px) scale(0.97)'; });
+    document.addEventListener('click', () => { profileDropdown.style.opacity = '0'; profileDropdown.style.pointerEvents = 'none'; profileDropdown.style.transform = 'translateY(-6px) scale(0.97)'; });
+    profileDropdown.addEventListener('click', e => e.stopPropagation());
+    document.getElementById('profile-signout-btn').addEventListener('click', () => { window.location.href = 'signin.html'; });
+    document.getElementById('profile-billing-btn').addEventListener('click', () => { profileDropdown.style.opacity = '0'; profileDropdown.style.pointerEvents = 'none'; document.getElementById('upgrade-backdrop').classList.add('open'); });
+
     // Upgrade modal
     const upgradeBackdrop = document.getElementById('upgrade-backdrop');
     const upgradeClose = document.getElementById('upgrade-close');
